@@ -54,7 +54,7 @@ create table if not exists receipts
         )
 );
 
--- Участники чека (пользователь или гость, другой null)
+-- Участники чека (пользователь или гость, другой null) TODO: Нужны ли они?
 create table if not exists receipt_members
 (
     id         serial primary key,
