@@ -3,7 +3,11 @@ package com.friney.fairsplit.api.controller;
 import com.friney.fairsplit.api.Paths;
 import com.friney.fairsplit.api.dto.Receipt.ReceiptCreateDto;
 import com.friney.fairsplit.api.dto.Receipt.ReceiptDto;
+import com.friney.fairsplit.core.entity.Receipt.Receipt;
+import com.friney.fairsplit.core.mapper.ReceiptMapper;
+import com.friney.fairsplit.core.service.EventService;
 import com.friney.fairsplit.core.service.ReceiptService;
+import com.friney.fairsplit.core.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,14 +23,23 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReceiptController {
     private final ReceiptService receiptService;
+    private final EventService eventService;
+    private final UserService userService;
+    private final ReceiptMapper receiptMapper;
 
     @GetMapping
     public List<ReceiptDto> getAll(@PathVariable Long eventId) {
-        return receiptService.getAll(eventId);
+        List<Receipt> receipts = receiptService.getAll(eventId);
+        return receiptMapper.map(receipts);
     }
 
     @PostMapping
     public ReceiptDto createReceipt(@RequestBody ReceiptCreateDto receiptCreateDto, @PathVariable Long eventId) {
-        return receiptService.create(receiptCreateDto, eventId);
+        Receipt receipt = new Receipt();
+        receipt.setName(receiptCreateDto.name());
+        receipt.setEvent(eventService.getById(eventId));
+        receipt.setPaidByUser(userService.getById(receiptCreateDto.userId()));
+        receipt = receiptService.create(receipt);
+        return receiptMapper.map(receipt);
     }
 }

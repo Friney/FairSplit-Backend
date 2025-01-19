@@ -1,9 +1,9 @@
 package com.friney.fairsplit.core.repository;
 
-import com.friney.fairsplit.core.entity.Event.Event;
+import com.friney.fairsplit.core.entity.User.NotRegisteredUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EventRepository extends JpaRepository<Event, Long> {
+public interface NotRegisteredUserRepository extends JpaRepository<NotRegisteredUser, Long> {
 }

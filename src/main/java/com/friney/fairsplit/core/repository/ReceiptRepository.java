@@ -1,4 +1,9 @@
 package com.friney.fairsplit.core.repository;
 
-public interface ReceiptRepository {
+import com.friney.fairsplit.core.entity.Receipt.Receipt;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ReceiptRepository extends JpaRepository<Receipt, Long> {
 }

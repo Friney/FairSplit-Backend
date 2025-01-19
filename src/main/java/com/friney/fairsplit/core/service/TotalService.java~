@@ -1,0 +1,22 @@
+package com.friney.fairsplit.core.service;
+
+import com.friney.fairsplit.core.entity.Event;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class TotalService {
+    private final EventService eventService;
+
+    public String calculate(Long eventId) {
+        Event event = eventService.getById(eventId);
+        String total = String
+                .valueOf(
+                        event
+                                .getReceipts()
+                                .stream()
+                                .mapToDouble(receipt -> receipt.getExpenses().stream().mapToDouble(expense -> expense.getAmount()).sum()).sum());
+        return null;
+    }
+}

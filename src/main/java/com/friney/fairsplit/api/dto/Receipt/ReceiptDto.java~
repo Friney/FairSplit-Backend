@@ -1,0 +1,18 @@
+package com.friney.fairsplit.api.dto.Receipt;
+
+import com.friney.fairsplit.api.dto.Expense.ExpenseDto;
+import com.friney.fairsplit.core.entity.Guest;
+import com.friney.fairsplit.core.entity.User;
+import lombok.Builder;
+
+import java.util.List;
+
+@Builder
+public record ReceiptDto(
+        Long id,
+        String name,
+        List<ExpenseDto> expenses,
+        User paidByUser,
+        Guest paidByGuest
+) {
+}
