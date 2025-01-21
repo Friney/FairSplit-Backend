@@ -9,7 +9,7 @@ create table if not exists users
 create table if not exists registered_users
 (
     user_id bigint primary key,
-    email   varchar(255) not null,
+    email   varchar(255) not null unique,
     foreign key (user_id) references users (id)
 
 );
@@ -29,7 +29,7 @@ create table if not exists events
     description varchar(2055) not null
 );
 
--- Чеки (оплатил либо пользователь, либо гость, другой null)
+-- Чеки
 create table if not exists receipts
 (
     id              serial primary key,
@@ -50,7 +50,7 @@ create table if not exists expenses
     foreign key (receipt_id) references receipts (id)
 );
 
--- Участники расхода (пользователь или гость, другой null)
+-- Участники расхода
 create table if not exists expense_members
 (
     id         serial primary key,
