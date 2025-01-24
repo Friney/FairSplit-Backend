@@ -1,11 +1,14 @@
 package com.friney.fairsplit.core.service;
 
+import com.friney.fairsplit.api.dto.Event.EventDto;
 import com.friney.fairsplit.api.dto.Receipt.ReceiptCreateDto;
 import com.friney.fairsplit.api.dto.Receipt.ReceiptDto;
 import com.friney.fairsplit.core.entity.Receipt.Receipt;
+import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.mapper.ReceiptMapper;
 import com.friney.fairsplit.core.repository.ReceiptRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,21 +22,16 @@ public class ReceiptService {
     private final ReceiptMapper receiptMapper;
 
     public List<ReceiptDto> getAll(Long eventId) {
-        return receiptRepository
-                .findAll()
-                .stream()
-                .filter(
-                        receipt -> receipt
-                                .getEvent()
-                                .getId()
-                                .equals(eventId)
-                )
-                .map(receiptMapper::map)
-                .toList();
+        EventDto event = eventService.getDtoById(eventId);
+        return event.receipts();
+    }
+
+    public ReceiptDto getDtoById(Long id) {
+        return receiptMapper.map(getById(id));
     }
 
     public Receipt getById(Long id) {
-        return receiptRepository.findById(id).orElse(null);
+        return receiptRepository.findById(id).orElseThrow(() -> new ServiceException("Receipt with id " + id + " not found", HttpStatus.NOT_FOUND));
     }
 
     public ReceiptDto create(ReceiptCreateDto receiptCreateDto, Long eventId) {

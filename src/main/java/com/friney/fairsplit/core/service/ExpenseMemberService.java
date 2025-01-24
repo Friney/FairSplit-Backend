@@ -1,7 +1,9 @@
 package com.friney.fairsplit.core.service;
 
+import com.friney.fairsplit.api.dto.Expense.ExpenseDto;
 import com.friney.fairsplit.api.dto.ExpenseMember.ExpenseMemberCreateDto;
 import com.friney.fairsplit.api.dto.ExpenseMember.ExpenseMemberDto;
+import com.friney.fairsplit.core.entity.Expense.Expense;
 import com.friney.fairsplit.core.entity.ExpenseMember.ExpenseMember;
 import com.friney.fairsplit.core.mapper.ExpenseMemberMapper;
 import com.friney.fairsplit.core.repository.ExpenseMemberRepository;
@@ -19,17 +21,8 @@ public class ExpenseMemberService {
     private final ExpenseMemberMapper expenseMemberMapper;
 
     public List<ExpenseMemberDto> getAllByExpenseId(Long expenseId) {
-        return expenseMemberRepository
-                .findAll()
-                .stream()
-                .filter(
-                        expenseMember -> expenseMember
-                                .getExpense()
-                                .getId()
-                                .equals(expenseId)
-                )
-                .map(expenseMemberMapper::map)
-                .toList();
+        ExpenseDto expense = expenseService.getDtoById(expenseId);
+        return expense.expenseMembers();
     }
 
     public ExpenseMemberDto create(ExpenseMemberCreateDto expenseMemberCreateDto, Long expenseId) {

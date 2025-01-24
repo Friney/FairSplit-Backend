@@ -5,10 +5,12 @@ import com.friney.fairsplit.api.dto.User.RegisteredUserDto;
 import com.friney.fairsplit.core.entity.User.NotRegisteredUser;
 import com.friney.fairsplit.core.entity.User.RegisteredUser;
 import com.friney.fairsplit.core.entity.User.User;
+import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.repository.NotRegisteredUserRepository;
 import com.friney.fairsplit.core.repository.RegisteredUserRepository;
 import com.friney.fairsplit.core.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +27,7 @@ public class UserService {
     }
 
     public User getById(Long id) {
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id).orElseThrow(() -> new ServiceException("User with id " + id + " not found", HttpStatus.NOT_FOUND));
     }
 
     public User create(RegisteredUserDto userDto) {
