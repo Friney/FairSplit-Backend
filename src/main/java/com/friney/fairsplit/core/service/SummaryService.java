@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -25,11 +26,11 @@ public class SummaryService {
     public Summary calculateSummary(Long eventId) {
         Summary summary = new Summary();
         Event event = eventService.getById(eventId);
-        List<Receipt> receipts = event.getReceipts();
+        Set<Receipt> receipts = event.getReceipts();
         List<ReceiptSummary> receiptSummaries = new ArrayList<>();
         for (Receipt receipt : receipts) {
             String recipient = receipt.getPaidByUser().getName();
-            List<Expense> expenses = receipt.getExpenses();
+            Set<Expense> expenses = receipt.getExpenses();
 
             BigDecimal total = expenses
                     .stream()

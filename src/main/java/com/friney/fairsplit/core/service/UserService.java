@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,17 +32,23 @@ public class UserService {
     }
 
     public User create(RegisteredUserDto userDto) {
+        Optional<RegisteredUser> existingUser = registeredUserRepository.findByEmail(userDto.email());
+        if (existingUser.isPresent()) {
+            throw new ServiceException("User with email " + userDto.email() + " already exists", HttpStatus.BAD_REQUEST);
+        }
         RegisteredUser user = new RegisteredUser();
         user.setName(userDto.name());
         user.setEmail(userDto.email());
-        registeredUserRepository.save(user);
         return userRepository.save(user);
     }
 
     public User create(NotRegisteredUserDto userDto) {
+        Optional<NotRegisteredUser> existingUser = notRegisteredUserRepository.findByName(userDto.name());
+        if (existingUser.isPresent()) {
+            return existingUser.get();
+        }
         NotRegisteredUser user = new NotRegisteredUser();
         user.setName(userDto.name());
-        notRegisteredUserRepository.save(user);
         return userRepository.save(user);
     }
 }
