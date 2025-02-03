@@ -25,9 +25,9 @@ repositories {
 }
 
 flyway {
-    url = 'psql -h localhost -U postgres -d test' // Убедитесь, что URL правильный
-    user = System.getenv('DB_USERNAME') // Используйте переменные окружения
-    password = System.getenv('DB_PASSWORD') // Используйте переменные окружения
+    url = 'psql -h localhost -U postgres -d test'
+    user = System.getenv('DB_USERNAME')
+    password = System.getenv('DB_PASSWORD')
     locations = ['classpath:db/migration']
 }
 
