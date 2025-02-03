@@ -3,7 +3,6 @@ package com.friney.fairsplit.api.controller;
 import com.friney.fairsplit.api.Paths;
 import com.friney.fairsplit.api.dto.Event.EventCreateDto;
 import com.friney.fairsplit.api.dto.Event.EventDto;
-import com.friney.fairsplit.core.entity.Event.Event;
 import com.friney.fairsplit.core.mapper.EventMapper;
 import com.friney.fairsplit.core.service.EventService;
 import lombok.RequiredArgsConstructor;
@@ -24,17 +23,12 @@ public class EventController {
 
     @GetMapping
     public List<EventDto> getAll() {
-        List<Event> events = eventService.getAll();
-
-        return eventMapper.map(events);
+        return eventService.getAll();
     }
 
 
     @PostMapping
-    public Event create(@RequestBody EventCreateDto eventCreateDto) {
-        Event event = new Event();
-        event.setName(eventCreateDto.name());
-        event.setDescription(eventCreateDto.description());
-        return eventService.create(event);
+    public EventDto create(@RequestBody EventCreateDto eventCreateDto) {
+        return eventService.create(eventCreateDto);
     }
 }
