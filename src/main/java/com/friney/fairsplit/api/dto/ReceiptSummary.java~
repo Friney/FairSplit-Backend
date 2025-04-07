@@ -1,4 +1,0 @@
-package com.friney.fairsplit.api.dto;
-
-public record ReceiptSummary() {
-}

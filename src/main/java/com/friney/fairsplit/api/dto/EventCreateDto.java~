@@ -1,9 +1,0 @@
-package com.friney.fairsplit.api.dto;
-
-import lombok.Builder;
-
-@Builder
-public record EventDto(
-        String name,
-        String description) {
-}

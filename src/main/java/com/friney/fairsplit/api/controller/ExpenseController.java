@@ -3,14 +3,9 @@ package com.friney.fairsplit.api.controller;
 import com.friney.fairsplit.api.Paths;
 import com.friney.fairsplit.api.dto.Expense.ExpenseCreateDto;
 import com.friney.fairsplit.api.dto.Expense.ExpenseDto;
-import com.friney.fairsplit.core.service.ExpenseService;
+import com.friney.fairsplit.core.service.expense.ExpenseService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,6 +13,7 @@ import java.util.List;
 @RequestMapping(Paths.EXPENSES)
 @RequiredArgsConstructor
 public class ExpenseController {
+
     private final ExpenseService expenseService;
 
     @GetMapping

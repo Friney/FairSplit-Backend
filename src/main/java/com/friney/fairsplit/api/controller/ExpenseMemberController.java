@@ -3,7 +3,7 @@ package com.friney.fairsplit.api.controller;
 import com.friney.fairsplit.api.Paths;
 import com.friney.fairsplit.api.dto.ExpenseMember.ExpenseMemberCreateDto;
 import com.friney.fairsplit.api.dto.ExpenseMember.ExpenseMemberDto;
-import com.friney.fairsplit.core.service.ExpenseMemberService;
+import com.friney.fairsplit.core.service.expense.member.ExpenseMemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +18,7 @@ import java.util.List;
 @RequestMapping(Paths.EXPENSES_MEMBERS)
 @RequiredArgsConstructor
 public class ExpenseMemberController {
+
     private final ExpenseMemberService expenseMemberService;
 
     @GetMapping

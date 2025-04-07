@@ -25,9 +25,9 @@ repositories {
 }
 
 flyway {
-    url = 'psql -h localhost -U postgres -d test' // Убедитесь, что URL правильный
-    user = System.getenv('DB_USERNAME') // Используйте переменные окружения
-    password = System.getenv('DB_PASSWORD') // Используйте переменные окружения
+    url = 'psql -h localhost -U postgres -d test'
+    user = System.getenv('DB_USERNAME')
+    password = System.getenv('DB_PASSWORD')
     locations = ['classpath:db/migration']
 }
 
@@ -45,8 +45,10 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation 'org.mapstruct:mapstruct:1.6.3'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
+    testImplementation 'org.mockito:mockito-core:5.17.0'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+    jvmArgs "-javaagent:${configurations.testRuntimeClasspath.find { it.name.contains("byte-buddy-agent") }.absolutePath}"
 }

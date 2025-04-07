@@ -1,4 +1,4 @@
-package com.friney.fairsplit.core.service;
+package com.friney.fairsplit.core.service.event;
 
 import com.friney.fairsplit.api.dto.Event.EventCreateDto;
 import com.friney.fairsplit.api.dto.Event.EventDto;
@@ -14,22 +14,28 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class EventService {
+public class EventServiceImpl implements EventService {
+
     private final EventRepository eventRepository;
     private final EventMapper eventMapper;
 
+    @Override
     public List<EventDto> getAll() {
         return eventMapper.map(eventRepository.findAll());
     }
 
+    @Override
     public EventDto getDtoById(Long id) {
         return eventMapper.map(getById(id));
     }
 
+    @Override
     public Event getById(Long id) {
-        return eventRepository.findById(id).orElseThrow(() -> new ServiceException("Event with id " + id + " not found", HttpStatus.NOT_FOUND));
+        return eventRepository.findById(id)
+                .orElseThrow(() -> new ServiceException("Event with id " + id + " not found", HttpStatus.NOT_FOUND));
     }
 
+    @Override
     public EventDto create(EventCreateDto eventCreateDto) {
         Event event = new Event();
         event.setName(eventCreateDto.name());

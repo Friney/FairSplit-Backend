@@ -1,27 +1,29 @@
-package com.friney.fairsplit.core.service;
+package com.friney.fairsplit.core.service.summary;
 
-import com.friney.fairsplit.core.entity.Summary.Debt;
-import com.friney.fairsplit.core.entity.ExpenseMember.ExpenseMember;
-import com.friney.fairsplit.core.entity.Summary.ReceiptSummary;
 import com.friney.fairsplit.core.entity.Event.Event;
 import com.friney.fairsplit.core.entity.Expense.Expense;
+import com.friney.fairsplit.core.entity.ExpenseMember.ExpenseMember;
 import com.friney.fairsplit.core.entity.Receipt.Receipt;
+import com.friney.fairsplit.core.entity.Summary.Debt;
+import com.friney.fairsplit.core.entity.Summary.ReceiptSummary;
 import com.friney.fairsplit.core.entity.Summary.Summary;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
+import com.friney.fairsplit.core.service.event.EventService;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class SummaryService {
+public class SummaryServiceImpl implements SummaryService {
+
     private final EventService eventService;
 
+    @Override
     public Summary calculateSummary(Long eventId) {
         Summary summary = new Summary();
         Event event = eventService.getById(eventId);

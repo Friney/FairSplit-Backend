@@ -1,4 +1,4 @@
-package com.friney.fairsplit.core.service;
+package com.friney.fairsplit.core.service.user;
 
 import com.friney.fairsplit.api.dto.User.NotRegisteredUserDto;
 import com.friney.fairsplit.api.dto.User.RegisteredUserDto;
@@ -17,19 +17,24 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserServiceImpl implements UserService {
+
     private final UserRepository userRepository;
     private final RegisteredUserRepository registeredUserRepository;
     private final NotRegisteredUserRepository notRegisteredUserRepository;
 
+    @Override
     public List<User> getAll() {
         return userRepository.findAll();
     }
 
+    @Override
     public User getById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new ServiceException("User with id " + id + " not found", HttpStatus.NOT_FOUND));
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ServiceException("User with id " + id + " not found", HttpStatus.NOT_FOUND));
     }
 
+    @Override
     public User create(RegisteredUserDto userDto) {
         RegisteredUser user = new RegisteredUser();
         user.setName(userDto.name());
@@ -38,6 +43,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Override
     public User create(NotRegisteredUserDto userDto) {
         NotRegisteredUser user = new NotRegisteredUser();
         user.setName(userDto.name());
