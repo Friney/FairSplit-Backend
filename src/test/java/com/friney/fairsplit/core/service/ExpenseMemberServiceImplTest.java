@@ -19,12 +19,12 @@ import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
-import com.friney.fairsplit.api.dto.Expense.ExpenseDto;
-import com.friney.fairsplit.api.dto.ExpenseMember.ExpenseMemberCreateDto;
-import com.friney.fairsplit.api.dto.ExpenseMember.ExpenseMemberDto;
-import com.friney.fairsplit.core.entity.Expense.Expense;
-import com.friney.fairsplit.core.entity.ExpenseMember.ExpenseMember;
-import com.friney.fairsplit.core.entity.User.User;
+import com.friney.fairsplit.api.dto.expense.ExpenseDto;
+import com.friney.fairsplit.api.dto.expense_member.ExpenseMemberCreateDto;
+import com.friney.fairsplit.api.dto.expense_member.ExpenseMemberDto;
+import com.friney.fairsplit.core.entity.expense.Expense;
+import com.friney.fairsplit.core.entity.expense_member.ExpenseMember;
+import com.friney.fairsplit.core.entity.user.User;
 import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.mapper.ExpenseMemberMapper;
 import com.friney.fairsplit.core.repository.ExpenseMemberRepository;
@@ -50,11 +50,11 @@ class ExpenseMemberServiceImplTest {
     @Test
     void testGetAllByExpenseId() {
         ExpenseMemberDto dto1 = ExpenseMemberDto.builder()
-                .name("User 1")
+                .name("user 1")
                 .build();
 
         ExpenseMemberDto dto2 = ExpenseMemberDto.builder()
-                .name("User 2")
+                .name("user 2")
                 .build();
 
         List<ExpenseMemberDto> expectedDtos = Arrays.asList(dto1, dto2);
@@ -71,11 +71,11 @@ class ExpenseMemberServiceImplTest {
     @Test
     void testGetAllByExpenseIdNotFound() {
         when(expenseService.getDtoById(1L))
-                .thenThrow(new ServiceException("Expense with id 1 not found", HttpStatus.NOT_FOUND));
+                .thenThrow(new ServiceException("expense with id 1 not found", HttpStatus.NOT_FOUND));
 
         ServiceException exception = assertThrows(ServiceException.class, () -> expenseMemberService.getAllByExpenseId(1L));
 
-        assertEquals("Expense with id 1 not found", exception.getMessage());
+        assertEquals("expense with id 1 not found", exception.getMessage());
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
         verify(expenseService, times(1)).getDtoById(1L);
     }
@@ -88,12 +88,12 @@ class ExpenseMemberServiceImplTest {
 
         User user = User.builder()
                 .id(1L)
-                .name("User")
+                .name("user")
                 .build();
 
         Expense expense = Expense.builder()
                 .id(1L)
-                .name("Expense")
+                .name("expense")
                 .build();
 
         ExpenseMember savedExpenseMember = ExpenseMember.builder()
@@ -127,11 +127,11 @@ class ExpenseMemberServiceImplTest {
                 .build();
 
         when(userService.getById(1L))
-                .thenThrow(new ServiceException("User with id 1 not found", HttpStatus.NOT_FOUND));
+                .thenThrow(new ServiceException("user with id 1 not found", HttpStatus.NOT_FOUND));
 
         ServiceException exception = assertThrows(ServiceException.class, () -> expenseMemberService.create(createDto, 1L));
 
-        assertEquals("User with id 1 not found", exception.getMessage());
+        assertEquals("user with id 1 not found", exception.getMessage());
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
         verify(userService, times(1)).getById(1L);
         verify(expenseService, times(0)).getById(any());
@@ -147,16 +147,16 @@ class ExpenseMemberServiceImplTest {
 
         User user = User.builder()
                 .id(1L)
-                .name("User")
+                .name("user")
                 .build();
 
         when(userService.getById(1L)).thenReturn(user);
         when(expenseService.getById(1L))
-                .thenThrow(new ServiceException("Expense with id 1 not found", HttpStatus.NOT_FOUND));
+                .thenThrow(new ServiceException("expense with id 1 not found", HttpStatus.NOT_FOUND));
 
         ServiceException exception = assertThrows(ServiceException.class, () -> expenseMemberService.create(createDto, 1L));
 
-        assertEquals("Expense with id 1 not found", exception.getMessage());
+        assertEquals("expense with id 1 not found", exception.getMessage());
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
         verify(userService, times(1)).getById(1L);
         verify(expenseService, times(1)).getById(1L);

@@ -1,8 +1,8 @@
 package com.friney.fairsplit.api.controller;
 
 import com.friney.fairsplit.api.Paths;
-import com.friney.fairsplit.api.dto.Expense.ExpenseCreateDto;
-import com.friney.fairsplit.api.dto.Expense.ExpenseDto;
+import com.friney.fairsplit.api.dto.expense.ExpenseCreateDto;
+import com.friney.fairsplit.api.dto.expense.ExpenseDto;
 import com.friney.fairsplit.core.service.expense.ExpenseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

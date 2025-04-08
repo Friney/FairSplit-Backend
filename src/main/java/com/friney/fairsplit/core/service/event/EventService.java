@@ -1,8 +1,8 @@
 package com.friney.fairsplit.core.service.event;
 
-import com.friney.fairsplit.api.dto.Event.EventCreateDto;
-import com.friney.fairsplit.api.dto.Event.EventDto;
-import com.friney.fairsplit.core.entity.Event.Event;
+import com.friney.fairsplit.api.dto.event.EventCreateDto;
+import com.friney.fairsplit.api.dto.event.EventDto;
+import com.friney.fairsplit.core.entity.event.Event;
 
 import java.util.List;
 

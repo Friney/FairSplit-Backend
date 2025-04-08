@@ -1,7 +1,7 @@
 package com.friney.fairsplit.api.controller;
 
 import com.friney.fairsplit.api.Paths;
-import com.friney.fairsplit.core.entity.Summary.Summary;
+import com.friney.fairsplit.core.entity.summary.Summary;
 import com.friney.fairsplit.core.service.summary.SummaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

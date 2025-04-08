@@ -1,10 +1,10 @@
 package com.friney.fairsplit.core.service.user;
 
-import com.friney.fairsplit.api.dto.User.NotRegisteredUserDto;
-import com.friney.fairsplit.api.dto.User.RegisteredUserDto;
-import com.friney.fairsplit.core.entity.User.NotRegisteredUser;
-import com.friney.fairsplit.core.entity.User.RegisteredUser;
-import com.friney.fairsplit.core.entity.User.User;
+import com.friney.fairsplit.api.dto.user.NotRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.RegisteredUserDto;
+import com.friney.fairsplit.core.entity.user.NotRegisteredUser;
+import com.friney.fairsplit.core.entity.user.RegisteredUser;
+import com.friney.fairsplit.core.entity.user.User;
 import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.repository.NotRegisteredUserRepository;
 import com.friney.fairsplit.core.repository.RegisteredUserRepository;
@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new ServiceException("User with id " + id + " not found", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ServiceException("user with id " + id + " not found", HttpStatus.NOT_FOUND));
     }
 
     @Override

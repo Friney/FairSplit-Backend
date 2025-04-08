@@ -1,9 +1,7 @@
 package com.friney.fairsplit.core.service.expense.member;
 
-import com.friney.fairsplit.api.dto.ExpenseMember.ExpenseMemberCreateDto;
-import com.friney.fairsplit.api.dto.ExpenseMember.ExpenseMemberDto;
-import com.friney.fairsplit.core.entity.ExpenseMember.ExpenseMember;
-import com.friney.fairsplit.core.exception.ServiceException;
+import com.friney.fairsplit.api.dto.expense_member.ExpenseMemberCreateDto;
+import com.friney.fairsplit.api.dto.expense_member.ExpenseMemberDto;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.friney.fairsplit.api.controller;
 
-import com.friney.fairsplit.api.dto.Expense.ExpenseCreateDto;
-import com.friney.fairsplit.api.dto.Expense.ExpenseDto;
+import com.friney.fairsplit.api.dto.expense.ExpenseCreateDto;
+import com.friney.fairsplit.api.dto.expense.ExpenseDto;
 import com.friney.fairsplit.core.service.expense.ExpenseService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,12 +31,12 @@ class ExpenseControllerTest {
     void testGetAllByReceiptId() {
         ExpenseDto dto1 = ExpenseDto.builder()
                 .id(1L)
-                .name("Expense 1")
+                .name("expense 1")
                 .build();
 
         ExpenseDto dto2 = ExpenseDto.builder()
                 .id(2L)
-                .name("Expense 2")
+                .name("expense 2")
                 .build();
 
         List<ExpenseDto> expectedDtos = Arrays.asList(dto1, dto2);
@@ -52,7 +52,7 @@ class ExpenseControllerTest {
     @Test
     void testCreate() {
         ExpenseCreateDto createDto = ExpenseCreateDto.builder()
-                .name("Test Expense")
+                .name("Test expense")
                 .amount(BigDecimal.valueOf(100))
                 .build();
 

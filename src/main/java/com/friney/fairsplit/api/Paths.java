@@ -10,4 +10,7 @@ public final class Paths {
     public static final String EXPENSES_ID = "/expenses/{expenseId}";
     public static final String EXPENSES_MEMBERS = EXPENSES_ID + "/members";
     public static final String SUMMARY = EVENTS_ID + "/summary";
+
+    private Paths() {
+    }
 }

@@ -9,14 +9,13 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.friney.fairsplit.api.dto.ExpenseMember.ExpenseMemberCreateDto;
-import com.friney.fairsplit.api.dto.ExpenseMember.ExpenseMemberDto;
+import com.friney.fairsplit.api.dto.expense_member.ExpenseMemberCreateDto;
+import com.friney.fairsplit.api.dto.expense_member.ExpenseMemberDto;
 
 @ExtendWith(MockitoExtension.class)
 class ExpenseMemberControllerTest {
@@ -30,11 +29,11 @@ class ExpenseMemberControllerTest {
     @Test
     void testGetAllByExpenseId() {
         ExpenseMemberDto dto1 = ExpenseMemberDto.builder()
-                .name("User 1")
+                .name("user 1")
                 .build();
 
         ExpenseMemberDto dto2 = ExpenseMemberDto.builder()
-                .name("User 2")
+                .name("user 2")
                 .build();
 
         List<ExpenseMemberDto> expectedDtos = Arrays.asList(dto1, dto2);
@@ -54,7 +53,7 @@ class ExpenseMemberControllerTest {
                 .build();
 
         ExpenseMemberDto expectedDto = ExpenseMemberDto.builder()
-                .name("Test User")
+                .name("Test user")
                 .build();
 
         when(expenseMemberService.create(createDto, 1L)).thenReturn(expectedDto);

@@ -1,15 +1,14 @@
 package com.friney.fairsplit.core.service;
 
-import com.friney.fairsplit.api.dto.User.NotRegisteredUserDto;
-import com.friney.fairsplit.api.dto.User.RegisteredUserDto;
-import com.friney.fairsplit.core.entity.User.NotRegisteredUser;
-import com.friney.fairsplit.core.entity.User.RegisteredUser;
-import com.friney.fairsplit.core.entity.User.User;
+import com.friney.fairsplit.api.dto.user.NotRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.RegisteredUserDto;
+import com.friney.fairsplit.core.entity.user.NotRegisteredUser;
+import com.friney.fairsplit.core.entity.user.RegisteredUser;
+import com.friney.fairsplit.core.entity.user.User;
 import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.repository.NotRegisteredUserRepository;
 import com.friney.fairsplit.core.repository.RegisteredUserRepository;
 import com.friney.fairsplit.core.repository.UserRepository;
-import com.friney.fairsplit.core.service.user.UserService;
 import com.friney.fairsplit.core.service.user.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,12 +43,12 @@ class UserServiceImplTest {
     void testGetAll() {
         User user1 = User.builder()
                 .id(1L)
-                .name("User 1")
+                .name("user 1")
                 .build();
 
         User user2 = User.builder()
                 .id(2L)
-                .name("User 2")
+                .name("user 2")
                 .build();
 
         List<User> users = Arrays.asList(user1, user2);
@@ -76,7 +75,7 @@ class UserServiceImplTest {
     void testGetById() {
         User user = User.builder()
                 .id(1L)
-                .name("User")
+                .name("user")
                 .build();
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
@@ -93,7 +92,7 @@ class UserServiceImplTest {
 
         ServiceException exception = assertThrows(ServiceException.class, () -> userService.getById(1L));
 
-        assertEquals("User with id 1 not found", exception.getMessage());
+        assertEquals("user with id 1 not found", exception.getMessage());
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
         verify(userRepository, times(1)).findById(1L);
     }
@@ -101,7 +100,7 @@ class UserServiceImplTest {
     @Test
     void testCreateRegisteredUser() {
         RegisteredUserDto userDto = RegisteredUserDto.builder()
-                .name("User")
+                .name("user")
                 .email("example@example.com")
                 .build();
         RegisteredUser savedUser = RegisteredUser.builder().
@@ -124,7 +123,7 @@ class UserServiceImplTest {
     @Test
     void testCreateNotRegisteredUser() {
         NotRegisteredUserDto userDto = NotRegisteredUserDto.builder()
-                .name("User")
+                .name("user")
                 .build();
         NotRegisteredUser savedUser = NotRegisteredUser.builder()
                 .id(1L)

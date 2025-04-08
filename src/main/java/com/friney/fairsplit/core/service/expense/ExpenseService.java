@@ -1,8 +1,8 @@
 package com.friney.fairsplit.core.service.expense;
 
-import com.friney.fairsplit.api.dto.Expense.ExpenseCreateDto;
-import com.friney.fairsplit.api.dto.Expense.ExpenseDto;
-import com.friney.fairsplit.core.entity.Expense.Expense;
+import com.friney.fairsplit.api.dto.expense.ExpenseCreateDto;
+import com.friney.fairsplit.api.dto.expense.ExpenseDto;
+import com.friney.fairsplit.core.entity.expense.Expense;
 
 import java.util.List;
 

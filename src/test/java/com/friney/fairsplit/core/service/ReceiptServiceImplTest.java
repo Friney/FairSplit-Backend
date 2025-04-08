@@ -1,11 +1,11 @@
 package com.friney.fairsplit.core.service;
 
-import com.friney.fairsplit.api.dto.Event.EventDto;
-import com.friney.fairsplit.api.dto.Receipt.ReceiptCreateDto;
-import com.friney.fairsplit.api.dto.Receipt.ReceiptDto;
-import com.friney.fairsplit.core.entity.Event.Event;
-import com.friney.fairsplit.core.entity.Receipt.Receipt;
-import com.friney.fairsplit.core.entity.User.User;
+import com.friney.fairsplit.api.dto.event.EventDto;
+import com.friney.fairsplit.api.dto.receipt.ReceiptCreateDto;
+import com.friney.fairsplit.api.dto.receipt.ReceiptDto;
+import com.friney.fairsplit.core.entity.event.Event;
+import com.friney.fairsplit.core.entity.receipt.Receipt;
+import com.friney.fairsplit.core.entity.user.User;
 import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.mapper.ReceiptMapper;
 import com.friney.fairsplit.core.repository.ReceiptRepository;
@@ -50,14 +50,14 @@ class ReceiptServiceImplTest {
     void testGetAllByEventId() {
         ReceiptDto dto1 = ReceiptDto.builder()
                 .id(1L)
-                .name("Receipt 1")
-                .paidByUserName("User 1")
+                .name("receipt 1")
+                .paidByUserName("user 1")
                 .build();
 
         ReceiptDto dto2 = ReceiptDto.builder()
                 .id(2L)
-                .name("Receipt 2")
-                .paidByUserName("User 2")
+                .name("receipt 2")
+                .paidByUserName("user 2")
                 .build();
 
         List<ReceiptDto> expectedDtos = Arrays.asList(dto1, dto2);
@@ -76,11 +76,11 @@ class ReceiptServiceImplTest {
     @Test
     void testGetAllByEventIdEventNotFound() {
         when(eventService.getDtoById(1L))
-                .thenThrow(new ServiceException("Event with id 1 not found", HttpStatus.NOT_FOUND));
+                .thenThrow(new ServiceException("event with id 1 not found", HttpStatus.NOT_FOUND));
 
         ServiceException exception = assertThrows(ServiceException.class, () -> receiptService.getAllByEventId(1L));
 
-        assertEquals("Event with id 1 not found", exception.getMessage());
+        assertEquals("event with id 1 not found", exception.getMessage());
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
         verify(eventService, times(1)).getDtoById(1L);
     }
@@ -89,10 +89,10 @@ class ReceiptServiceImplTest {
     void testGetDtoById() {
         Receipt receipt = Receipt.builder()
                 .id(1L)
-                .name("Test Receipt")
+                .name("Test receipt")
                 .paidByUser(User.builder()
                         .id(1L)
-                        .name("Test User")
+                        .name("Test user")
                         .build())
                 .build();
 
@@ -118,7 +118,7 @@ class ReceiptServiceImplTest {
 
         ServiceException exception = assertThrows(ServiceException.class, () -> receiptService.getDtoById(1L));
 
-        assertEquals("Receipt with id 1 not found", exception.getMessage());
+        assertEquals("receipt with id 1 not found", exception.getMessage());
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
         verify(receiptRepository, times(1)).findById(1L);
     }
@@ -126,18 +126,18 @@ class ReceiptServiceImplTest {
     @Test
     void testCreate() {
         ReceiptCreateDto createDto = ReceiptCreateDto.builder()
-                .name("Test Receipt")
+                .name("Test receipt")
                 .userId(1L)
                 .build();
 
         Event event = Event.builder()
                 .id(1L)
-                .name("Test Event")
+                .name("Test event")
                 .build();
 
         User user = User.builder()
                 .id(1L)
-                .name("Test User")
+                .name("Test user")
                 .build();
 
         Receipt savedReceipt = Receipt.builder()
@@ -171,16 +171,16 @@ class ReceiptServiceImplTest {
     void testCreateEventNotFound() {
         // Given
         ReceiptCreateDto createDto = ReceiptCreateDto.builder()
-                .name("Test Receipt")
+                .name("Test receipt")
                 .userId(1L)
                 .build();
 
         when(eventService.getById(1L))
-                .thenThrow(new ServiceException("Event with id 1 not found", HttpStatus.NOT_FOUND));
+                .thenThrow(new ServiceException("event with id 1 not found", HttpStatus.NOT_FOUND));
 
         ServiceException exception = assertThrows(ServiceException.class, () -> receiptService.create(createDto, 1L));
 
-        assertEquals("Event with id 1 not found", exception.getMessage());
+        assertEquals("event with id 1 not found", exception.getMessage());
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
         verify(eventService, times(1)).getById(1L);
     }
@@ -188,22 +188,22 @@ class ReceiptServiceImplTest {
     @Test
     void testCreateUserNotFound() {
         ReceiptCreateDto createDto = ReceiptCreateDto.builder()
-                .name("Test Receipt")
+                .name("Test receipt")
                 .userId(1L)
                 .build();
 
         Event event = Event.builder()
                 .id(1L)
-                .name("Test Event")
+                .name("Test event")
                 .build();
 
         when(eventService.getById(1L)).thenReturn(event);
         when(userService.getById(1L))
-                .thenThrow(new ServiceException("User with id 1 not found", HttpStatus.NOT_FOUND));
+                .thenThrow(new ServiceException("user with id 1 not found", HttpStatus.NOT_FOUND));
 
         ServiceException exception = assertThrows(ServiceException.class, () -> receiptService.create(createDto, 1L));
 
-        assertEquals("User with id 1 not found", exception.getMessage());
+        assertEquals("user with id 1 not found", exception.getMessage());
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
         verify(eventService, times(1)).getById(1L);
         verify(userService, times(1)).getById(1L);

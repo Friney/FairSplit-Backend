@@ -1,10 +1,10 @@
 package com.friney.fairsplit.api.controller;
 
-import com.friney.fairsplit.api.dto.User.NotRegisteredUserDto;
-import com.friney.fairsplit.api.dto.User.RegisteredUserDto;
-import com.friney.fairsplit.core.entity.User.NotRegisteredUser;
-import com.friney.fairsplit.core.entity.User.RegisteredUser;
-import com.friney.fairsplit.core.entity.User.User;
+import com.friney.fairsplit.api.dto.user.NotRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.RegisteredUserDto;
+import com.friney.fairsplit.core.entity.user.NotRegisteredUser;
+import com.friney.fairsplit.core.entity.user.RegisteredUser;
+import com.friney.fairsplit.core.entity.user.User;
 import com.friney.fairsplit.core.service.user.UserService;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class UserControllerTest {
     @Test
     void createRegisteredUser() {
         RegisteredUserDto registeredUser = RegisteredUserDto.builder()
-                .name("User")
+                .name("user")
                 .email("example@example.com")
                 .build();
 
@@ -49,7 +49,7 @@ class UserControllerTest {
     @Test
     void testCreateNotRegisteredUser() {
         NotRegisteredUserDto notRegisteredUser = NotRegisteredUserDto.builder()
-                .name("User")
+                .name("user")
                 .build();
 
         NotRegisteredUser user = NotRegisteredUser.builder()
@@ -68,12 +68,12 @@ class UserControllerTest {
     void getAll() {
         User user1 = User.builder()
                 .id(1L)
-                .name("User 1")
+                .name("user 1")
                 .build();
 
         User user2 = User.builder()
                 .id(2L)
-                .name("User 2")
+                .name("user 2")
                 .build();
 
         List<User> expectedUsers = List.of(user1, user2);

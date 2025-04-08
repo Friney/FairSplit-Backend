@@ -1,8 +1,8 @@
 package com.friney.fairsplit.core.service;
 
-import com.friney.fairsplit.api.dto.Event.EventCreateDto;
-import com.friney.fairsplit.api.dto.Event.EventDto;
-import com.friney.fairsplit.core.entity.Event.Event;
+import com.friney.fairsplit.api.dto.event.EventCreateDto;
+import com.friney.fairsplit.api.dto.event.EventDto;
+import com.friney.fairsplit.core.entity.event.Event;
 import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.mapper.EventMapper;
 import com.friney.fairsplit.core.repository.EventRepository;
@@ -37,12 +37,12 @@ class EventServiceImplTest {
     void testGetAll() {
         Event event1 = Event.builder()
                 .id(1L)
-                .name("Event 1")
+                .name("event 1")
                 .build();
 
         Event event2 = Event.builder()
                 .id(2L)
-                .name("Event 2")
+                .name("event 2")
                 .build();
 
         List<Event> events = Arrays.asList(event1, event2);
@@ -81,7 +81,7 @@ class EventServiceImplTest {
     void testGetDtoById() {
         Event event = Event.builder()
                 .id(1L)
-                .name("Event")
+                .name("event")
                 .build();
 
         EventDto dto = EventDto.builder()
@@ -105,7 +105,7 @@ class EventServiceImplTest {
 
         ServiceException exception = assertThrows(ServiceException.class, () -> eventService.getDtoById(1L));
 
-        assertEquals("Event with id 1 not found", exception.getMessage());
+        assertEquals("event with id 1 not found", exception.getMessage());
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
         verify(eventRepository).findById(1L);
     }
@@ -114,7 +114,7 @@ class EventServiceImplTest {
     void testGetById() {
         Event event = Event.builder()
                 .id(1L)
-                .name("Event")
+                .name("event")
                 .build();
 
         when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
@@ -131,7 +131,7 @@ class EventServiceImplTest {
 
         ServiceException exception = assertThrows(ServiceException.class, () -> eventService.getById(1L));
 
-        assertEquals("Event with id 1 not found", exception.getMessage());
+        assertEquals("event with id 1 not found", exception.getMessage());
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
         verify(eventRepository).findById(1L);
     }
@@ -139,7 +139,7 @@ class EventServiceImplTest {
     @Test
     void testCreate() {
         EventCreateDto createDto = EventCreateDto.builder()
-                .name("Event")
+                .name("event")
                 .build();
         Event event = Event.builder()
                 .id(1L)

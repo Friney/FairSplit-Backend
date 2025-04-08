@@ -1,9 +1,9 @@
 package com.friney.fairsplit.core.service.receipt;
 
-import com.friney.fairsplit.api.dto.Event.EventDto;
-import com.friney.fairsplit.api.dto.Receipt.ReceiptCreateDto;
-import com.friney.fairsplit.api.dto.Receipt.ReceiptDto;
-import com.friney.fairsplit.core.entity.Receipt.Receipt;
+import com.friney.fairsplit.api.dto.event.EventDto;
+import com.friney.fairsplit.api.dto.receipt.ReceiptCreateDto;
+import com.friney.fairsplit.api.dto.receipt.ReceiptDto;
+import com.friney.fairsplit.core.entity.receipt.Receipt;
 import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.mapper.ReceiptMapper;
 import com.friney.fairsplit.core.repository.ReceiptRepository;
@@ -38,7 +38,7 @@ public class ReceiptServiceImpl implements ReceiptService {
     @Override
     public Receipt getById(Long id) {
         return receiptRepository.findById(id)
-                .orElseThrow(() -> new ServiceException("Receipt with id " + id + " not found", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ServiceException("receipt with id " + id + " not found", HttpStatus.NOT_FOUND));
     }
 
     @Override

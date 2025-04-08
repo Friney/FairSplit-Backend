@@ -1,14 +1,13 @@
 package com.friney.fairsplit.core.service;
 
-import com.friney.fairsplit.api.dto.Expense.ExpenseCreateDto;
-import com.friney.fairsplit.api.dto.Expense.ExpenseDto;
-import com.friney.fairsplit.api.dto.Receipt.ReceiptDto;
-import com.friney.fairsplit.core.entity.Expense.Expense;
-import com.friney.fairsplit.core.entity.Receipt.Receipt;
+import com.friney.fairsplit.api.dto.expense.ExpenseCreateDto;
+import com.friney.fairsplit.api.dto.expense.ExpenseDto;
+import com.friney.fairsplit.api.dto.receipt.ReceiptDto;
+import com.friney.fairsplit.core.entity.expense.Expense;
+import com.friney.fairsplit.core.entity.receipt.Receipt;
 import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.mapper.ExpenseMapper;
 import com.friney.fairsplit.core.repository.ExpenseRepository;
-import com.friney.fairsplit.core.service.expense.ExpenseService;
 import com.friney.fairsplit.core.service.expense.ExpenseServiceImpl;
 import com.friney.fairsplit.core.service.receipt.ReceiptService;
 import org.junit.jupiter.api.Test;
@@ -47,13 +46,13 @@ class ExpenseServiceImplTest {
     void testGetAllByReceiptId() {
         ExpenseDto dto1 = ExpenseDto.builder()
                 .id(1L)
-                .name("Expense 1")
+                .name("expense 1")
                 .amount(BigDecimal.valueOf(100))
                 .build();
 
         ExpenseDto dto2 = ExpenseDto.builder()
                 .id(2L)
-                .name("Expense 2")
+                .name("expense 2")
                 .amount(BigDecimal.valueOf(200))
                 .build();
 
@@ -73,11 +72,11 @@ class ExpenseServiceImplTest {
     @Test
     void testGetAllByReceiptIdNotFound() {
         when(receiptService.getDtoById(1L))
-                .thenThrow(new ServiceException("Receipt with id 1 not found", HttpStatus.NOT_FOUND));
+                .thenThrow(new ServiceException("receipt with id 1 not found", HttpStatus.NOT_FOUND));
 
         ServiceException exception = assertThrows(ServiceException.class, () -> expenseService.getAllByReceiptId(1L));
 
-        assertEquals("Receipt with id 1 not found", exception.getMessage());
+        assertEquals("receipt with id 1 not found", exception.getMessage());
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
         verify(receiptService, times(1)).getDtoById(1L);
     }
@@ -86,7 +85,7 @@ class ExpenseServiceImplTest {
     void testGetDtoById() {
         Expense expense = Expense.builder()
                 .id(1L)
-                .name("Test Expense")
+                .name("Test expense")
                 .amount(BigDecimal.valueOf(100))
                 .build();
 
@@ -112,7 +111,7 @@ class ExpenseServiceImplTest {
 
         ServiceException exception = assertThrows(ServiceException.class, () -> expenseService.getDtoById(1L));
 
-        assertEquals("Expense with id 1 not found", exception.getMessage());
+        assertEquals("expense with id 1 not found", exception.getMessage());
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
         verify(expenseRepository, times(1)).findById(1L);
     }
@@ -120,13 +119,13 @@ class ExpenseServiceImplTest {
     @Test
     void testCreate() {
         ExpenseCreateDto createDto = ExpenseCreateDto.builder()
-                .name("Test Expense")
+                .name("Test expense")
                 .amount(BigDecimal.valueOf(100))
                 .build();
 
         Receipt receipt = Receipt.builder()
                 .id(1L)
-                .name("Test Receipt")
+                .name("Test receipt")
                 .build();
 
         Expense savedExpense = Expense.builder()
@@ -157,16 +156,16 @@ class ExpenseServiceImplTest {
     @Test
     void testCreateReceiptNotFound() {
         ExpenseCreateDto createDto = ExpenseCreateDto.builder()
-                .name("Test Expense")
+                .name("Test expense")
                 .amount(BigDecimal.valueOf(100))
                 .build();
 
         when(receiptService.getById(1L))
-                .thenThrow(new ServiceException("Receipt with id 1 not found", HttpStatus.NOT_FOUND));
+                .thenThrow(new ServiceException("receipt with id 1 not found", HttpStatus.NOT_FOUND));
 
         ServiceException exception = assertThrows(ServiceException.class, () -> expenseService.create(createDto, 1L));
 
-        assertEquals("Receipt with id 1 not found", exception.getMessage());
+        assertEquals("receipt with id 1 not found", exception.getMessage());
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
         verify(receiptService, times(1)).getById(1L);
     }

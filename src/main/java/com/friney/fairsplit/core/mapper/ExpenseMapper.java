@@ -1,7 +1,7 @@
 package com.friney.fairsplit.core.mapper;
 
-import com.friney.fairsplit.api.dto.Expense.ExpenseDto;
-import com.friney.fairsplit.core.entity.Expense.Expense;
+import com.friney.fairsplit.api.dto.expense.ExpenseDto;
+import com.friney.fairsplit.core.entity.expense.Expense;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 

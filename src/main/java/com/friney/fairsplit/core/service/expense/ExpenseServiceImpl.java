@@ -1,10 +1,9 @@
 package com.friney.fairsplit.core.service.expense;
 
-import com.friney.fairsplit.api.dto.Expense.ExpenseCreateDto;
-import com.friney.fairsplit.api.dto.Expense.ExpenseDto;
-import com.friney.fairsplit.api.dto.Receipt.ReceiptDto;
-import com.friney.fairsplit.core.entity.Expense.Expense;
-import com.friney.fairsplit.core.entity.Receipt.Receipt;
+import com.friney.fairsplit.api.dto.expense.ExpenseCreateDto;
+import com.friney.fairsplit.api.dto.expense.ExpenseDto;
+import com.friney.fairsplit.api.dto.receipt.ReceiptDto;
+import com.friney.fairsplit.core.entity.expense.Expense;
 import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.mapper.ExpenseMapper;
 import com.friney.fairsplit.core.repository.ExpenseRepository;
@@ -37,7 +36,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Override
     public Expense getById(Long id) {
         return expenseRepository.findById(id)
-                .orElseThrow(() -> new ServiceException("Expense with id " + id + " not found", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ServiceException("expense with id " + id + " not found", HttpStatus.NOT_FOUND));
     }
 
     @Override

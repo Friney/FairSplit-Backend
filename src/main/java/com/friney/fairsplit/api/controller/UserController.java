@@ -1,9 +1,9 @@
 package com.friney.fairsplit.api.controller;
 
 import com.friney.fairsplit.api.Paths;
-import com.friney.fairsplit.api.dto.User.NotRegisteredUserDto;
-import com.friney.fairsplit.api.dto.User.RegisteredUserDto;
-import com.friney.fairsplit.core.entity.User.User;
+import com.friney.fairsplit.api.dto.user.NotRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.RegisteredUserDto;
+import com.friney.fairsplit.core.entity.user.User;
 import com.friney.fairsplit.core.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

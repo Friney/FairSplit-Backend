@@ -1,11 +1,16 @@
 package com.friney.fairsplit.api.controller;
 
 import com.friney.fairsplit.api.Paths;
-import com.friney.fairsplit.api.dto.Receipt.ReceiptCreateDto;
-import com.friney.fairsplit.api.dto.Receipt.ReceiptDto;
+import com.friney.fairsplit.api.dto.receipt.ReceiptCreateDto;
+import com.friney.fairsplit.api.dto.receipt.ReceiptDto;
 import com.friney.fairsplit.core.service.receipt.ReceiptService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -13,11 +18,10 @@ import java.util.List;
 @RequestMapping(Paths.RECEIPTS)
 @RequiredArgsConstructor
 public class ReceiptController {
-
     private final ReceiptService receiptService;
 
     @GetMapping
-    public List<ReceiptDto> getAll(@PathVariable Long eventId) {
+    public List<ReceiptDto> getAllByEventId(@PathVariable Long eventId) {
         return receiptService.getAllByEventId(eventId);
     }
 

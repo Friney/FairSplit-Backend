@@ -1,7 +1,7 @@
 package com.friney.fairsplit.api.controller;
 
-import com.friney.fairsplit.api.dto.Receipt.ReceiptCreateDto;
-import com.friney.fairsplit.api.dto.Receipt.ReceiptDto;
+import com.friney.fairsplit.api.dto.receipt.ReceiptCreateDto;
+import com.friney.fairsplit.api.dto.receipt.ReceiptDto;
 import com.friney.fairsplit.core.service.receipt.ReceiptService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,14 +30,14 @@ class ReceiptControllerTest {
     void testGetAllByEventId() {
         ReceiptDto dto1 = ReceiptDto.builder()
                 .id(1L)
-                .name("Receipt 1")
-                .paidByUserName("User 1")
+                .name("receipt 1")
+                .paidByUserName("user 1")
                 .build();
 
         ReceiptDto dto2 = ReceiptDto.builder()
                 .id(2L)
-                .name("Receipt 2")
-                .paidByUserName("User 2")
+                .name("receipt 2")
+                .paidByUserName("user 2")
                 .build();
 
         List<ReceiptDto> expectedDtos = Arrays.asList(dto1, dto2);
@@ -53,14 +53,14 @@ class ReceiptControllerTest {
     @Test
     void testCreateReceipt() {
         ReceiptCreateDto createDto = ReceiptCreateDto.builder()
-                .name("Test Receipt")
+                .name("Test receipt")
                 .userId(1L)
                 .build();
 
         ReceiptDto expectedDto = ReceiptDto.builder()
                 .id(1L)
                 .name(createDto.name())
-                .paidByUserName("Test User")
+                .paidByUserName("Test user")
                 .build();
 
         when(receiptService.create(createDto, 1L)).thenReturn(expectedDto);

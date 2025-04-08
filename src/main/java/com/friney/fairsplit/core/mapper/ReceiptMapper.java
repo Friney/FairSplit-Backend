@@ -1,7 +1,7 @@
 package com.friney.fairsplit.core.mapper;
 
-import com.friney.fairsplit.api.dto.Receipt.ReceiptDto;
-import com.friney.fairsplit.core.entity.Receipt.Receipt;
+import com.friney.fairsplit.api.dto.receipt.ReceiptDto;
+import com.friney.fairsplit.core.entity.receipt.Receipt;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;

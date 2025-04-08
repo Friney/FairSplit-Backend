@@ -1,6 +1,6 @@
 package com.friney.fairsplit.api.controller;
 
-import com.friney.fairsplit.core.entity.Summary.Summary;
+import com.friney.fairsplit.core.entity.summary.Summary;
 import com.friney.fairsplit.core.service.summary.SummaryService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

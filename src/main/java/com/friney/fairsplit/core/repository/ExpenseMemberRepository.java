@@ -1,6 +1,6 @@
 package com.friney.fairsplit.core.repository;
 
-import com.friney.fairsplit.core.entity.ExpenseMember.ExpenseMember;
+import com.friney.fairsplit.core.entity.expense_member.ExpenseMember;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

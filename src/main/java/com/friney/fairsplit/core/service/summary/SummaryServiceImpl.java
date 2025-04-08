@@ -1,16 +1,17 @@
 package com.friney.fairsplit.core.service.summary;
 
-import com.friney.fairsplit.core.entity.Event.Event;
-import com.friney.fairsplit.core.entity.Expense.Expense;
-import com.friney.fairsplit.core.entity.ExpenseMember.ExpenseMember;
-import com.friney.fairsplit.core.entity.Receipt.Receipt;
-import com.friney.fairsplit.core.entity.Summary.Debt;
-import com.friney.fairsplit.core.entity.Summary.ReceiptSummary;
-import com.friney.fairsplit.core.entity.Summary.Summary;
+import com.friney.fairsplit.core.entity.event.Event;
+import com.friney.fairsplit.core.entity.expense.Expense;
+import com.friney.fairsplit.core.entity.expense_member.ExpenseMember;
+import com.friney.fairsplit.core.entity.receipt.Receipt;
+import com.friney.fairsplit.core.entity.summary.Debt;
+import com.friney.fairsplit.core.entity.summary.ReceiptSummary;
+import com.friney.fairsplit.core.entity.summary.Summary;
 import com.friney.fairsplit.core.service.event.EventService;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +54,7 @@ public class SummaryServiceImpl implements SummaryService {
             for (Map.Entry<String, BigDecimal> entry : debtsMap.entrySet()) {
                 debts.add(new Debt(entry.getKey(), recipient, entry.getValue()));
             }
+            debts.sort(Comparator.comparing(d -> d.getFrom().toLowerCase()));
             receiptSummaries.add(new ReceiptSummary(total, debts));
         }
         summary.setReceipts(receiptSummaries);

@@ -1,8 +1,8 @@
 package com.friney.fairsplit.core.service.event;
 
-import com.friney.fairsplit.api.dto.Event.EventCreateDto;
-import com.friney.fairsplit.api.dto.Event.EventDto;
-import com.friney.fairsplit.core.entity.Event.Event;
+import com.friney.fairsplit.api.dto.event.EventCreateDto;
+import com.friney.fairsplit.api.dto.event.EventDto;
+import com.friney.fairsplit.core.entity.event.Event;
 import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.mapper.EventMapper;
 import com.friney.fairsplit.core.repository.EventRepository;
@@ -32,7 +32,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public Event getById(Long id) {
         return eventRepository.findById(id)
-                .orElseThrow(() -> new ServiceException("Event with id " + id + " not found", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ServiceException("event with id " + id + " not found", HttpStatus.NOT_FOUND));
     }
 
     @Override

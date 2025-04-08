@@ -1,8 +1,8 @@
 package com.friney.fairsplit.core.service.user;
 
-import com.friney.fairsplit.api.dto.User.NotRegisteredUserDto;
-import com.friney.fairsplit.api.dto.User.RegisteredUserDto;
-import com.friney.fairsplit.core.entity.User.User;
+import com.friney.fairsplit.api.dto.user.NotRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.RegisteredUserDto;
+import com.friney.fairsplit.core.entity.user.User;
 
 import java.util.List;
 

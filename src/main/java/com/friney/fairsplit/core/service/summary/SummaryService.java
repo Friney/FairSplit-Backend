@@ -1,6 +1,6 @@
 package com.friney.fairsplit.core.service.summary;
 
-import com.friney.fairsplit.core.entity.Summary.Summary;
+import com.friney.fairsplit.core.entity.summary.Summary;
 
 public interface SummaryService {
 

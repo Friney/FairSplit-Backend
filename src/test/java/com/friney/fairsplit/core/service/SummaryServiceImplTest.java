@@ -1,16 +1,15 @@
 package com.friney.fairsplit.core.service;
 
-import com.friney.fairsplit.core.entity.Event.Event;
-import com.friney.fairsplit.core.entity.Expense.Expense;
-import com.friney.fairsplit.core.entity.ExpenseMember.ExpenseMember;
-import com.friney.fairsplit.core.entity.Receipt.Receipt;
-import com.friney.fairsplit.core.entity.Summary.Debt;
-import com.friney.fairsplit.core.entity.Summary.ReceiptSummary;
-import com.friney.fairsplit.core.entity.Summary.Summary;
-import com.friney.fairsplit.core.entity.User.User;
+import com.friney.fairsplit.core.entity.event.Event;
+import com.friney.fairsplit.core.entity.expense.Expense;
+import com.friney.fairsplit.core.entity.expense_member.ExpenseMember;
+import com.friney.fairsplit.core.entity.receipt.Receipt;
+import com.friney.fairsplit.core.entity.summary.Debt;
+import com.friney.fairsplit.core.entity.summary.ReceiptSummary;
+import com.friney.fairsplit.core.entity.summary.Summary;
+import com.friney.fairsplit.core.entity.user.User;
 import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.service.event.EventService;
-import com.friney.fairsplit.core.service.summary.SummaryService;
 import com.friney.fairsplit.core.service.summary.SummaryServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,17 +39,17 @@ class SummaryServiceImplTest {
     void testCalculateSummary() {
         User user1 = User.builder()
                 .id(1L)
-                .name("User 1")
+                .name("user 1")
                 .build();
 
         User user2 = User.builder()
                 .id(2L)
-                .name("User 2")
+                .name("user 2")
                 .build();
 
         User user3 = User.builder()
                 .id(3L)
-                .name("User 3")
+                .name("user 3")
                 .build();
 
         Expense expense1 = Expense.builder()
@@ -124,18 +123,18 @@ class SummaryServiceImplTest {
         assertEquals(3, receipt1Summary.getDebts().size());
 
         Debt debt1 = receipt1Summary.getDebts().getFirst();
-        assertEquals("User 1", debt1.getFrom());
-        assertEquals("User 1", debt1.getTo());
+        assertEquals("user 1", debt1.getFrom());
+        assertEquals("user 1", debt1.getTo());
         assertEquals(BigDecimal.valueOf(50).stripTrailingZeros(), debt1.getAmount().stripTrailingZeros());
 
         Debt debt2 = receipt1Summary.getDebts().get(1);
-        assertEquals("User 2", debt2.getFrom());
-        assertEquals("User 1", debt2.getTo());
+        assertEquals("user 2", debt2.getFrom());
+        assertEquals("user 1", debt2.getTo());
         assertEquals(BigDecimal.valueOf(150).stripTrailingZeros(), debt2.getAmount().stripTrailingZeros());
 
         Debt debt3 = receipt1Summary.getDebts().get(2);
-        assertEquals("User 3", debt3.getFrom());
-        assertEquals("User 1", debt3.getTo());
+        assertEquals("user 3", debt3.getFrom());
+        assertEquals("user 1", debt3.getTo());
         assertEquals(BigDecimal.valueOf(100).stripTrailingZeros(), debt3.getAmount().stripTrailingZeros());
 
         ReceiptSummary receipt2Summary = result.getReceipts().get(1);
@@ -143,18 +142,18 @@ class SummaryServiceImplTest {
         assertEquals(3, receipt2Summary.getDebts().size());
 
         Debt debt4 = receipt2Summary.getDebts().getFirst();
-        assertEquals("User 1", debt4.getFrom());
-        assertEquals("User 2", debt4.getTo());
+        assertEquals("user 1", debt4.getFrom());
+        assertEquals("user 2", debt4.getTo());
         assertEquals(BigDecimal.valueOf(50).stripTrailingZeros(), debt4.getAmount().stripTrailingZeros());
 
         Debt debt5 = receipt2Summary.getDebts().get(1);
-        assertEquals("User 2", debt5.getFrom());
-        assertEquals("User 2", debt5.getTo());
+        assertEquals("user 2", debt5.getFrom());
+        assertEquals("user 2", debt5.getTo());
         assertEquals(BigDecimal.valueOf(50).stripTrailingZeros(), debt5.getAmount().stripTrailingZeros());
 
         Debt debt6 = receipt2Summary.getDebts().get(2);
-        assertEquals("User 3", debt6.getFrom());
-        assertEquals("User 2", debt6.getTo());
+        assertEquals("user 3", debt6.getFrom());
+        assertEquals("user 2", debt6.getTo());
         assertEquals(BigDecimal.valueOf(50).stripTrailingZeros(), debt6.getAmount().stripTrailingZeros());
     }
 
@@ -176,13 +175,13 @@ class SummaryServiceImplTest {
     @Test
     void testCalculateSummaryEventNotFound() {
         when(eventService.getById(1L))
-                .thenThrow(new ServiceException("Event with id 1 not found", HttpStatus.NOT_FOUND));
+                .thenThrow(new ServiceException("event with id 1 not found", HttpStatus.NOT_FOUND));
 
         ServiceException exception = assertThrows(ServiceException.class, () -> {
             summaryService.calculateSummary(1L);
         });
 
-        assertEquals("Event with id 1 not found", exception.getMessage());
+        assertEquals("event with id 1 not found", exception.getMessage());
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
     }
 }

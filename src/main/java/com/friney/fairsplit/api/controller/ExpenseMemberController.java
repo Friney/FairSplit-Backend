@@ -1,8 +1,8 @@
 package com.friney.fairsplit.api.controller;
 
 import com.friney.fairsplit.api.Paths;
-import com.friney.fairsplit.api.dto.ExpenseMember.ExpenseMemberCreateDto;
-import com.friney.fairsplit.api.dto.ExpenseMember.ExpenseMemberDto;
+import com.friney.fairsplit.api.dto.expense_member.ExpenseMemberCreateDto;
+import com.friney.fairsplit.api.dto.expense_member.ExpenseMemberDto;
 import com.friney.fairsplit.core.service.expense.member.ExpenseMemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
