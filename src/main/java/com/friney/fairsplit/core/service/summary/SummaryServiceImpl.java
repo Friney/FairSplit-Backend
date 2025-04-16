@@ -2,12 +2,11 @@ package com.friney.fairsplit.core.service.summary;
 
 import com.friney.fairsplit.core.entity.event.Event;
 import com.friney.fairsplit.core.entity.expense.Expense;
-import com.friney.fairsplit.core.entity.expense_member.ExpenseMember;
+import com.friney.fairsplit.core.entity.expense.member.ExpenseMember;
 import com.friney.fairsplit.core.entity.receipt.Receipt;
 import com.friney.fairsplit.core.entity.summary.Debt;
 import com.friney.fairsplit.core.entity.summary.ReceiptSummary;
 import com.friney.fairsplit.core.entity.summary.Summary;
-import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.service.event.EventService;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -16,8 +15,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,7 +29,7 @@ public class SummaryServiceImpl implements SummaryService {
     public Summary calculateSummary(Long eventId) {
         Summary summary = new Summary();
         Event event = eventService.getById(eventId);
-        List<Receipt> receipts = event.getReceipts();
+        Set<Receipt> receipts = event.getReceipts();
         if (receipts == null || receipts.isEmpty()) {
             summary.setTotal(BigDecimal.ZERO);
             summary.setReceipts(List.of());
@@ -46,11 +45,11 @@ public class SummaryServiceImpl implements SummaryService {
         return summary;
     }
 
-    private List<ReceiptSummary> getReceiptSummaries(List<Receipt> receipts) {
+    private List<ReceiptSummary> getReceiptSummaries(Set<Receipt> receipts) {
         List<ReceiptSummary> receiptSummaries = new ArrayList<>();
         for (Receipt receipt : receipts) {
             String recipient = receipt.getPaidByUser().getName();
-            List<Expense> expenses = receipt.getExpenses();
+            Set<Expense> expenses = receipt.getExpenses();
             if (expenses == null || expenses.isEmpty()) {
                 continue;
             }
@@ -76,8 +75,9 @@ public class SummaryServiceImpl implements SummaryService {
                 debts.add(new Debt(entry.getKey(), recipient, entry.getValue()));
             }
             debts.sort(Comparator.comparing(debt -> debt.getFrom().toLowerCase()));
-            receiptSummaries.add(new ReceiptSummary(receiptTotal, debts));
+            receiptSummaries.add(new ReceiptSummary(receipt.getName(), receiptTotal, debts));
         }
+        receiptSummaries.sort(Comparator.comparing(receiptSummary -> receiptSummary.getName().toLowerCase()));
         return receiptSummaries;
     }
 

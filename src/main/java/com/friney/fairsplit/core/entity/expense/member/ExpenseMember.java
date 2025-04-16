@@ -1,4 +1,4 @@
-package com.friney.fairsplit.core.entity.expense_member;
+package com.friney.fairsplit.core.entity.expense.member;
 
 import com.friney.fairsplit.core.entity.expense.Expense;
 import com.friney.fairsplit.core.entity.user.User;

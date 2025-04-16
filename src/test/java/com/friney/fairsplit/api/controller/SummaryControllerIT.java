@@ -120,8 +120,8 @@ class SummaryControllerIT {
         Summary expected = Summary.builder()
                 .total(BigDecimal.valueOf(500))
                 .receipts(List.of(
-                        new ReceiptSummary(BigDecimal.valueOf(200.0), List.of()),
-                        new ReceiptSummary(BigDecimal.valueOf(300.0), List.of())
+                        new ReceiptSummary(receipt1.name(), BigDecimal.valueOf(200.0), List.of()),
+                        new ReceiptSummary(receipt2.name(), BigDecimal.valueOf(300.0), List.of())
                 ))
                 .build();
         testSummaryEndpoint(eventDto.id(), expected);
@@ -160,16 +160,22 @@ class SummaryControllerIT {
         Summary expected = Summary.builder()
                 .total(BigDecimal.valueOf(500))
                 .receipts(List.of(
-                        new ReceiptSummary(BigDecimal.valueOf(200.0), List.of(
-                                new Debt("user 2", "user 1", BigDecimal.valueOf(83.33)),
-                                new Debt("user 3", "user 1", BigDecimal.valueOf(50.00)),
-                                new Debt("user 4", "user 1", BigDecimal.valueOf(33.33))
-                        )),
-                        new ReceiptSummary(BigDecimal.valueOf(300.0), List.of(
-                                new Debt("user 1", "user 2", BigDecimal.valueOf(75.00)),
-                                new Debt("user 3", "user 2", BigDecimal.valueOf(75.00)),
-                                new Debt("user 4", "user 2", BigDecimal.valueOf(75.00))
-                        ))
+                        new ReceiptSummary(
+                                receipt1.name(),
+                                BigDecimal.valueOf(200.0),
+                                List.of(
+                                        new Debt("user 2", "user 1", BigDecimal.valueOf(83.33)),
+                                        new Debt("user 3", "user 1", BigDecimal.valueOf(50.00)),
+                                        new Debt("user 4", "user 1", BigDecimal.valueOf(33.33))
+                                )),
+                        new ReceiptSummary(
+                                receipt2.name(),
+                                BigDecimal.valueOf(300.0),
+                                List.of(
+                                        new Debt("user 1", "user 2", BigDecimal.valueOf(75.00)),
+                                        new Debt("user 3", "user 2", BigDecimal.valueOf(75.00)),
+                                        new Debt("user 4", "user 2", BigDecimal.valueOf(75.00))
+                                ))
                 ))
                 .build();
         testSummaryEndpoint(eventDto.id(), expected);

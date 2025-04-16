@@ -2,7 +2,7 @@ package com.friney.fairsplit.core.service;
 
 import com.friney.fairsplit.core.entity.event.Event;
 import com.friney.fairsplit.core.entity.expense.Expense;
-import com.friney.fairsplit.core.entity.expense_member.ExpenseMember;
+import com.friney.fairsplit.core.entity.expense.member.ExpenseMember;
 import com.friney.fairsplit.core.entity.receipt.Receipt;
 import com.friney.fairsplit.core.entity.summary.Debt;
 import com.friney.fairsplit.core.entity.summary.ReceiptSummary;
@@ -11,6 +11,7 @@ import com.friney.fairsplit.core.entity.user.User;
 import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.service.event.EventService;
 import com.friney.fairsplit.core.service.summary.SummaryServiceImpl;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,8 +20,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -55,7 +54,7 @@ class SummaryServiceImplTest {
         Expense expense1 = Expense.builder()
                 .id(1L)
                 .amount(BigDecimal.valueOf(100))
-                .expenseMembers(Arrays.asList(
+                .expenseMembers(Set.of(
                         ExpenseMember.builder()
                                 .user(user1)
                                 .build(),
@@ -68,7 +67,7 @@ class SummaryServiceImplTest {
         Expense expense2 = Expense.builder()
                 .id(2L)
                 .amount(BigDecimal.valueOf(200))
-                .expenseMembers(Arrays.asList(
+                .expenseMembers(Set.of(
                         ExpenseMember.builder()
                                 .user(user2)
                                 .build(),
@@ -80,14 +79,15 @@ class SummaryServiceImplTest {
 
         Receipt receipt1 = Receipt.builder()
                 .id(1L)
+                .name("receipt 1")
                 .paidByUser(user1)
-                .expenses(Arrays.asList(expense1, expense2))
+                .expenses(Set.of(expense1, expense2))
                 .build();
 
         Expense expense3 = Expense.builder()
                 .id(3L)
                 .amount(BigDecimal.valueOf(150))
-                .expenseMembers(Arrays.asList(
+                .expenseMembers(Set.of(
                         ExpenseMember.builder()
                                 .user(user1)
                                 .build(),
@@ -102,13 +102,14 @@ class SummaryServiceImplTest {
 
         Receipt receipt2 = Receipt.builder()
                 .id(2L)
+                .name("receipt 2")
                 .paidByUser(user2)
-                .expenses(List.of(expense3))
+                .expenses(Set.of(expense3))
                 .build();
 
         Event event = Event.builder()
                 .id(1L)
-                .receipts(Arrays.asList(receipt1, receipt2))
+                .receipts(Set.of(receipt1, receipt2))
                 .build();
 
         when(eventService.getById(1L)).thenReturn(event);
@@ -151,7 +152,7 @@ class SummaryServiceImplTest {
     void testCalculateSummaryNoReceipts() {
         Event event = Event.builder()
                 .id(1L)
-                .receipts(List.of())
+                .receipts(Set.of())
                 .build();
 
         when(eventService.getById(1L)).thenReturn(event);
@@ -167,9 +168,7 @@ class SummaryServiceImplTest {
         when(eventService.getById(1L))
                 .thenThrow(new ServiceException("event with id 1 not found", HttpStatus.NOT_FOUND));
 
-        ServiceException exception = assertThrows(ServiceException.class, () -> {
-            summaryService.calculateSummary(1L);
-        });
+        ServiceException exception = assertThrows(ServiceException.class, () -> summaryService.calculateSummary(1L));
 
         assertEquals("event with id 1 not found", exception.getMessage());
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());

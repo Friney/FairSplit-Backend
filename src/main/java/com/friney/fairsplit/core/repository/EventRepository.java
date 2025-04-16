@@ -13,10 +13,10 @@ import java.util.Optional;
 public interface EventRepository extends JpaRepository<Event, Long>, JpaSpecificationExecutor<Event> {
 
     @Override
-    @EntityGraph(value = "Event.withReceiptsAndExpenses", type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(value = "event.withReceiptsAndExpenses", type = EntityGraph.EntityGraphType.LOAD)
     List<Event> findAll();
 
     @Override
-    @EntityGraph(value = "Event.withReceiptsAndExpenses", type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(value = "event.withReceiptsAndExpenses", type = EntityGraph.EntityGraphType.LOAD)
     Optional<Event> findById(Long id);
 }

@@ -11,6 +11,6 @@ import java.util.Optional;
 public interface ReceiptRepository extends JpaRepository<Receipt, Long> {
 
     @Override
-    @EntityGraph(value = "Receipt.withExpenses", type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(value = "receipt.withExpenses", type = EntityGraph.EntityGraphType.LOAD)
     Optional<Receipt> findById(Long id);
 }

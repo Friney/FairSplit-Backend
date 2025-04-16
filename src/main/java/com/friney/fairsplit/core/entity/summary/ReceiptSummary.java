@@ -15,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReceiptSummary {
+    private String name;
     private BigDecimal total;
     private List<Debt> debts;
 }

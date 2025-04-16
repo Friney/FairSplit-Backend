@@ -49,7 +49,7 @@ class UserControllerIT {
     @Transactional
     void testCreateAndGetNotRegisteredUser() throws Exception {
         NotRegisteredUserDto userDto = NotRegisteredUserDto.builder()
-                .name("User")
+                .name("user")
                 .build();
 
         mockMvc.perform(post(Paths.USERS)
@@ -73,7 +73,7 @@ class UserControllerIT {
     @Transactional
     void testCreateAndGetRegisteredUser() throws Exception {
         RegisteredUserDto userDto = RegisteredUserDto.builder()
-                .name("User")
+                .name("user")
                 .email("email@email.com")
                 .build();
 
@@ -97,7 +97,7 @@ class UserControllerIT {
     @Transactional
     void testCreateTwoRegisteredUsersWithSameEmail() throws Exception {
         RegisteredUserDto userDto = RegisteredUserDto.builder()
-                .name("User")
+                .name("user")
                 .email("email@email.com")
                 .build();
 
@@ -121,7 +121,7 @@ class UserControllerIT {
     @Transactional
     void testCreateTwoNotRegisteredUsersWithSameName() throws Exception {
         NotRegisteredUserDto userDto = NotRegisteredUserDto.builder()
-                .name("User")
+                .name("user")
                 .build();
 
         mockMvc.perform(post(Paths.USERS)
@@ -155,7 +155,7 @@ class UserControllerIT {
     @Transactional
     void testGetAllUsers() throws Exception {
         NotRegisteredUserDto userDto = NotRegisteredUserDto.builder()
-                .name("User")
+                .name("user")
                 .build();
         mockMvc.perform(post(Paths.USERS)
                         .contentType(MediaType.APPLICATION_JSON)

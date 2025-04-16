@@ -23,7 +23,7 @@ import com.friney.fairsplit.api.dto.expense.ExpenseDto;
 import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberCreateDto;
 import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberDto;
 import com.friney.fairsplit.core.entity.expense.Expense;
-import com.friney.fairsplit.core.entity.expense_member.ExpenseMember;
+import com.friney.fairsplit.core.entity.expense.member.ExpenseMember;
 import com.friney.fairsplit.core.entity.user.User;
 import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.mapper.ExpenseMemberMapper;

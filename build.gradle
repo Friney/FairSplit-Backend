@@ -27,13 +27,6 @@ repositories {
     mavenCentral()
 }
 
-flyway {
-    url = 'psql -h localhost -U postgres -d test'
-    user = System.getenv('DB_USERNAME')
-    password = System.getenv('DB_PASSWORD')
-    locations = ['classpath:db/migration']
-}
-
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'

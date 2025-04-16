@@ -1,6 +1,6 @@
 package com.friney.fairsplit.core.entity.expense;
 
-import com.friney.fairsplit.core.entity.expense_member.ExpenseMember;
+import com.friney.fairsplit.core.entity.expense.member.ExpenseMember;
 import com.friney.fairsplit.core.entity.receipt.Receipt;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +20,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Set;
 
 @Builder
