@@ -20,8 +20,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import com.friney.fairsplit.api.dto.expense.ExpenseDto;
-import com.friney.fairsplit.api.dto.expense_member.ExpenseMemberCreateDto;
-import com.friney.fairsplit.api.dto.expense_member.ExpenseMemberDto;
+import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberCreateDto;
+import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberDto;
 import com.friney.fairsplit.core.entity.expense.Expense;
 import com.friney.fairsplit.core.entity.expense_member.ExpenseMember;
 import com.friney.fairsplit.core.entity.user.User;

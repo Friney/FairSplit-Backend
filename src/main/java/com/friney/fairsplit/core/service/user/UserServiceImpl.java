@@ -36,6 +36,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(RegisteredUserDto userDto) {
+        registeredUserRepository.findByEmail(userDto.email()).ifPresent(
+                user -> {
+                    throw new ServiceException("user with email " + userDto.email() + " already exists", HttpStatus.BAD_REQUEST);
+                });
         RegisteredUser user = new RegisteredUser();
         user.setName(userDto.name());
         user.setEmail(userDto.email());
@@ -45,6 +49,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(NotRegisteredUserDto userDto) {
+        notRegisteredUserRepository.findByName(userDto.name()).ifPresent(
+                user -> {
+                    throw new ServiceException("user with name " + userDto.name() + " already exists", HttpStatus.BAD_REQUEST);
+                });
         NotRegisteredUser user = new NotRegisteredUser();
         user.setName(userDto.name());
         notRegisteredUserRepository.save(user);

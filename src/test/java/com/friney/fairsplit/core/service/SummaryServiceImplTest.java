@@ -118,43 +118,33 @@ class SummaryServiceImplTest {
         assertEquals(BigDecimal.valueOf(450).stripTrailingZeros(), result.getTotal().stripTrailingZeros());
         assertEquals(2, result.getReceipts().size());
 
-        ReceiptSummary receipt1Summary = result.getReceipts().getFirst();
-        assertEquals(BigDecimal.valueOf(300).stripTrailingZeros(), receipt1Summary.getTotal().stripTrailingZeros());
-        assertEquals(3, receipt1Summary.getDebts().size());
+        ReceiptSummary receiptSummary = result.getReceipts().getFirst();
+        assertEquals(BigDecimal.valueOf(300).stripTrailingZeros(), receiptSummary.getTotal().stripTrailingZeros());
+        assertEquals(2, receiptSummary.getDebts().size());
 
-        Debt debt1 = receipt1Summary.getDebts().getFirst();
-        assertEquals("user 1", debt1.getFrom());
+        Debt debt1 = receiptSummary.getDebts().getFirst();
+        assertEquals("user 2", debt1.getFrom());
         assertEquals("user 1", debt1.getTo());
+        assertEquals(BigDecimal.valueOf(150).stripTrailingZeros(), debt1.getAmount().stripTrailingZeros());
+
+        Debt debt2 = receiptSummary.getDebts().get(1);
+        assertEquals("user 3", debt2.getFrom());
+        assertEquals("user 1", debt2.getTo());
+        assertEquals(BigDecimal.valueOf(100).stripTrailingZeros(), debt2.getAmount().stripTrailingZeros());
+
+        receiptSummary = result.getReceipts().get(1);
+        assertEquals(BigDecimal.valueOf(150).stripTrailingZeros(), receiptSummary.getTotal().stripTrailingZeros());
+        assertEquals(2, receiptSummary.getDebts().size());
+
+        debt1 = receiptSummary.getDebts().getFirst();
+        assertEquals("user 1", debt1.getFrom());
+        assertEquals("user 2", debt1.getTo());
         assertEquals(BigDecimal.valueOf(50).stripTrailingZeros(), debt1.getAmount().stripTrailingZeros());
 
-        Debt debt2 = receipt1Summary.getDebts().get(1);
-        assertEquals("user 2", debt2.getFrom());
-        assertEquals("user 1", debt2.getTo());
-        assertEquals(BigDecimal.valueOf(150).stripTrailingZeros(), debt2.getAmount().stripTrailingZeros());
-
-        Debt debt3 = receipt1Summary.getDebts().get(2);
-        assertEquals("user 3", debt3.getFrom());
-        assertEquals("user 1", debt3.getTo());
-        assertEquals(BigDecimal.valueOf(100).stripTrailingZeros(), debt3.getAmount().stripTrailingZeros());
-
-        ReceiptSummary receipt2Summary = result.getReceipts().get(1);
-        assertEquals(BigDecimal.valueOf(150).stripTrailingZeros(), receipt2Summary.getTotal().stripTrailingZeros());
-        assertEquals(3, receipt2Summary.getDebts().size());
-
-        Debt debt4 = receipt2Summary.getDebts().getFirst();
-        assertEquals("user 1", debt4.getFrom());
-        assertEquals("user 2", debt4.getTo());
-        assertEquals(BigDecimal.valueOf(50).stripTrailingZeros(), debt4.getAmount().stripTrailingZeros());
-
-        Debt debt5 = receipt2Summary.getDebts().get(1);
-        assertEquals("user 2", debt5.getFrom());
-        assertEquals("user 2", debt5.getTo());
-        assertEquals(BigDecimal.valueOf(50).stripTrailingZeros(), debt5.getAmount().stripTrailingZeros());
-
-        Debt debt6 = receipt2Summary.getDebts().get(2);
-        assertEquals("user 3", debt6.getFrom());
-        assertEquals("user 2", debt6.getTo());
-        assertEquals(BigDecimal.valueOf(50).stripTrailingZeros(), debt6.getAmount().stripTrailingZeros());
+        debt2 = receiptSummary.getDebts().get(1);
+        assertEquals("user 3", debt2.getFrom());
+        assertEquals("user 2", debt2.getTo());
+        assertEquals(BigDecimal.valueOf(50).stripTrailingZeros(), debt2.getAmount().stripTrailingZeros());
     }
 
     @Test

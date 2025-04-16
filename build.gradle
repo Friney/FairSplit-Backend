@@ -3,7 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.4.1'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'org.flywaydb.flyway' version '11.1.1'
-    id "co.uzzu.dotenv.gradle" version "2.0.0" // Автоматически загружает .env
+    id "co.uzzu.dotenv.gradle" version "2.0.0"
     id 'org.sonarqube' version '6.1.0.5360'
     id 'jacoco'
 }
@@ -43,6 +43,10 @@ dependencies {
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
     testImplementation 'org.mockito:mockito-core:5.17.0'
     implementation 'io.github.cdimascio:dotenv-java:3.2.0'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6'
+    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:postgresql'
 }
 
 tasks.named('test') {

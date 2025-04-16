@@ -7,6 +7,7 @@ import com.friney.fairsplit.core.entity.receipt.Receipt;
 import com.friney.fairsplit.core.entity.summary.Debt;
 import com.friney.fairsplit.core.entity.summary.ReceiptSummary;
 import com.friney.fairsplit.core.entity.summary.Summary;
+import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.service.event.EventService;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,23 +31,42 @@ public class SummaryServiceImpl implements SummaryService {
         Summary summary = new Summary();
         Event event = eventService.getById(eventId);
         List<Receipt> receipts = event.getReceipts();
+        if (receipts == null || receipts.isEmpty()) {
+            summary.setTotal(BigDecimal.ZERO);
+            summary.setReceipts(List.of());
+            return summary;
+        }
+
+        summary.setReceipts(getReceiptSummaries(receipts));
+        BigDecimal total = summary.getReceipts()
+                .stream()
+                .map(ReceiptSummary::getTotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        summary.setTotal(total);
+        return summary;
+    }
+
+    private List<ReceiptSummary> getReceiptSummaries(List<Receipt> receipts) {
         List<ReceiptSummary> receiptSummaries = new ArrayList<>();
         for (Receipt receipt : receipts) {
             String recipient = receipt.getPaidByUser().getName();
             List<Expense> expenses = receipt.getExpenses();
+            if (expenses == null || expenses.isEmpty()) {
+                continue;
+            }
 
-            BigDecimal total = expenses
+            BigDecimal receiptTotal = expenses
                     .stream()
                     .map(Expense::getAmount)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
-
             Map<String, BigDecimal> debtsMap = new HashMap<>();
             for (Expense expense : expenses) {
-                BigDecimal amount = expense.getAmount();
-                int countMembers = expense.getExpenseMembers().size();
-                BigDecimal amountPerMember = amount.divide(BigDecimal.valueOf(countMembers), 2, RoundingMode.HALF_UP);
+                BigDecimal amountPerMember = getBigDecimalPerMember(expense);
                 for (ExpenseMember expenseMember : expense.getExpenseMembers()) {
                     String name = expenseMember.getUser().getName();
+                    if (name.equals(recipient)) {
+                        continue;
+                    }
                     debtsMap.merge(name, amountPerMember, BigDecimal::add);
                 }
             }
@@ -54,15 +75,19 @@ public class SummaryServiceImpl implements SummaryService {
             for (Map.Entry<String, BigDecimal> entry : debtsMap.entrySet()) {
                 debts.add(new Debt(entry.getKey(), recipient, entry.getValue()));
             }
-            debts.sort(Comparator.comparing(d -> d.getFrom().toLowerCase()));
-            receiptSummaries.add(new ReceiptSummary(total, debts));
+            debts.sort(Comparator.comparing(debt -> debt.getFrom().toLowerCase()));
+            receiptSummaries.add(new ReceiptSummary(receiptTotal, debts));
         }
-        summary.setReceipts(receiptSummaries);
-        BigDecimal total = receiptSummaries
-                .stream()
-                .map(ReceiptSummary::getTotal)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        summary.setTotal(total);
-        return summary;
+        return receiptSummaries;
+    }
+
+    private BigDecimal getBigDecimalPerMember(Expense expense) {
+        BigDecimal amount = expense.getAmount();
+        int countMembers = expense.getExpenseMembers().size();
+        if (countMembers == 0) {
+            return amount;
+        }
+        return amount.divide(BigDecimal.valueOf(countMembers), 2, RoundingMode.HALF_UP);
     }
 }
+

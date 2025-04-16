@@ -5,6 +5,7 @@ import com.friney.fairsplit.api.dto.expense.ExpenseCreateDto;
 import com.friney.fairsplit.api.dto.expense.ExpenseDto;
 import com.friney.fairsplit.core.service.expense.ExpenseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class ExpenseController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ExpenseDto create(@RequestBody ExpenseCreateDto expenseCreateDto, @PathVariable Long receiptId) {
         return expenseService.create(expenseCreateDto, receiptId);
     }

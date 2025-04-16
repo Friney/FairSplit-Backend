@@ -1,8 +1,8 @@
 package com.friney.fairsplit.core.service.expense.member;
 
 import com.friney.fairsplit.api.dto.expense.ExpenseDto;
-import com.friney.fairsplit.api.dto.expense_member.ExpenseMemberCreateDto;
-import com.friney.fairsplit.api.dto.expense_member.ExpenseMemberDto;
+import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberCreateDto;
+import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberDto;
 import com.friney.fairsplit.core.entity.expense_member.ExpenseMember;
 import com.friney.fairsplit.core.mapper.ExpenseMemberMapper;
 import com.friney.fairsplit.core.repository.ExpenseMemberRepository;

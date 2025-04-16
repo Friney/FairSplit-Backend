@@ -14,8 +14,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.friney.fairsplit.api.dto.expense_member.ExpenseMemberCreateDto;
-import com.friney.fairsplit.api.dto.expense_member.ExpenseMemberDto;
+import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberCreateDto;
+import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberDto;
 
 @ExtendWith(MockitoExtension.class)
 class ExpenseMemberControllerTest {

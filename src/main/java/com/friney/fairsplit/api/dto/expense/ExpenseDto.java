@@ -1,6 +1,6 @@
 package com.friney.fairsplit.api.dto.expense;
 
-import com.friney.fairsplit.api.dto.expense_member.ExpenseMemberDto;
+import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberDto;
 import lombok.Builder;
 
 import java.math.BigDecimal;

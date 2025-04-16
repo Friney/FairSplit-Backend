@@ -1,4 +1,4 @@
-package com.friney.fairsplit.api.dto.expense_member;
+package com.friney.fairsplit.api.dto.expense.member;
 
 import lombok.Builder;
 

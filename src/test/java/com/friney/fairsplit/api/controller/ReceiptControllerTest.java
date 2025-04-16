@@ -44,7 +44,7 @@ class ReceiptControllerTest {
 
         when(receiptService.getAllByEventId(1L)).thenReturn(expectedDtos);
 
-        List<ReceiptDto> result = receiptController.getAll(1L);
+        List<ReceiptDto> result = receiptController.getAllByEventId(1L);
 
         assertEquals(expectedDtos, result);
         verify(receiptService, times(1)).getAllByEventId(1L);
