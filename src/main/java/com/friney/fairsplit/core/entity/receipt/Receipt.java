@@ -9,6 +9,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
+import jakarta.persistence.NamedSubgraph;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -18,6 +21,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 @Builder
 @Getter
@@ -26,6 +30,27 @@ import java.util.List;
 @Table(name = "receipts")
 @AllArgsConstructor
 @NoArgsConstructor
+@NamedEntityGraph(
+        name = "Receipt.withExpenses",
+        attributeNodes = {
+                @NamedAttributeNode(value = "expenses", subgraph = "expensesSubgraph"),
+                @NamedAttributeNode("paidByUser")
+        },
+        subgraphs = {
+                @NamedSubgraph(
+                        name = "expensesSubgraph",
+                        attributeNodes = {
+                                @NamedAttributeNode(value = "expenseMembers", subgraph = "expenseMembersSubgraph")
+                        }
+                ),
+                @NamedSubgraph(
+                        name = "expenseMembersSubgraph",
+                        attributeNodes = {
+                                @NamedAttributeNode("user")
+                        }
+                )
+        }
+)
 public class Receipt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +60,7 @@ public class Receipt {
     @JoinColumn(name = "event_id")
     Event event;
     @OneToMany(mappedBy = "receipt")
-    List<Expense> expenses;
+    Set<Expense> expenses;
     @ManyToOne
     @JoinColumn(name = "paid_by_user_id")
     User paidByUser;

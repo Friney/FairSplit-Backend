@@ -5,7 +5,9 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+
 @Repository
 public interface NotRegisteredUserRepository extends JpaRepository<NotRegisteredUser, Long> {
-    Optional<Object> findByName(String name);
+
+    Optional<NotRegisteredUser> findByName(String name);
 }
