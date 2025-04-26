@@ -1,10 +1,10 @@
 package com.friney.fairsplit.api.controller;
 
-import com.friney.fairsplit.api.dto.user.NotRegisteredUserDto;
-import com.friney.fairsplit.api.dto.user.RegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.CreateRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.UserDto;
 import com.friney.fairsplit.core.entity.user.NotRegisteredUser;
 import com.friney.fairsplit.core.entity.user.RegisteredUser;
-import com.friney.fairsplit.core.entity.user.User;
 import com.friney.fairsplit.core.service.user.UserService;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ class UserControllerTest {
 
     @Test
     void createRegisteredUser() {
-        RegisteredUserDto registeredUser = RegisteredUserDto.builder()
+        CreateRegisteredUserDto registeredUser = CreateRegisteredUserDto.builder()
                 .name("user")
                 .email("example@example.com")
                 .build();
@@ -38,17 +38,23 @@ class UserControllerTest {
                 .email(registeredUser.email())
                 .build();
 
-        when(userService.create(registeredUser)).thenReturn(user);
+        UserDto expectedUser = UserDto.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .displayName(user.getName() + " (example@example.com)")
+                .build();
 
-        RegisteredUser result = (RegisteredUser) userController.create(registeredUser);
+        when(userService.addRegisteredUser(registeredUser)).thenReturn(expectedUser);
 
-        assertEquals(user, result);
-        verify(userService, times(1)).create(registeredUser);
+        UserDto result = userController.create(registeredUser);
+
+        assertEquals(result, expectedUser);
+        verify(userService, times(1)).addRegisteredUser(registeredUser);
     }
 
     @Test
     void testCreateNotRegisteredUser() {
-        NotRegisteredUserDto notRegisteredUser = NotRegisteredUserDto.builder()
+        CreateNotRegisteredUserDto notRegisteredUser = CreateNotRegisteredUserDto.builder()
                 .name("user")
                 .build();
 
@@ -56,31 +62,39 @@ class UserControllerTest {
                 .name(notRegisteredUser.name())
                 .build();
 
-        when(userService.create(notRegisteredUser)).thenReturn(user);
+        UserDto expectedUser = UserDto.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .displayName(user.getName())
+                .build();
 
-        NotRegisteredUser result = (NotRegisteredUser) userController.create(notRegisteredUser);
+        when(userService.addNotRegisteredUser(notRegisteredUser)).thenReturn(expectedUser);
 
-        assertEquals(user, result);
-        verify(userService, times(1)).create(notRegisteredUser);
+        UserDto result = userController.create(notRegisteredUser);
+
+        assertEquals(result, expectedUser);
+        verify(userService, times(1)).addNotRegisteredUser(notRegisteredUser);
     }
 
     @Test
     void getAll() {
-        User user1 = User.builder()
+        UserDto user1 = UserDto.builder()
                 .id(1L)
                 .name("user 1")
+                .displayName("user 1")
                 .build();
 
-        User user2 = User.builder()
+        UserDto user2 = UserDto.builder()
                 .id(2L)
                 .name("user 2")
+                .displayName("user 2 (example@example.com)")
                 .build();
 
-        List<User> expectedUsers = List.of(user1, user2);
+        List<UserDto> expectedUsers = List.of(user1, user2);
 
         when(userService.getAll()).thenReturn(expectedUsers);
 
-        List<User> result = userController.getAll();
+        List<UserDto> result = userController.getAll();
 
         assertEquals(expectedUsers, result);
         verify(userService, times(1)).getAll();

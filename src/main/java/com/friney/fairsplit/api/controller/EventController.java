@@ -19,6 +19,7 @@ import java.util.List;
 @RequestMapping(Paths.EVENTS)
 @RequiredArgsConstructor
 public class EventController {
+
     private final EventService eventService;
 
     @GetMapping

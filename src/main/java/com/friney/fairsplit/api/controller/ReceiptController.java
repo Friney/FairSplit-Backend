@@ -20,6 +20,7 @@ import java.util.List;
 @RequestMapping(Paths.RECEIPTS)
 @RequiredArgsConstructor
 public class ReceiptController {
+
     private final ReceiptService receiptService;
 
     @GetMapping

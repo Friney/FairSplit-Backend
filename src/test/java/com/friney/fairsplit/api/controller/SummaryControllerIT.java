@@ -33,8 +33,8 @@ import com.friney.fairsplit.api.dto.expense.ExpenseDto;
 import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberCreateDto;
 import com.friney.fairsplit.api.dto.receipt.ReceiptCreateDto;
 import com.friney.fairsplit.api.dto.receipt.ReceiptDto;
-import com.friney.fairsplit.api.dto.user.NotRegisteredUserDto;
-import com.friney.fairsplit.api.dto.user.RegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.CreateRegisteredUserDto;
 import com.friney.fairsplit.core.entity.user.User;
 
 @SpringBootTest
@@ -201,7 +201,7 @@ class SummaryControllerIT {
     }
 
     private User createNotRegisteredUser(String name) throws Exception {
-        NotRegisteredUserDto userDto = NotRegisteredUserDto.builder()
+        CreateNotRegisteredUserDto userDto = CreateNotRegisteredUserDto.builder()
                 .name(name)
                 .build();
 
@@ -218,7 +218,7 @@ class SummaryControllerIT {
     }
 
     private User createRegisteredUser(String name, String email) throws Exception {
-        RegisteredUserDto userDto = RegisteredUserDto.builder()
+        CreateRegisteredUserDto userDto = CreateRegisteredUserDto.builder()
                 .name(name)
                 .email(email)
                 .build();

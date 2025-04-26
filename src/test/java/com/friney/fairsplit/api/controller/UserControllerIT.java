@@ -2,8 +2,8 @@ package com.friney.fairsplit.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.friney.fairsplit.api.Paths;
-import com.friney.fairsplit.api.dto.user.NotRegisteredUserDto;
-import com.friney.fairsplit.api.dto.user.RegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.CreateRegisteredUserDto;
 import com.friney.fairsplit.core.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -48,7 +48,7 @@ class UserControllerIT {
     @Test
     @Transactional
     void testCreateAndGetNotRegisteredUser() throws Exception {
-        NotRegisteredUserDto userDto = NotRegisteredUserDto.builder()
+        CreateNotRegisteredUserDto userDto = CreateNotRegisteredUserDto.builder()
                 .name("user")
                 .build();
 
@@ -72,7 +72,7 @@ class UserControllerIT {
     @Test
     @Transactional
     void testCreateAndGetRegisteredUser() throws Exception {
-        RegisteredUserDto userDto = RegisteredUserDto.builder()
+        CreateRegisteredUserDto userDto = CreateRegisteredUserDto.builder()
                 .name("user")
                 .email("email@email.com")
                 .build();
@@ -96,7 +96,7 @@ class UserControllerIT {
     @Test
     @Transactional
     void testCreateTwoRegisteredUsersWithSameEmail() throws Exception {
-        RegisteredUserDto userDto = RegisteredUserDto.builder()
+        CreateRegisteredUserDto userDto = CreateRegisteredUserDto.builder()
                 .name("user")
                 .email("email@email.com")
                 .build();
@@ -120,7 +120,7 @@ class UserControllerIT {
     @Test
     @Transactional
     void testCreateTwoNotRegisteredUsersWithSameName() throws Exception {
-        NotRegisteredUserDto userDto = NotRegisteredUserDto.builder()
+        CreateNotRegisteredUserDto userDto = CreateNotRegisteredUserDto.builder()
                 .name("user")
                 .build();
 
@@ -154,7 +154,7 @@ class UserControllerIT {
     @Test
     @Transactional
     void testGetAllUsers() throws Exception {
-        NotRegisteredUserDto userDto = NotRegisteredUserDto.builder()
+        CreateNotRegisteredUserDto userDto = CreateNotRegisteredUserDto.builder()
                 .name("user")
                 .build();
         mockMvc.perform(post(Paths.USERS)
@@ -165,7 +165,7 @@ class UserControllerIT {
                         content().json(new ObjectMapper().writeValueAsString(userDto))
                 );
 
-        RegisteredUserDto userDto2 = RegisteredUserDto.builder()
+        CreateRegisteredUserDto userDto2 = CreateRegisteredUserDto.builder()
                 .name("User2")
                 .email("email@email.com")
                 .build();

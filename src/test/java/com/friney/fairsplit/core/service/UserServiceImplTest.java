@@ -1,7 +1,8 @@
 package com.friney.fairsplit.core.service;
 
-import com.friney.fairsplit.api.dto.user.NotRegisteredUserDto;
-import com.friney.fairsplit.api.dto.user.RegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.CreateRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.UserDto;
 import com.friney.fairsplit.core.entity.user.NotRegisteredUser;
 import com.friney.fairsplit.core.entity.user.RegisteredUser;
 import com.friney.fairsplit.core.entity.user.User;
@@ -51,13 +52,26 @@ class UserServiceImplTest {
                 .name("user 2")
                 .build();
 
+        UserDto userDto1 = UserDto.builder()
+                .id(1L)
+                .name("user 1")
+                .displayName("user 1")
+                .build();
+
+        UserDto userDto2 = UserDto.builder()
+                .id(2L)
+                .name("user 2")
+                .displayName("user 2")
+                .build();
+
         List<User> users = Arrays.asList(user1, user2);
 
+        List<UserDto> expectedUsers = Arrays.asList(userDto1, userDto2);
         when(userRepository.findAll()).thenReturn(users);
 
-        List<User> result = userService.getAll();
+        List<UserDto> result = userService.getAll();
 
-        assertEquals(users, result);
+        assertEquals(expectedUsers, result);
         verify(userRepository, times(1)).findAll();
     }
 
@@ -65,7 +79,7 @@ class UserServiceImplTest {
     void testGetAllNoUsers() {
         when(userRepository.findAll()).thenReturn(List.of());
 
-        List<User> result = userService.getAll();
+        List<UserDto> result = userService.getAll();
 
         assertTrue(result.isEmpty());
         verify(userRepository, times(1)).findAll();
@@ -98,31 +112,37 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testCreateRegisteredUser() {
-        RegisteredUserDto userDto = RegisteredUserDto.builder()
+    void testAddRegisteredUserRegisteredUser() {
+        CreateRegisteredUserDto registeredUserDto = CreateRegisteredUserDto.builder()
                 .name("user")
                 .email("example@example.com")
                 .build();
+
         RegisteredUser savedUser = RegisteredUser.builder().
                 id(1L).
-                name(userDto.name()).
-                email(userDto.email()).
+                name(registeredUserDto.name()).
+                email(registeredUserDto.email()).
                 build();
+
+        UserDto expectedUser = UserDto.builder()
+                .id(savedUser.getId())
+                .name(savedUser.getName())
+                .displayName(savedUser.getName() + " (example@example.com)")
+                .build();
 
         when(registeredUserRepository.save(any(RegisteredUser.class))).thenReturn(savedUser);
         when(userRepository.save(any(User.class))).thenReturn(savedUser);
 
-        // When
-        User result = userService.create(userDto);
+        UserDto result = userService.addRegisteredUser(registeredUserDto);
 
-        assertEquals(savedUser, result);
+        assertEquals(expectedUser, result);
         verify(registeredUserRepository, times(1)).save(any(RegisteredUser.class));
         verify(userRepository, times(1)).save(any(User.class));
     }
 
     @Test
-    void testCreateNotRegisteredUser() {
-        NotRegisteredUserDto userDto = NotRegisteredUserDto.builder()
+    void testAddRegisteredUserNotNotRegisteredUser() {
+        CreateNotRegisteredUserDto userDto = CreateNotRegisteredUserDto.builder()
                 .name("user")
                 .build();
         NotRegisteredUser savedUser = NotRegisteredUser.builder()
@@ -130,12 +150,18 @@ class UserServiceImplTest {
                 .name(userDto.name())
                 .build();
 
+        UserDto expectedUser = UserDto.builder()
+                .id(savedUser.getId())
+                .name(savedUser.getName())
+                .displayName(savedUser.getName())
+                .build();
+
         when(notRegisteredUserRepository.save(any(NotRegisteredUser.class))).thenReturn(savedUser);
         when(userRepository.save(any(User.class))).thenReturn(savedUser);
 
-        User result = userService.create(userDto);
+        UserDto result = userService.addNotRegisteredUser(userDto);
 
-        assertEquals(savedUser, result);
+        assertEquals(expectedUser, result);
         verify(notRegisteredUserRepository, times(1)).save(any(NotRegisteredUser.class));
         verify(userRepository, times(1)).save(any(User.class));
     }

@@ -3,7 +3,9 @@ package com.friney.fairsplit.api.dto.user;
 import lombok.Builder;
 
 @Builder
-public record RegisteredUserDto(
+public record UserDto(
+        Long id,
         String name,
-        String email) {
+        String displayName
+) {
 }
