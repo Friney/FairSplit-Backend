@@ -1,6 +1,6 @@
 package com.friney.fairsplit.core.configs;
 
-import com.friney.fairsplit.core.service.user.UserService;
+import com.friney.fairsplit.core.security.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,6 +32,8 @@ public class SecurityConfig {
                                 .requestMatchers("/users/register", "/auth/**").permitAll()
                                 .anyRequest().authenticated()
                 )
+//                .exceptionHandling(
+//                        exception -> exception.authenticationEntryPoint(jwtFilter))
                 .sessionManagement(
                         session -> session
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

@@ -1,4 +1,4 @@
-package com.friney.fairsplit.core.configs;
+package com.friney.fairsplit.core.security;
 
 import com.friney.fairsplit.core.service.jwt.JwtService;
 import jakarta.servlet.FilterChain;
