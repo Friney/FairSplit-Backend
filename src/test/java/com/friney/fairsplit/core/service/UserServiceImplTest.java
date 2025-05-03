@@ -1,35 +1,42 @@
 package com.friney.fairsplit.core.service;
 
 import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserDto;
-import com.friney.fairsplit.api.dto.user.CreateRegisteredUserDto;
 import com.friney.fairsplit.api.dto.user.UserDto;
 import com.friney.fairsplit.core.entity.user.NotRegisteredUser;
 import com.friney.fairsplit.core.entity.user.RegisteredUser;
 import com.friney.fairsplit.core.entity.user.User;
 import com.friney.fairsplit.core.exception.ServiceException;
+import com.friney.fairsplit.core.mapper.UserMapper;
 import com.friney.fairsplit.core.repository.NotRegisteredUserRepository;
 import com.friney.fairsplit.core.repository.RegisteredUserRepository;
 import com.friney.fairsplit.core.repository.UserRepository;
 import com.friney.fairsplit.core.service.user.UserServiceImpl;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import org.springframework.security.core.userdetails.UserDetails;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private UserMapper userMapper;
 
     @Mock
     private RegisteredUserRepository registeredUserRepository;
@@ -68,6 +75,7 @@ class UserServiceImplTest {
 
         List<UserDto> expectedUsers = Arrays.asList(userDto1, userDto2);
         when(userRepository.findAll()).thenReturn(users);
+        when(userMapper.map(users)).thenReturn(expectedUsers);
 
         List<UserDto> result = userService.getAll();
 
@@ -113,16 +121,11 @@ class UserServiceImplTest {
 
     @Test
     void testAddRegisteredUserRegisteredUser() {
-        CreateRegisteredUserDto registeredUserDto = CreateRegisteredUserDto.builder()
+        RegisteredUser savedUser = RegisteredUser.builder()
+                .id(1L)
                 .name("user")
                 .email("example@example.com")
                 .build();
-
-        RegisteredUser savedUser = RegisteredUser.builder().
-                id(1L).
-                name(registeredUserDto.name()).
-                email(registeredUserDto.email()).
-                build();
 
         UserDto expectedUser = UserDto.builder()
                 .id(savedUser.getId())
@@ -131,17 +134,16 @@ class UserServiceImplTest {
                 .build();
 
         when(registeredUserRepository.save(any(RegisteredUser.class))).thenReturn(savedUser);
-        when(userRepository.save(any(User.class))).thenReturn(savedUser);
+        when(userMapper.map(any(User.class))).thenReturn(expectedUser);
 
-        UserDto result = userService.addRegisteredUser(registeredUserDto);
+        UserDto result = userService.addRegisteredUser(savedUser);
 
         assertEquals(expectedUser, result);
         verify(registeredUserRepository, times(1)).save(any(RegisteredUser.class));
-        verify(userRepository, times(1)).save(any(User.class));
     }
 
     @Test
-    void testAddRegisteredUserNotNotRegisteredUser() {
+    void testAddNotRegisteredUser() {
         CreateNotRegisteredUserDto userDto = CreateNotRegisteredUserDto.builder()
                 .name("user")
                 .build();
@@ -157,12 +159,30 @@ class UserServiceImplTest {
                 .build();
 
         when(notRegisteredUserRepository.save(any(NotRegisteredUser.class))).thenReturn(savedUser);
-        when(userRepository.save(any(User.class))).thenReturn(savedUser);
+        when(userMapper.map(any(User.class))).thenReturn(expectedUser);
 
         UserDto result = userService.addNotRegisteredUser(userDto);
 
         assertEquals(expectedUser, result);
         verify(notRegisteredUserRepository, times(1)).save(any(NotRegisteredUser.class));
-        verify(userRepository, times(1)).save(any(User.class));
+    }
+
+    @Test
+    void loadUserByUsername() {
+        String email = "example@example.com";
+        RegisteredUser savedUser = RegisteredUser.builder()
+                .id(1L)
+                .name("user")
+                .email(email)
+                .password("password")
+                .build();
+
+        when(registeredUserRepository.findByEmail(email)).thenReturn(Optional.of(savedUser));
+
+        UserDetails result = userService.loadUserByUsername(email);
+
+        assertEquals(savedUser.getEmail(), result.getUsername());
+        assertEquals(savedUser.getPassword(), result.getPassword());
+        verify(registeredUserRepository, times(1)).findByEmail(email);
     }
 } 

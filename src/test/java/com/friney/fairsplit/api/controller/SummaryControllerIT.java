@@ -1,29 +1,5 @@
 package com.friney.fairsplit.api.controller;
 
-import com.friney.fairsplit.core.entity.summary.Debt;
-import com.friney.fairsplit.core.entity.summary.ReceiptSummary;
-import com.friney.fairsplit.core.entity.summary.Summary;
-import jakarta.persistence.EntityManager;
-import java.math.BigDecimal;
-
-import java.util.List;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.friney.fairsplit.api.Paths;
 import com.friney.fairsplit.api.dto.event.EventCreateDto;
@@ -35,7 +11,30 @@ import com.friney.fairsplit.api.dto.receipt.ReceiptCreateDto;
 import com.friney.fairsplit.api.dto.receipt.ReceiptDto;
 import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserDto;
 import com.friney.fairsplit.api.dto.user.CreateRegisteredUserDto;
+import com.friney.fairsplit.core.entity.summary.Debt;
+import com.friney.fairsplit.core.entity.summary.ReceiptSummary;
+import com.friney.fairsplit.core.entity.summary.Summary;
 import com.friney.fairsplit.core.entity.user.User;
+import jakarta.persistence.EntityManager;
+import java.math.BigDecimal;
+import java.util.List;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -61,14 +60,17 @@ class SummaryControllerIT {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Test
-    void testCorrectCollectionResultWithoutReceipts() throws Exception {
-        EventDto eventDto = createEvent();
+    private final String userEmailOwnerEvent = "email1@email.com";
 
+    @Test
+    @WithMockUser(username = userEmailOwnerEvent)
+    void testCorrectCollectionResultWithoutReceipts() throws Exception {
         createNotRegisteredUser("user 1");
         createNotRegisteredUser("user 2");
-        createRegisteredUser("user 3", "email1@email.com");
+        createRegisteredUser("user 3", userEmailOwnerEvent);
         createRegisteredUser("user 4", "email2@email.com");
+
+        EventDto eventDto = createEvent();
 
         saveInTransactional();
         Summary expected = Summary.builder()
@@ -79,13 +81,14 @@ class SummaryControllerIT {
     }
 
     @Test
+    @WithMockUser(username = userEmailOwnerEvent)
     void testCorrectCollectionResultWithoutExpenses() throws Exception {
-        EventDto eventDto = createEvent();
-
         User user1 = createNotRegisteredUser("user 1");
         User user2 = createNotRegisteredUser("user 2");
-        createRegisteredUser("user 3", "email1@email.com");
+        createRegisteredUser("user 3", userEmailOwnerEvent);
         createRegisteredUser("user 4", "email2@email.com");
+
+        EventDto eventDto = createEvent();
 
         createReceipt(eventDto.id(), "receipt 1", user1.getId());
         createReceipt(eventDto.id(), "receipt 2", user2.getId());
@@ -100,13 +103,14 @@ class SummaryControllerIT {
     }
 
     @Test
+    @WithMockUser(username = userEmailOwnerEvent)
     void testCorrectCollectionResultWithoutExpensesMember() throws Exception {
-        EventDto eventDto = createEvent();
-
         User user1 = createNotRegisteredUser("user 1");
         User user2 = createNotRegisteredUser("user 2");
-        createRegisteredUser("user 3", "email1@email.com");
+        createRegisteredUser("user 3", userEmailOwnerEvent);
         createRegisteredUser("user 4", "email2@email.com");
+
+        EventDto eventDto = createEvent();
 
         ReceiptDto receipt1 = createReceipt(eventDto.id(), "receipt 1", user1.getId());
         ReceiptDto receipt2 = createReceipt(eventDto.id(), "receipt 2", user2.getId());
@@ -128,13 +132,14 @@ class SummaryControllerIT {
     }
 
     @Test
+    @WithMockUser(username = userEmailOwnerEvent)
     void testCorrectCollectionResult() throws Exception {
-        EventDto eventDto = createEvent();
-
         User user1 = createNotRegisteredUser("user 1");
         User user2 = createNotRegisteredUser("user 2");
-        User user3 = createRegisteredUser("user 3", "email1@email.com");
+        User user3 = createRegisteredUser("user 3", userEmailOwnerEvent);
         User user4 = createRegisteredUser("user 4", "email2@email.com");
+
+        EventDto eventDto = createEvent();
 
         ReceiptDto receipt1 = createReceipt(eventDto.id(), "receipt 1", user1.getId());
         ReceiptDto receipt2 = createReceipt(eventDto.id(), "receipt 2", user2.getId());
@@ -221,9 +226,11 @@ class SummaryControllerIT {
         CreateRegisteredUserDto userDto = CreateRegisteredUserDto.builder()
                 .name(name)
                 .email(email)
+                .password("password")
+                .confirmPassword("password")
                 .build();
 
-        String response = mockMvc.perform(post(Paths.USERS + "/register")
+        String response = mockMvc.perform(post(Paths.AUTH + "/registration")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isCreated())

@@ -3,10 +3,14 @@ package com.friney.fairsplit.core.service;
 import com.friney.fairsplit.api.dto.event.EventCreateDto;
 import com.friney.fairsplit.api.dto.event.EventDto;
 import com.friney.fairsplit.core.entity.event.Event;
+import com.friney.fairsplit.core.entity.user.RegisteredUser;
 import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.mapper.EventMapper;
 import com.friney.fairsplit.core.repository.EventRepository;
 import com.friney.fairsplit.core.service.event.EventServiceImpl;
+import com.friney.fairsplit.core.service.user.UserService;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,12 +18,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
-
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class EventServiceImplTest {
@@ -30,11 +37,14 @@ class EventServiceImplTest {
     @Mock
     private EventMapper eventMapper;
 
+    @Mock
+    private UserService userService;
+
     @InjectMocks
     private EventServiceImpl eventService;
 
     @Test
-    void testGetAll() {
+    void testGetAllByUserDetails() {
         Event event1 = Event.builder()
                 .id(1L)
                 .name("event 1")
@@ -56,25 +66,36 @@ class EventServiceImplTest {
                 .id(event2.getId())
                 .name(event2.getName())
                 .build();
+        UserDetails userDetails = createTestUserDetails();
+        RegisteredUser registeredUser = RegisteredUser.builder()
+                .email(userDetails.getUsername())
+                .build();
 
-        when(eventRepository.findAll()).thenReturn(events);
+        when(userService.findByEmail(userDetails.getUsername())).thenReturn(registeredUser);
+        when(eventRepository.findAllByOwner(registeredUser)).thenReturn(events);
         when(eventMapper.map(events)).thenReturn(Arrays.asList(dto1, dto2));
 
-        List<EventDto> result = eventService.getAll();
+        List<EventDto> result = eventService.getAllByUserDetails(userDetails);
 
         assertEquals(Arrays.asList(dto1, dto2), result);
-        verify(eventRepository, times(1)).findAll();
+        verify(eventRepository, times(1)).findAllByOwner(registeredUser);
         verify(eventMapper, times(1)).map(events);
     }
 
     @Test
-    void testGetAllNoEvents() {
-        when(eventRepository.findAll()).thenReturn(List.of());
+    void testGetAllByUserDetailsNoEvents() {
+        UserDetails userDetails = createTestUserDetails();
+        RegisteredUser registeredUser = RegisteredUser.builder()
+                .email(userDetails.getUsername())
+                .build();
 
-        List<EventDto> result = eventService.getAll();
+        when(userService.findByEmail(userDetails.getUsername())).thenReturn(registeredUser);
+        when(eventRepository.findAllByOwner(registeredUser)).thenReturn(List.of());
+
+        List<EventDto> result = eventService.getAllByUserDetails(userDetails);
 
         assertTrue(result.isEmpty());
-        verify(eventRepository, times(1)).findAll();
+        verify(eventRepository, times(1)).findAllByOwner(registeredUser);
     }
 
     @Test
@@ -150,14 +171,23 @@ class EventServiceImplTest {
                 .id(event.getId())
                 .name(createDto.name())
                 .build();
+        UserDetails userDetails = createTestUserDetails();
 
         when(eventRepository.save(any(Event.class))).thenReturn(event);
         when(eventMapper.map(event)).thenReturn(dto);
 
-        EventDto result = eventService.create(createDto);
+        EventDto result = eventService.create(createDto, userDetails);
 
         assertEquals(dto, result);
         verify(eventRepository).save(any(Event.class));
         verify(eventMapper, times(1)).map(event);
+    }
+
+    private UserDetails createTestUserDetails() {
+        return User.builder()
+                .username("username")
+                .password("password")
+                .authorities(List.of())
+                .build();
     }
 }

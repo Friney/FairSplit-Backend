@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.friney.fairsplit.api.Paths;
 import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserDto;
 import com.friney.fairsplit.api.dto.user.CreateRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.UserDto;
 import com.friney.fairsplit.core.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,11 +24,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Testcontainers
+@Transactional
 class UserControllerIT {
 
     @Autowired
@@ -46,7 +50,7 @@ class UserControllerIT {
     }
 
     @Test
-    @Transactional
+    @WithMockUser
     void testCreateAndGetNotRegisteredUser() throws Exception {
         CreateNotRegisteredUserDto userDto = CreateNotRegisteredUserDto.builder()
                 .name("user")
@@ -57,7 +61,7 @@ class UserControllerIT {
                         .content(new ObjectMapper().writeValueAsString(userDto)))
                 .andExpectAll(
                         status().isCreated(),
-                        content().json(new ObjectMapper().writeValueAsString(userDto))
+                        jsonPath("$.name").value(userDto.name())
                 )
                 .andDo(
                         result -> {
@@ -70,19 +74,26 @@ class UserControllerIT {
     }
 
     @Test
-    @Transactional
+    @WithMockUser
     void testCreateAndGetRegisteredUser() throws Exception {
-        CreateRegisteredUserDto userDto = CreateRegisteredUserDto.builder()
+        CreateRegisteredUserDto createRegisteredUserDto = CreateRegisteredUserDto.builder()
                 .name("user")
                 .email("email@email.com")
+                .password("password")
+                .confirmPassword("password")
+                .build();
+        UserDto registeredUserDto = UserDto.builder()
+                .name(createRegisteredUserDto.name())
+                .displayName(createRegisteredUserDto.name() + " (" + createRegisteredUserDto.email() + ")")
                 .build();
 
-        mockMvc.perform(post(Paths.USERS + "/register")
+        mockMvc.perform(post(Paths.AUTH + "/registration")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(userDto)))
+                        .content(new ObjectMapper().writeValueAsString(createRegisteredUserDto)))
                 .andExpectAll(
                         status().isCreated(),
-                        content().json(new ObjectMapper().writeValueAsString(userDto))
+                        jsonPath("$.name").value(registeredUserDto.name()),
+                        jsonPath("$.displayName").value(registeredUserDto.displayName())
                 )
                 .andDo(
                         result -> {
@@ -94,54 +105,37 @@ class UserControllerIT {
     }
 
     @Test
-    @Transactional
-    void testCreateTwoRegisteredUsersWithSameEmail() throws Exception {
-        CreateRegisteredUserDto userDto = CreateRegisteredUserDto.builder()
-                .name("user")
-                .email("email@email.com")
-                .build();
-
-        mockMvc.perform(post(Paths.USERS + "/register")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(userDto)))
-                .andExpectAll(
-                        status().isCreated(),
-                        content().json(new ObjectMapper().writeValueAsString(userDto))
-                );
-
-        mockMvc.perform(post(Paths.USERS + "/register")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(userDto)))
-                .andExpectAll(
-                        status().isBadRequest()
-                );
-    }
-
-    @Test
-    @Transactional
+    @WithMockUser
     void testCreateTwoNotRegisteredUsersWithSameName() throws Exception {
-        CreateNotRegisteredUserDto userDto = CreateNotRegisteredUserDto.builder()
+        CreateNotRegisteredUserDto createNotRegisteredUserDto = CreateNotRegisteredUserDto.builder()
                 .name("user")
+                .build();
+        UserDto notRegistereduserDto = UserDto.builder()
+                .name(createNotRegisteredUserDto.name())
+                .displayName(createNotRegisteredUserDto.name())
                 .build();
 
         mockMvc.perform(post(Paths.USERS)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(userDto)))
+                        .content(new ObjectMapper().writeValueAsString(createNotRegisteredUserDto)))
                 .andExpectAll(
                         status().isCreated(),
-                        content().json(new ObjectMapper().writeValueAsString(userDto))
+                        jsonPath("$.name").value(notRegistereduserDto.name()),
+                        jsonPath("$.displayName").value(notRegistereduserDto.displayName())
                 );
 
         mockMvc.perform(post(Paths.USERS)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(userDto)))
+                        .content(new ObjectMapper().writeValueAsString(createNotRegisteredUserDto)))
                 .andExpectAll(
-                        status().isBadRequest()
+                        status().isCreated(),
+                        jsonPath("$.name").value(notRegistereduserDto.name()),
+                        jsonPath("$.displayName").value(notRegistereduserDto.displayName())
                 );
     }
 
     @Test
-    @Transactional
+    @WithMockUser
     void testGetAllUsersEmpty() throws Exception {
         mockMvc.perform(get(Paths.USERS))
                 .andExpectAll(
@@ -152,35 +146,52 @@ class UserControllerIT {
     }
 
     @Test
-    @Transactional
+    @WithMockUser
     void testGetAllUsers() throws Exception {
-        CreateNotRegisteredUserDto userDto = CreateNotRegisteredUserDto.builder()
+        CreateNotRegisteredUserDto createNotRegisteredUserDto = CreateNotRegisteredUserDto.builder()
                 .name("user")
+                .build();
+        UserDto notRegistereduserDto = UserDto.builder()
+                .name(createNotRegisteredUserDto.name())
+                .displayName(createNotRegisteredUserDto.name())
                 .build();
         mockMvc.perform(post(Paths.USERS)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(userDto)))
+                        .content(new ObjectMapper().writeValueAsString(createNotRegisteredUserDto))
+                )
                 .andExpectAll(
                         status().isCreated(),
-                        content().json(new ObjectMapper().writeValueAsString(userDto))
+                        jsonPath("$.name").value(notRegistereduserDto.name()),
+                        jsonPath("$.displayName").value(notRegistereduserDto.displayName())
                 );
 
-        CreateRegisteredUserDto userDto2 = CreateRegisteredUserDto.builder()
+        CreateRegisteredUserDto createRegisteredUserDto = CreateRegisteredUserDto.builder()
                 .name("User2")
                 .email("email@email.com")
+                .password("password")
+                .confirmPassword("password")
                 .build();
-        mockMvc.perform(post(Paths.USERS + "/register")
+        UserDto registeredUserDto = UserDto.builder()
+                .name(createRegisteredUserDto.name())
+                .displayName(createRegisteredUserDto.name() + " (" + createRegisteredUserDto.email() + ")")
+                .build();
+
+        mockMvc.perform(post(Paths.AUTH + "/registration")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(userDto2)))
+                        .content(new ObjectMapper().writeValueAsString(createRegisteredUserDto)))
                 .andExpectAll(
                         status().isCreated(),
-                        content().json(new ObjectMapper().writeValueAsString(userDto2))
+                        jsonPath("$.name").value(registeredUserDto.name()),
+                        jsonPath("$.displayName").value(registeredUserDto.displayName())
                 );
 
         mockMvc.perform(get(Paths.USERS))
                 .andExpectAll(
                         status().isOk(),
-                        content().json(new ObjectMapper().writeValueAsString(List.of(userDto, userDto2)))
+                        jsonPath("$[0].name").value(notRegistereduserDto.name()),
+                        jsonPath("$[0].displayName").value(notRegistereduserDto.displayName()),
+                        jsonPath("$[1].name").value(registeredUserDto.name()),
+                        jsonPath("$[1].displayName").value(registeredUserDto.displayName())
                 );
     }
 }

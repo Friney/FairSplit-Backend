@@ -1,10 +1,8 @@
 package com.friney.fairsplit.api.controller;
 
 import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserDto;
-import com.friney.fairsplit.api.dto.user.CreateRegisteredUserDto;
 import com.friney.fairsplit.api.dto.user.UserDto;
 import com.friney.fairsplit.core.entity.user.NotRegisteredUser;
-import com.friney.fairsplit.core.entity.user.RegisteredUser;
 import com.friney.fairsplit.core.service.user.UserService;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -12,7 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -25,32 +23,6 @@ class UserControllerTest {
 
     @InjectMocks
     private UserController userController;
-
-    @Test
-    void createRegisteredUser() {
-        CreateRegisteredUserDto registeredUser = CreateRegisteredUserDto.builder()
-                .name("user")
-                .email("example@example.com")
-                .build();
-
-        RegisteredUser user = RegisteredUser.builder()
-                .name(registeredUser.name())
-                .email(registeredUser.email())
-                .build();
-
-        UserDto expectedUser = UserDto.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .displayName(user.getName() + " (example@example.com)")
-                .build();
-
-        when(userService.addRegisteredUser(registeredUser)).thenReturn(expectedUser);
-
-        UserDto result = userController.create(registeredUser);
-
-        assertEquals(result, expectedUser);
-        verify(userService, times(1)).addRegisteredUser(registeredUser);
-    }
 
     @Test
     void testCreateNotRegisteredUser() {

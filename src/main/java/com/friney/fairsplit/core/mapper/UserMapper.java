@@ -24,6 +24,7 @@ public interface UserMapper {
         }
         return UserDto.builder()
                 .id(user.getId())
+                .name(user.getName())
                 .displayName(displayName)
                 .build();
     }

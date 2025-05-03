@@ -1,7 +1,6 @@
 package com.friney.fairsplit.core.service.jwt;
 
 import com.friney.fairsplit.api.dto.jwt.JwtAuthenticationDto;
-import java.security.Key;
 import java.time.Duration;
 import javax.crypto.SecretKey;
 

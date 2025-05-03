@@ -19,4 +19,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RegisteredUser extends User {
     private String email;
+    private String password;
 }

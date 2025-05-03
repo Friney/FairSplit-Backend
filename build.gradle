@@ -71,3 +71,5 @@ jacocoTestReport {
     }
     dependsOn test
 }
+
+project.tasks["sonar"].dependsOn jacocoTestReport

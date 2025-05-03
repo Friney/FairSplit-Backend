@@ -6,6 +6,7 @@ import lombok.Builder;
 public record CreateRegisteredUserDto(
         String name,
         String email,
-        String password
+        String password,
+        String confirmPassword
 ) {
 }

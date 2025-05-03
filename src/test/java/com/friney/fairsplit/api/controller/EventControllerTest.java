@@ -3,15 +3,15 @@ package com.friney.fairsplit.api.controller;
 import com.friney.fairsplit.api.dto.event.EventCreateDto;
 import com.friney.fairsplit.api.dto.event.EventDto;
 import com.friney.fairsplit.core.service.event.EventService;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Arrays;
-import java.util.List;
-
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -39,12 +39,13 @@ class EventControllerTest {
                 .build();
 
         List<EventDto> expectedDtos = Arrays.asList(dto1, dto2);
+        UserDetails userDetails = createTestUserDetails();
 
-        when(eventService.getAll()).thenReturn(expectedDtos);
-        List<EventDto> result = eventController.getAll();
+        when(eventService.getAllByUserDetails(userDetails)).thenReturn(expectedDtos);
+        List<EventDto> result = eventController.getAllByUserDetails(userDetails);
 
         assertEquals(expectedDtos, result);
-        verify(eventService, times(1)).getAll();
+        verify(eventService, times(1)).getAllByUserDetails(userDetails);
     }
 
     @Test
@@ -58,10 +59,19 @@ class EventControllerTest {
                 .name(createDto.name())
                 .build();
 
-        when(eventService.create(createDto)).thenReturn(expectedDto);
-        EventDto result = eventController.create(createDto);
+        UserDetails userDetails = createTestUserDetails();
+        when(eventService.create(createDto, userDetails)).thenReturn(expectedDto);
+        EventDto result = eventController.create(createDto, userDetails);
 
         assertEquals(expectedDto, result);
-        verify(eventService, times(1)).create(createDto);
+        verify(eventService, times(1)).create(createDto, userDetails);
+    }
+
+    private UserDetails createTestUserDetails() {
+        return User.builder()
+                .username("username")
+                .password("password")
+                .authorities(List.of())
+                .build();
     }
 }

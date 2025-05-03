@@ -11,7 +11,6 @@ create table if not exists registered_users
     user_id bigint primary key,
     email   varchar(255) not null unique,
     foreign key (user_id) references users (id)
-
 );
 
 -- Незарегистрированные пользователи (по сути просто ники людей, которые не зарегистрированы)

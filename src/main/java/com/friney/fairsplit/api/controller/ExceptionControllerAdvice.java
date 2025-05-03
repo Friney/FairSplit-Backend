@@ -3,7 +3,6 @@ package com.friney.fairsplit.api.controller;
 import com.friney.fairsplit.core.entity.api_exception.ApiException;
 import com.friney.fairsplit.core.exception.ServiceException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -17,11 +16,6 @@ public class ExceptionControllerAdvice {
     public ResponseEntity<ApiException> handleServiceException(ServiceException e) {
         return new ResponseEntity<>(new ApiException(e.getMessage()), e.getHttpStatus());
     }
-//
-//    @ExceptionHandler(AuthenticationException.class)
-//    public ResponseEntity<ApiException> handleAuthenticationException(AuthenticationException e) {
-//        return new ResponseEntity<>(new ApiException("Authentication failed"), HttpStatus.FORBIDDEN);
-//    }
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiException> handleRuntimeException(RuntimeException exception) {

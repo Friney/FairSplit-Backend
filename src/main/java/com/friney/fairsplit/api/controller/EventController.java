@@ -4,16 +4,17 @@ import com.friney.fairsplit.api.Paths;
 import com.friney.fairsplit.api.dto.event.EventCreateDto;
 import com.friney.fairsplit.api.dto.event.EventDto;
 import com.friney.fairsplit.core.service.event.EventService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(Paths.EVENTS)
@@ -23,14 +24,14 @@ public class EventController {
     private final EventService eventService;
 
     @GetMapping
-    public List<EventDto> getAll() {
-        return eventService.getAll();
+    public List<EventDto> getAllByUserDetails(@AuthenticationPrincipal UserDetails userDetails) {
+        return eventService.getAllByUserDetails(userDetails);
     }
 
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public EventDto create(@RequestBody EventCreateDto eventCreateDto) {
-        return eventService.create(eventCreateDto);
+    public EventDto create(@RequestBody EventCreateDto eventCreateDto, @AuthenticationPrincipal UserDetails userDetails) {
+        return eventService.create(eventCreateDto, userDetails);
     }
 }
