@@ -22,5 +22,4 @@ public class ExceptionControllerAdvice {
         log.error("{} -> {}", exception.getClass(), exception.getMessage());
         return new ResponseEntity<>(new ApiException(exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 }
