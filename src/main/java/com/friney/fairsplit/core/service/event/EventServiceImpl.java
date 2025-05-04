@@ -2,6 +2,7 @@ package com.friney.fairsplit.core.service.event;
 
 import com.friney.fairsplit.api.dto.event.EventCreateDto;
 import com.friney.fairsplit.api.dto.event.EventDto;
+import com.friney.fairsplit.api.dto.event.EventUpdateDto;
 import com.friney.fairsplit.core.entity.event.Event;
 import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.mapper.EventMapper;
@@ -46,5 +47,36 @@ public class EventServiceImpl implements EventService {
                 .build();
         Event savedEvent = eventRepository.save(event);
         return eventMapper.map(savedEvent);
+    }
+
+    @Override
+    public EventDto update(EventUpdateDto eventUpdateDto, Long id, UserDetails userDetails) {
+        Event event = getById(id);
+        validateChangeRequest(event, userDetails);
+        if (eventUpdateDto.name() != null) {
+            event.setName(eventUpdateDto.name());
+        }
+        if (eventUpdateDto.description() != null) {
+            event.setDescription(eventUpdateDto.description());
+        }
+        return eventMapper.map(eventRepository.save(event));
+    }
+
+    @Override
+    public void delete(Long id, UserDetails userDetails) {
+        Event event = getById(id);
+        validateChangeRequest(event, userDetails);
+
+        eventRepository.delete(event);
+    }
+
+    boolean hasPermissionOnChange(Event event, UserDetails userDetails) {
+        return event.getOwner().getEmail().equals(userDetails.getUsername());
+    }
+
+    void validateChangeRequest(Event event, UserDetails userDetails) {
+        if (!hasPermissionOnChange(event, userDetails)) {
+            throw new ServiceException("you are not the owner of this event", HttpStatus.FORBIDDEN);
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.friney.fairsplit.core.service;
 import com.friney.fairsplit.api.dto.jwt.JwtAuthenticationDto;
 import com.friney.fairsplit.api.dto.jwt.RefreshTokenDto;
 import com.friney.fairsplit.api.dto.user.CreateRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.UserChangePasswordDto;
 import com.friney.fairsplit.api.dto.user.UserCredentialsDto;
 import com.friney.fairsplit.api.dto.user.UserDto;
 import com.friney.fairsplit.core.entity.user.RegisteredUser;
@@ -46,7 +47,7 @@ class AuthServiceImplTest {
     private AuthServiceImpl authService;
 
     @Test
-    void login() {
+    void testLogin() {
         UserCredentialsDto credentials = UserCredentialsDto.builder()
                 .email("test@example.com")
                 .password("password")
@@ -74,7 +75,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void registration() {
+    void testRegistration() {
         CreateRegisteredUserDto userDto = CreateRegisteredUserDto.builder()
                 .name("user")
                 .email("test@example.com")
@@ -98,7 +99,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void registrationWhenPasswordsNotMatch() {
+    void testRegistrationWhenPasswordsNotMatch() {
         CreateRegisteredUserDto userDto = CreateRegisteredUserDto.builder()
                 .name("user")
                 .email("test@example.com")
@@ -114,7 +115,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void refresh() {
+    void testRefresh() {
         String email = "test@example.com";
         RefreshTokenDto refreshTokenDto = RefreshTokenDto.builder()
                 .refreshToken("refreshToken")
@@ -137,7 +138,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void refreshWhenInvalidToken() {
+    void testRefreshWhenInvalidToken() {
         String invalidToken = "invalidToken";
         RefreshTokenDto refreshTokenDto = new RefreshTokenDto(invalidToken);
 
@@ -150,5 +151,101 @@ class AuthServiceImplTest {
         assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
         verify(jwtService).validateToken(invalidToken);
         verifyNoMoreInteractions(jwtService);
+    }
+
+    @Test
+    void testUpdatePassword() {
+        UserChangePasswordDto updatePasswordDto = UserChangePasswordDto.builder()
+                .oldPassword("oldPassword")
+                .newPassword("newPassword")
+                .confirmPassword("newPassword")
+                .build();
+        UserDto expectedUser = UserDto.builder()
+                .id(1L)
+                .name("user")
+                .displayName("user" + " (test@example.com)")
+                .build();
+        UserDetails userDetails = createTestUserDetails();
+        RegisteredUser registeredUser = RegisteredUser.builder()
+                .email(expectedUser.name())
+                .email(userDetails.getUsername())
+                .password("oldPassword")
+                .build();
+
+        when(userService.findByEmail(userDetails.getUsername())).thenReturn(registeredUser);
+        when(passwordEncoder.matches(updatePasswordDto.oldPassword(), registeredUser.getPassword())).thenReturn(true);
+        when(passwordEncoder.encode(updatePasswordDto.newPassword())).thenReturn("newPassword");
+        when(userService.updateRegisteredUser(registeredUser)).thenReturn(expectedUser);
+
+        authService.changePassword(updatePasswordDto, createTestUserDetails());
+        registeredUser.setPassword("oldPassword");
+
+        verify(userService, times(1)).findByEmail(userDetails.getUsername());
+        verify(passwordEncoder, times(1)).matches(updatePasswordDto.oldPassword(), registeredUser.getPassword());
+        verify(passwordEncoder, times(1)).encode(updatePasswordDto.newPassword());
+        verify(userService, times(1)).updateRegisteredUser(registeredUser);
+    }
+
+    @Test
+    void testUpdatePasswordWhenPasswordsNotMatch() {
+        UserChangePasswordDto updatePasswordDto = UserChangePasswordDto.builder()
+                .oldPassword("oldPassword")
+                .newPassword("newPassword")
+                .confirmPassword("wrongPassword")
+                .build();
+
+        UserDetails userDetails = createTestUserDetails();
+
+        ServiceException exception = assertThrows(ServiceException.class,
+                () -> authService.changePassword(updatePasswordDto, userDetails));
+
+        assertEquals("passwords do not match", exception.getMessage());
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
+    }
+
+    @Test
+    void testUpdatePasswordWhenOldPasswordNotMatch() {
+        UserChangePasswordDto updatePasswordDto = UserChangePasswordDto.builder()
+                .oldPassword("oldPassword")
+                .newPassword("newPassword")
+                .confirmPassword("newPassword")
+                .build();
+
+        UserDetails userDetails = createTestUserDetails();
+
+        RegisteredUser registeredUser = RegisteredUser.builder()
+                .email(userDetails.getUsername())
+                .password("encodedPassword")
+                .build();
+
+        when(userService.findByEmail(userDetails.getUsername())).thenReturn(registeredUser);
+        when(passwordEncoder.matches(updatePasswordDto.oldPassword(), registeredUser.getPassword())).thenReturn(false);
+
+        ServiceException exception = assertThrows(ServiceException.class,
+                () -> authService.changePassword(updatePasswordDto, userDetails));
+
+        assertEquals("old password is incorrect", exception.getMessage());
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
+    }
+
+    @Test
+    void testDelete() {
+        RegisteredUser registeredUser = RegisteredUser.builder()
+                .email("email")
+                .build();
+        UserDetails userDetails = createTestUserDetails();
+
+        when(userService.findByEmail(userDetails.getUsername())).thenReturn(registeredUser);
+
+        authService.delete(userDetails);
+        verify(userService, times(1)).deleteRegisteredUser(registeredUser);
+    }
+
+    private UserDetails createTestUserDetails() {
+        return User.builder()
+                .username("username")
+                .password("password")
+                .authorities(List.of())
+                .build();
     }
 }

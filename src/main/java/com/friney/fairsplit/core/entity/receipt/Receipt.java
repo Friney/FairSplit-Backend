@@ -3,6 +3,7 @@ package com.friney.fairsplit.core.entity.receipt;
 import com.friney.fairsplit.core.entity.event.Event;
 import com.friney.fairsplit.core.entity.expense.Expense;
 import com.friney.fairsplit.core.entity.user.User;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,13 +15,14 @@ import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.NamedSubgraph;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Set;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Builder
 @Getter
@@ -58,7 +60,9 @@ public class Receipt {
     @ManyToOne
     @JoinColumn(name = "event_id")
     Event event;
-    @OneToMany(mappedBy = "receipt")
+    @OneToMany(mappedBy = "receipt",
+            cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     Set<Expense> expenses;
     @ManyToOne
     @JoinColumn(name = "paid_by_user_id")

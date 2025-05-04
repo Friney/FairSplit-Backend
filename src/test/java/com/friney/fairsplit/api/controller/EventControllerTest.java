@@ -2,6 +2,7 @@ package com.friney.fairsplit.api.controller;
 
 import com.friney.fairsplit.api.dto.event.EventCreateDto;
 import com.friney.fairsplit.api.dto.event.EventDto;
+import com.friney.fairsplit.api.dto.event.EventUpdateDto;
 import com.friney.fairsplit.core.service.event.EventService;
 import java.util.Arrays;
 import java.util.List;
@@ -65,6 +66,33 @@ class EventControllerTest {
 
         assertEquals(expectedDto, result);
         verify(eventService, times(1)).create(createDto, userDetails);
+    }
+
+    @Test
+    void testUpdate() {
+        EventUpdateDto updateDto = EventUpdateDto.builder()
+                .name("Updated event")
+                .build();
+
+        EventDto expectedDto = EventDto.builder()
+                .id(1L)
+                .name(updateDto.name())
+                .build();
+
+        UserDetails userDetails = createTestUserDetails();
+        when(eventService.update(updateDto, 1L, userDetails)).thenReturn(expectedDto);
+        EventDto result = eventController.update(updateDto, 1L, userDetails);
+
+        assertEquals(expectedDto, result);
+        verify(eventService, times(1)).update(updateDto, 1L, userDetails);
+    }
+
+    @Test
+    void testDelete() {
+        UserDetails userDetails = createTestUserDetails();
+        long eventId = 1L;
+        eventController.delete(eventId, userDetails);
+        verify(eventService, times(1)).delete(eventId, userDetails);
     }
 
     private UserDetails createTestUserDetails() {

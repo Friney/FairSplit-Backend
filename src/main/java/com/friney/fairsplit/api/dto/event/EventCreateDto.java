@@ -5,5 +5,6 @@ import lombok.Builder;
 @Builder
 public record EventCreateDto(
         String name,
-        String description) {
+        String description
+) {
 }

@@ -2,17 +2,18 @@ package com.friney.fairsplit.api.controller;
 
 import com.friney.fairsplit.api.dto.expense.ExpenseCreateDto;
 import com.friney.fairsplit.api.dto.expense.ExpenseDto;
+import com.friney.fairsplit.api.dto.expense.ExpenseUpdateDto;
 import com.friney.fairsplit.core.service.expense.ExpenseService;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -67,5 +68,43 @@ class ExpenseControllerTest {
 
         assertEquals(expectedDto, result);
         verify(expenseService, times(1)).create(createDto, 1L);
+    }
+
+    @Test
+    void testUpdate() {
+        ExpenseUpdateDto updateDto = ExpenseUpdateDto.builder()
+                .name("Updated expense")
+                .build();
+
+        ExpenseDto expectedDto = ExpenseDto.builder()
+                .id(1L)
+                .name(updateDto.name())
+                .build();
+
+        UserDetails userDetails = createTestUserDetails();
+
+        when(expenseService.update(updateDto, 1L, 1L, userDetails)).thenReturn(expectedDto);
+
+        ExpenseDto result = expenseController.update(updateDto, 1L, 1L, userDetails);
+
+        assertEquals(expectedDto, result);
+        verify(expenseService, times(1)).update(updateDto, 1L, 1L, userDetails);
+    }
+
+    @Test
+    void testDelete() {
+        UserDetails userDetails = createTestUserDetails();
+
+        expenseController.delete(1L, 1L, userDetails);
+
+        verify(expenseService, times(1)).delete(1L, 1L, userDetails);
+    }
+
+    private UserDetails createTestUserDetails() {
+        return User.builder()
+                .username("username")
+                .password("password")
+                .authorities(List.of())
+                .build();
     }
 }

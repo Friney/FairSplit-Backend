@@ -2,6 +2,7 @@ package com.friney.fairsplit.core.service;
 
 import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserDto;
 import com.friney.fairsplit.api.dto.user.UserDto;
+import com.friney.fairsplit.api.dto.user.UserUpdateDto;
 import com.friney.fairsplit.core.entity.user.NotRegisteredUser;
 import com.friney.fairsplit.core.entity.user.RegisteredUser;
 import com.friney.fairsplit.core.entity.user.User;
@@ -25,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -184,5 +186,71 @@ class UserServiceImplTest {
         assertEquals(savedUser.getEmail(), result.getUsername());
         assertEquals(savedUser.getPassword(), result.getPassword());
         verify(registeredUserRepository, times(1)).findByEmail(email);
+    }
+
+    @Test
+    void testUpdateRegisteredUser() {
+        RegisteredUser user = RegisteredUser.builder()
+                .id(1L)
+                .name("user")
+                .email("example@example.com")
+                .password("password")
+                .build();
+
+        UserDto userDto = UserDto.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .displayName(user.getName() + " (example@example.com)")
+                .build();
+
+        when(registeredUserRepository.save(any(RegisteredUser.class))).thenReturn(user);
+        when(userMapper.map(any(User.class))).thenReturn(userDto);
+
+        UserDto result = userService.updateRegisteredUser(user);
+
+        assertEquals(userDto, result);
+        verify(registeredUserRepository, times(1)).save(any(RegisteredUser.class));
+    }
+
+    @Test
+    void testDeleteRegisteredUser() {
+        RegisteredUser user = RegisteredUser.builder()
+                .id(1L)
+                .name("user")
+                .email("example@example.com")
+                .password("password")
+                .build();
+
+        doNothing().when(registeredUserRepository).delete(user);
+
+        userService.deleteRegisteredUser(user);
+
+        verify(registeredUserRepository, times(1)).delete(user);
+    }
+
+    @Test
+    void testUpdateNotRegisteredUser() {
+        UserUpdateDto userUpdateDto = UserUpdateDto.builder()
+                .name("user")
+                .build();
+
+        NotRegisteredUser user = NotRegisteredUser.builder()
+                .id(1L)
+                .name(userUpdateDto.name())
+                .build();
+
+        UserDto userDto = UserDto.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .displayName(user.getName())
+                .build();
+
+        when(notRegisteredUserRepository.save(any(NotRegisteredUser.class))).thenReturn(user);
+        when(userMapper.map(any(User.class))).thenReturn(userDto);
+
+        UserDto result = userService.updateNotRegisteredUser(userUpdateDto);
+
+        assertEquals(userDto, result);
+        verify(notRegisteredUserRepository, times(1)).save(any(NotRegisteredUser.class));
     }
 } 
