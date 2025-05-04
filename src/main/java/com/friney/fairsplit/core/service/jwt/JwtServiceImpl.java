@@ -23,6 +23,8 @@ public class JwtServiceImpl implements JwtService {
     @Value("${jwt.lifetime}")
     private Duration jwtLifetime;
 
+    private final Duration refreshTokenLifetime = Duration.ofDays(7);
+
     @Override
     public JwtAuthenticationDto generateAuthToken(String email) {
         return JwtAuthenticationDto.builder()
@@ -71,7 +73,7 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public String generateRefreshToken(String email) {
-        return generateToken(email, Duration.ofDays(1));
+        return generateToken(email, refreshTokenLifetime);
     }
 
     @Override

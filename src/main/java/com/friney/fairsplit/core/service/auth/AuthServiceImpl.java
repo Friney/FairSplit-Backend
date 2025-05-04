@@ -3,8 +3,10 @@ package com.friney.fairsplit.core.service.auth;
 import com.friney.fairsplit.api.dto.jwt.JwtAuthenticationDto;
 import com.friney.fairsplit.api.dto.jwt.RefreshTokenDto;
 import com.friney.fairsplit.api.dto.user.CreateRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.UserChangePasswordDto;
 import com.friney.fairsplit.api.dto.user.UserCredentialsDto;
 import com.friney.fairsplit.api.dto.user.UserDto;
+import com.friney.fairsplit.api.dto.user.UserUpdateDto;
 import com.friney.fairsplit.core.entity.user.RegisteredUser;
 import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.service.jwt.JwtService;
@@ -58,4 +60,31 @@ public class AuthServiceImpl implements AuthService {
         return jwtService.refreshBaseToken(jwtService.getEmailFromToken(refreshToken), refreshToken);
     }
 
+    @Override
+    public void changePassword(UserChangePasswordDto userChangePasswordDto, UserDetails userDetails) {
+        if (!userChangePasswordDto.newPassword().equals(userChangePasswordDto.confirmPassword())) {
+            throw new ServiceException("passwords do not match", HttpStatus.BAD_REQUEST);
+        }
+        RegisteredUser registeredUser = userService.findByEmail(userDetails.getUsername());
+        if (!passwordEncoder.matches(userChangePasswordDto.oldPassword(), registeredUser.getPassword())) {
+            throw new ServiceException("old password is incorrect", HttpStatus.BAD_REQUEST);
+        }
+        registeredUser.setPassword(passwordEncoder.encode(userChangePasswordDto.newPassword()));
+        userService.updateRegisteredUser(registeredUser);
+    }
+
+    @Override
+    public UserDto update(UserUpdateDto userUpdateDto, UserDetails userDetails) {
+        RegisteredUser registeredUser = userService.findByEmail(userDetails.getUsername());
+        if (userUpdateDto.name() != null) {
+            registeredUser.setName(userUpdateDto.name());
+        }
+        return userService.updateRegisteredUser(registeredUser);
+    }
+
+    @Override
+    public void delete(UserDetails userDetails) {
+        RegisteredUser registeredUser = userService.findByEmail(userDetails.getUsername());
+        userService.deleteRegisteredUser(registeredUser);
+    }
 }

@@ -19,8 +19,7 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiException> handleRuntimeException(RuntimeException exception) {
-        log.info("{} -> {}", exception.getClass(), exception.getMessage());
+        log.error("{} -> {}", exception.getClass(), exception.getMessage());
         return new ResponseEntity<>(new ApiException(exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 }

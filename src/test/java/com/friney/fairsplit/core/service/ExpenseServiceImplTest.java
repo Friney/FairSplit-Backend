@@ -2,30 +2,35 @@ package com.friney.fairsplit.core.service;
 
 import com.friney.fairsplit.api.dto.expense.ExpenseCreateDto;
 import com.friney.fairsplit.api.dto.expense.ExpenseDto;
+import com.friney.fairsplit.api.dto.expense.ExpenseUpdateDto;
 import com.friney.fairsplit.api.dto.receipt.ReceiptDto;
+import com.friney.fairsplit.core.entity.event.Event;
 import com.friney.fairsplit.core.entity.expense.Expense;
 import com.friney.fairsplit.core.entity.receipt.Receipt;
+import com.friney.fairsplit.core.entity.user.RegisteredUser;
 import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.mapper.ExpenseMapper;
 import com.friney.fairsplit.core.repository.ExpenseRepository;
 import com.friney.fairsplit.core.service.expense.ExpenseServiceImpl;
 import com.friney.fairsplit.core.service.receipt.ReceiptService;
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
-
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
+import org.springframework.security.core.userdetails.UserDetails;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ExpenseServiceImplTest {
@@ -168,5 +173,115 @@ class ExpenseServiceImplTest {
         assertEquals("receipt with id 1 not found", exception.getMessage());
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
         verify(receiptService, times(1)).getById(1L);
+    }
+
+    @Test
+    void testUpdate() {
+        ExpenseUpdateDto updateDto = ExpenseUpdateDto.builder()
+                .name("Updated expense")
+                .build();
+
+        ExpenseDto expectedDto = ExpenseDto.builder()
+                .name("expense")
+                .build();
+
+        RegisteredUser user = RegisteredUser.builder()
+                .email("username")
+                .build();
+
+        Event event = Event.builder()
+                .id(1L)
+                .owner(user)
+                .build();
+
+        Receipt recipient = Receipt.builder()
+                .id(1L)
+                .event(event)
+                .build();
+
+        Expense expense = Expense.builder()
+                .id(1L)
+                .receipt(recipient)
+                .build();
+
+        when(expenseRepository.findById(1L)).thenReturn(Optional.of(expense));
+        when(expenseRepository.save(any(Expense.class))).thenReturn(expense);
+        when(expenseMapper.map(expense)).thenReturn(expectedDto);
+
+        ExpenseDto result = expenseService.update(updateDto, 1L, 1L, createTestUserDetails());
+
+        assertEquals(expectedDto, result);
+        verify(expenseRepository, times(1)).findById(1L);
+        verify(expenseRepository, times(1)).save(any(Expense.class));
+        verify(expenseMapper, times(1)).map((Expense) any());
+    }
+
+    @Test
+    void testDelete() {
+        RegisteredUser user = RegisteredUser.builder()
+                .email("username")
+                .build();
+
+        Event event = Event.builder()
+                .id(1L)
+                .owner(user)
+                .build();
+
+        Receipt recipient = Receipt.builder()
+                .id(1L)
+                .event(event)
+                .build();
+
+        Expense expense = Expense.builder()
+                .id(1L)
+                .receipt(recipient)
+                .build();
+
+
+        when(expenseRepository.findById(1L)).thenReturn(Optional.of(expense));
+        doNothing().when(expenseRepository).delete(expense);
+        expenseService.delete(1L, 1L, createTestUserDetails());
+
+        verify(expenseRepository, times(1)).findById(1L);
+        verify(expenseRepository, times(1)).delete(expense);
+    }
+
+    @Test
+    void testDeleteWithoutOwner() {
+        RegisteredUser user = RegisteredUser.builder()
+                .email("wrong username")
+                .build();
+
+        Event event = Event.builder()
+                .id(1L)
+                .owner(user)
+                .build();
+
+        Receipt recipient = Receipt.builder()
+                .id(1L)
+                .event(event)
+                .build();
+
+        Expense expense = Expense.builder()
+                .id(1L)
+                .receipt(recipient)
+                .build();
+
+
+        UserDetails userDetails = createTestUserDetails();
+
+        when(expenseRepository.findById(1L)).thenReturn(Optional.of(expense));
+        ServiceException exception = assertThrows(ServiceException.class, () -> expenseService.delete(1L, 1L, userDetails));
+        assertEquals("you are not the owner of this expense", exception.getMessage());
+        verify(expenseRepository, times(1)).findById(1L);
+    }
+
+
+    private UserDetails createTestUserDetails() {
+        return org.springframework.security.core.userdetails.User.builder()
+                .username("username")
+                .password("password")
+                .authorities(List.of())
+                .build();
     }
 }

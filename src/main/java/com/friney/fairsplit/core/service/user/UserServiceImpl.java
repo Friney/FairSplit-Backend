@@ -2,6 +2,7 @@ package com.friney.fairsplit.core.service.user;
 
 import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserDto;
 import com.friney.fairsplit.api.dto.user.UserDto;
+import com.friney.fairsplit.api.dto.user.UserUpdateDto;
 import com.friney.fairsplit.core.entity.user.NotRegisteredUser;
 import com.friney.fairsplit.core.entity.user.RegisteredUser;
 import com.friney.fairsplit.core.entity.user.User;
@@ -75,4 +76,21 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+    @Override
+    public UserDto updateRegisteredUser(RegisteredUser user) {
+        return userMapper.map(registeredUserRepository.save(user));
+    }
+
+    @Override
+    public void deleteRegisteredUser(RegisteredUser registeredUser) {
+        registeredUserRepository.delete(registeredUser);
+    }
+
+    @Override
+    public UserDto updateNotRegisteredUser(UserUpdateDto userUpdateDto) {
+        CreateNotRegisteredUserDto createNotRegisteredUserDto = CreateNotRegisteredUserDto.builder()
+                .name(userUpdateDto.name())
+                .build();
+        return addNotRegisteredUser(createNotRegisteredUserDto);
+    }
 }

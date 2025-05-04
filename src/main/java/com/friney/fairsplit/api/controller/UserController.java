@@ -3,11 +3,13 @@ package com.friney.fairsplit.api.controller;
 import com.friney.fairsplit.api.Paths;
 import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserDto;
 import com.friney.fairsplit.api.dto.user.UserDto;
+import com.friney.fairsplit.api.dto.user.UserUpdateDto;
 import com.friney.fairsplit.core.service.user.UserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,5 +32,10 @@ public class UserController {
     @GetMapping
     public List<UserDto> getAll() {
         return userService.getAll();
+    }
+
+    @PatchMapping
+    public UserDto update(@RequestBody UserUpdateDto userUpdateDto) {
+        return userService.updateNotRegisteredUser(userUpdateDto);
     }
 }

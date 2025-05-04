@@ -2,6 +2,7 @@ package com.friney.fairsplit.core.service;
 
 import com.friney.fairsplit.api.dto.event.EventCreateDto;
 import com.friney.fairsplit.api.dto.event.EventDto;
+import com.friney.fairsplit.api.dto.event.EventUpdateDto;
 import com.friney.fairsplit.core.entity.event.Event;
 import com.friney.fairsplit.core.entity.user.RegisteredUser;
 import com.friney.fairsplit.core.exception.ServiceException;
@@ -24,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -181,6 +183,74 @@ class EventServiceImplTest {
         assertEquals(dto, result);
         verify(eventRepository).save(any(Event.class));
         verify(eventMapper, times(1)).map(event);
+    }
+
+    @Test
+    void testUpdate() {
+        RegisteredUser user = RegisteredUser.builder()
+                .email("username")
+                .build();
+
+        Event event = Event.builder()
+                .id(1L)
+                .owner(user)
+                .build();
+
+        EventUpdateDto updateDto = EventUpdateDto.builder()
+                .name("new name")
+                .build();
+        EventDto dto = EventDto.builder()
+                .id(event.getId())
+                .name(updateDto.name())
+                .build();
+
+        when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+        when(eventRepository.save(any(Event.class))).thenReturn(event);
+        when(eventMapper.map(event)).thenReturn(dto);
+
+        EventDto result = eventService.update(updateDto, 1L, createTestUserDetails());
+
+        assertEquals(dto, result);
+        verify(eventRepository).save(any(Event.class));
+        verify(eventMapper, times(1)).map(event);
+    }
+
+    @Test
+    void testDelete() {
+        RegisteredUser user = RegisteredUser.builder()
+                .email("username")
+                .build();
+
+        Event event = Event.builder()
+                .id(1L)
+                .owner(user)
+                .build();
+
+        when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+        doNothing().when(eventRepository).delete(event);
+        eventService.delete(1L, createTestUserDetails());
+
+        verify(eventRepository, times(1)).findById(1L);
+        verify(eventRepository, times(1)).delete(event);
+    }
+
+    @Test
+    void testDeleteWithoutOwner() {
+        RegisteredUser user = RegisteredUser.builder()
+                .email("wrong username")
+                .build();
+
+        Event event = Event.builder()
+                .id(1L)
+                .owner(user)
+                .build();
+
+        UserDetails userDetails = createTestUserDetails();
+
+        when(eventRepository.findById(1L)).thenReturn(Optional.of(event));
+        ServiceException exception = assertThrows(ServiceException.class, () -> eventService.delete(1L, userDetails));
+        assertEquals("you are not the owner of this event", exception.getMessage());
+        verify(eventRepository, times(1)).findById(1L);
     }
 
     private UserDetails createTestUserDetails() {
