@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AuthServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">fairsplit</a> &gt; <a href="index.source.html" class="el_package">com.friney.fairsplit.core.service.auth</a> &gt; <span class="el_source">AuthServiceImpl.java</span></div><h1>AuthServiceImpl.java</h1><pre class="source lang-java linenums">package com.friney.fairsplit.core.service.auth;
+
+import com.friney.fairsplit.api.dto.jwt.JwtAuthenticationDto;
+import com.friney.fairsplit.api.dto.jwt.RefreshTokenDto;
+import com.friney.fairsplit.api.dto.user.CreateRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.UserChangePasswordDto;
+import com.friney.fairsplit.api.dto.user.UserCredentialsDto;
+import com.friney.fairsplit.api.dto.user.UserDto;
+import com.friney.fairsplit.api.dto.user.UserUpdateDto;
+import com.friney.fairsplit.core.entity.user.RegisteredUser;
+import com.friney.fairsplit.core.exception.ServiceException;
+import com.friney.fairsplit.core.service.jwt.JwtService;
+import com.friney.fairsplit.core.service.user.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class AuthServiceImpl implements AuthService {
+
+    private final UserService userService;
+    private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+
+    @Override
+    public JwtAuthenticationDto login(UserCredentialsDto userDto) {
+<span class="fc" id="L33">        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDto.email(), userDto.password()));</span>
+<span class="fc" id="L34">        UserDetails user = userService.loadUserByUsername(userDto.email());</span>
+
+<span class="fc" id="L36">        return jwtService.generateAuthToken(user.getUsername());</span>
+    }
+
+    @Override
+    public UserDto registration(CreateRegisteredUserDto userDto) {
+<span class="fc bfc" id="L41" title="All 2 branches covered.">        if (!userDto.password().equals(userDto.confirmPassword())) {</span>
+<span class="fc" id="L42">            throw new ServiceException(&quot;passwords do not match&quot;, HttpStatus.BAD_REQUEST);</span>
+        }
+
+<span class="fc" id="L45">        RegisteredUser registeredUser = RegisteredUser.builder()</span>
+<span class="fc" id="L46">                .email(userDto.email())</span>
+<span class="fc" id="L47">                .name(userDto.name())</span>
+<span class="fc" id="L48">                .password(passwordEncoder.encode(userDto.password()))</span>
+<span class="fc" id="L49">                .build();</span>
+
+<span class="fc" id="L51">        return userService.addRegisteredUser(registeredUser);</span>
+    }
+
+    @Override
+    public JwtAuthenticationDto refresh(RefreshTokenDto refreshTokenDto) {
+<span class="fc" id="L56">        String refreshToken = refreshTokenDto.refreshToken();</span>
+<span class="pc bpc" id="L57" title="1 of 4 branches missed.">        if (refreshToken == null || !jwtService.validateToken(refreshToken)) {</span>
+<span class="fc" id="L58">            throw new ServiceException(&quot;invalid refresh token&quot;, HttpStatus.BAD_REQUEST);</span>
+        }
+<span class="fc" id="L60">        return jwtService.refreshBaseToken(jwtService.getEmailFromToken(refreshToken), refreshToken);</span>
+    }
+
+    @Override
+    public void changePassword(UserChangePasswordDto userChangePasswordDto, UserDetails userDetails) {
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        if (!userChangePasswordDto.newPassword().equals(userChangePasswordDto.confirmPassword())) {</span>
+<span class="fc" id="L66">            throw new ServiceException(&quot;passwords do not match&quot;, HttpStatus.BAD_REQUEST);</span>
+        }
+<span class="fc" id="L68">        RegisteredUser registeredUser = userService.findByEmail(userDetails.getUsername());</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        if (!passwordEncoder.matches(userChangePasswordDto.oldPassword(), registeredUser.getPassword())) {</span>
+<span class="fc" id="L70">            throw new ServiceException(&quot;old password is incorrect&quot;, HttpStatus.BAD_REQUEST);</span>
+        }
+<span class="fc" id="L72">        registeredUser.setPassword(passwordEncoder.encode(userChangePasswordDto.newPassword()));</span>
+<span class="fc" id="L73">        userService.updateRegisteredUser(registeredUser);</span>
+<span class="fc" id="L74">    }</span>
+
+    @Override
+    public UserDto update(UserUpdateDto userUpdateDto, UserDetails userDetails) {
+<span class="nc" id="L78">        RegisteredUser registeredUser = userService.findByEmail(userDetails.getUsername());</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">        if (userUpdateDto.name() != null) {</span>
+<span class="nc" id="L80">            registeredUser.setName(userUpdateDto.name());</span>
+        }
+<span class="nc" id="L82">        return userService.updateRegisteredUser(registeredUser);</span>
+    }
+
+    @Override
+    public void delete(UserDetails userDetails) {
+<span class="fc" id="L87">        RegisteredUser registeredUser = userService.findByEmail(userDetails.getUsername());</span>
+<span class="fc" id="L88">        userService.deleteRegisteredUser(registeredUser);</span>
+<span class="fc" id="L89">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

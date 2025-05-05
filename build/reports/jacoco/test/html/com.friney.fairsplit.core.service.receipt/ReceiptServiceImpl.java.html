@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReceiptServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">fairsplit</a> &gt; <a href="index.source.html" class="el_package">com.friney.fairsplit.core.service.receipt</a> &gt; <span class="el_source">ReceiptServiceImpl.java</span></div><h1>ReceiptServiceImpl.java</h1><pre class="source lang-java linenums">package com.friney.fairsplit.core.service.receipt;
+
+import com.friney.fairsplit.api.dto.event.EventDto;
+import com.friney.fairsplit.api.dto.receipt.ReceiptCreateDto;
+import com.friney.fairsplit.api.dto.receipt.ReceiptDto;
+import com.friney.fairsplit.api.dto.receipt.ReceiptUpdateDto;
+import com.friney.fairsplit.core.entity.receipt.Receipt;
+import com.friney.fairsplit.core.exception.ServiceException;
+import com.friney.fairsplit.core.mapper.ReceiptMapper;
+import com.friney.fairsplit.core.repository.ReceiptRepository;
+import com.friney.fairsplit.core.service.event.EventService;
+import com.friney.fairsplit.core.service.user.UserService;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class ReceiptServiceImpl implements ReceiptService {
+
+    private final ReceiptRepository receiptRepository;
+    private final EventService eventService;
+    private final UserService userService;
+    private final ReceiptMapper receiptMapper;
+
+    @Override
+    public List&lt;ReceiptDto&gt; getAllByEventId(Long eventId) {
+<span class="fc" id="L30">        EventDto event = eventService.getDtoById(eventId);</span>
+<span class="fc" id="L31">        return event.receipts();</span>
+    }
+
+    @Override
+    public ReceiptDto getDtoById(Long id) {
+<span class="fc" id="L36">        return receiptMapper.map(getById(id));</span>
+    }
+
+    @Override
+    public Receipt getById(Long id) {
+<span class="fc" id="L41">        return receiptRepository.findById(id)</span>
+<span class="fc" id="L42">                .orElseThrow(() -&gt; new ServiceException(&quot;receipt with id &quot; + id + &quot; not found&quot;, HttpStatus.NOT_FOUND));</span>
+    }
+
+    @Override
+    public ReceiptDto create(ReceiptCreateDto receiptCreateDto, Long eventId) {
+<span class="fc" id="L47">        Receipt receipt = Receipt.builder()</span>
+<span class="fc" id="L48">                .name(receiptCreateDto.name())</span>
+<span class="fc" id="L49">                .event(eventService.getById(eventId))</span>
+<span class="fc" id="L50">                .paidByUser(userService.getById(receiptCreateDto.userId()))</span>
+<span class="fc" id="L51">                .build();</span>
+<span class="fc" id="L52">        return receiptMapper.map(receiptRepository.save(receipt));</span>
+    }
+
+    @Override
+    public ReceiptDto update(ReceiptUpdateDto receiptUpdateDto, Long id, Long eventId, UserDetails userDetails) {
+<span class="fc" id="L57">        Receipt receipt = getById(id);</span>
+<span class="fc" id="L58">        validateChangeRequest(receipt, eventId, userDetails);</span>
+
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">        if (receiptUpdateDto.name() != null) {</span>
+<span class="fc" id="L61">            receipt.setName(receiptUpdateDto.name());</span>
+        }
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">        if (receiptUpdateDto.userId() != null) {</span>
+<span class="nc" id="L64">            receipt.setPaidByUser(userService.getById(receiptUpdateDto.userId()));</span>
+        }
+<span class="fc" id="L66">        return receiptMapper.map(receiptRepository.save(receipt));</span>
+    }
+
+    @Override
+    public void delete(Long id, Long eventId, UserDetails userDetails) {
+<span class="fc" id="L71">        Receipt receipt = getById(id);</span>
+<span class="fc" id="L72">        validateChangeRequest(receipt, eventId, userDetails);</span>
+
+<span class="fc" id="L74">        receiptRepository.delete(receipt);</span>
+<span class="fc" id="L75">    }</span>
+
+    boolean hasPermissionOnChange(Receipt receipt, UserDetails userDetails) {
+<span class="fc" id="L78">        return receipt.getEvent().getOwner().getEmail().equals(userDetails.getUsername());</span>
+    }
+
+    void validateChangeRequest(Receipt receipt, Long eventId, UserDetails userDetails) {
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        if (!receipt.getEvent().getId().equals(eventId)) {</span>
+<span class="nc" id="L83">            throw new ServiceException(&quot;receipt with id &quot; + receipt.getId() + &quot; in event with id &quot; + eventId + &quot; not found&quot;, HttpStatus.NOT_FOUND);</span>
+        }
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        if (!hasPermissionOnChange(receipt, userDetails)) {</span>
+<span class="fc" id="L86">            throw new ServiceException(&quot;you are not the owner of this receipt&quot;, HttpStatus.FORBIDDEN);</span>
+        }
+<span class="fc" id="L88">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JwtFilter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">fairsplit</a> &gt; <a href="index.source.html" class="el_package">com.friney.fairsplit.core.security</a> &gt; <span class="el_source">JwtFilter.java</span></div><h1>JwtFilter.java</h1><pre class="source lang-java linenums">package com.friney.fairsplit.core.security;
+
+import com.friney.fairsplit.core.service.jwt.JwtService;
+import com.friney.fairsplit.core.service.user.UserService;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+@Component
+@RequiredArgsConstructor
+public class JwtFilter extends OncePerRequestFilter {
+
+    private final JwtService jwtService;
+    private final UserService userService;
+
+    @Override
+<span class="pc bpc" id="L27" title="1 of 2 branches missed.">    protected void doFilterInternal(@NonNull HttpServletRequest request,</span>
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">                                    @NonNull HttpServletResponse response,</span>
+<span class="pc bpc" id="L29" title="1 of 2 branches missed.">                                    @NonNull FilterChain filterChain) throws ServletException, IOException {</span>
+<span class="fc" id="L30">        String token = getTokenFromRequest(request);</span>
+<span class="pc bpc" id="L31" title="3 of 4 branches missed.">        if (token != null &amp;&amp; jwtService.validateToken(token)) {</span>
+<span class="nc" id="L32">            setUserDetailsToSecurityContextHolder(token);</span>
+        }
+<span class="fc" id="L34">        filterChain.doFilter(request, response);</span>
+<span class="fc" id="L35">    }</span>
+
+    private void setUserDetailsToSecurityContextHolder(String token) {
+<span class="nc" id="L38">        String email = jwtService.getEmailFromToken(token);</span>
+<span class="nc" id="L39">        UserDetails user = userService.loadUserByUsername(email);</span>
+<span class="nc" id="L40">        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(</span>
+                user,
+                null,
+<span class="nc" id="L43">                user.getAuthorities()</span>
+        );
+<span class="nc" id="L45">        SecurityContextHolder.getContext().setAuthentication(authentication);</span>
+<span class="nc" id="L46">    }</span>
+
+    private String getTokenFromRequest(HttpServletRequest request) {
+<span class="fc" id="L49">        String startToken = &quot;Bearer &quot;;</span>
+<span class="fc" id="L50">        String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);</span>
+<span class="pc bpc" id="L51" title="3 of 4 branches missed.">        if (bearerToken != null &amp;&amp; bearerToken.startsWith(startToken)) {</span>
+<span class="nc" id="L52">            return bearerToken.substring(startToken.length());</span>
+        }
+<span class="fc" id="L54">        return bearerToken;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

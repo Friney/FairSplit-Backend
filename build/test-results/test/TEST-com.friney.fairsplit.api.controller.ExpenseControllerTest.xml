@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.friney.fairsplit.api.controller.ExpenseControllerTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2025-05-04T22:44:23" hostname="Friney" time="0.174">
+  <properties/>
+  <testcase name="testCreate()" classname="com.friney.fairsplit.api.controller.ExpenseControllerTest" time="0.145"/>
+  <testcase name="testDelete()" classname="com.friney.fairsplit.api.controller.ExpenseControllerTest" time="0.003"/>
+  <testcase name="testGetAllByReceiptId()" classname="com.friney.fairsplit.api.controller.ExpenseControllerTest" time="0.003"/>
+  <testcase name="testUpdate()" classname="com.friney.fairsplit.api.controller.ExpenseControllerTest" time="0.019"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

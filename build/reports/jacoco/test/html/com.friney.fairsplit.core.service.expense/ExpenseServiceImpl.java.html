@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ExpenseServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">fairsplit</a> &gt; <a href="index.source.html" class="el_package">com.friney.fairsplit.core.service.expense</a> &gt; <span class="el_source">ExpenseServiceImpl.java</span></div><h1>ExpenseServiceImpl.java</h1><pre class="source lang-java linenums">package com.friney.fairsplit.core.service.expense;
+
+import com.friney.fairsplit.api.dto.expense.ExpenseCreateDto;
+import com.friney.fairsplit.api.dto.expense.ExpenseDto;
+import com.friney.fairsplit.api.dto.expense.ExpenseUpdateDto;
+import com.friney.fairsplit.api.dto.receipt.ReceiptDto;
+import com.friney.fairsplit.core.entity.expense.Expense;
+import com.friney.fairsplit.core.exception.ServiceException;
+import com.friney.fairsplit.core.mapper.ExpenseMapper;
+import com.friney.fairsplit.core.repository.ExpenseRepository;
+import com.friney.fairsplit.core.service.receipt.ReceiptService;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class ExpenseServiceImpl implements ExpenseService {
+
+    private final ExpenseRepository expenseRepository;
+    private final ReceiptService receiptService;
+    private final ExpenseMapper expenseMapper;
+
+    @Override
+    public List&lt;ExpenseDto&gt; getAllByReceiptId(Long receiptId) {
+<span class="fc" id="L28">        ReceiptDto receipt = receiptService.getDtoById(receiptId);</span>
+<span class="fc" id="L29">        return receipt.expenses();</span>
+    }
+
+    @Override
+    public ExpenseDto getDtoById(Long id) {
+<span class="fc" id="L34">        return expenseMapper.map(getById(id));</span>
+    }
+
+    @Override
+    public Expense getById(Long id) {
+<span class="fc" id="L39">        return expenseRepository.findById(id)</span>
+<span class="fc" id="L40">                .orElseThrow(() -&gt; new ServiceException(&quot;expense with id &quot; + id + &quot; not found&quot;, HttpStatus.NOT_FOUND));</span>
+    }
+
+    @Override
+    public ExpenseDto create(ExpenseCreateDto expenseCreateDto, Long receiptId) {
+<span class="fc" id="L45">        Expense expense = Expense.builder()</span>
+<span class="fc" id="L46">                .name(expenseCreateDto.name())</span>
+<span class="fc" id="L47">                .amount(expenseCreateDto.amount())</span>
+<span class="fc" id="L48">                .receipt(receiptService.getById(receiptId))</span>
+<span class="fc" id="L49">                .build();</span>
+<span class="fc" id="L50">        return expenseMapper.map(expenseRepository.save(expense));</span>
+    }
+
+    @Override
+    public ExpenseDto update(ExpenseUpdateDto expenseCreateDto, Long id, Long receiptId, UserDetails userDetails) {
+<span class="fc" id="L55">        Expense expense = getById(id);</span>
+<span class="fc" id="L56">        validateChangeRequest(expense, receiptId, userDetails);</span>
+
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">        if (expenseCreateDto.name() != null) {</span>
+<span class="fc" id="L59">            expense.setName(expenseCreateDto.name());</span>
+        }
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        if (expenseCreateDto.amount() != null) {</span>
+<span class="nc" id="L62">            expense.setAmount(expenseCreateDto.amount());</span>
+        }
+<span class="fc" id="L64">        return expenseMapper.map(expenseRepository.save(expense));</span>
+    }
+
+    @Override
+    public void delete(Long id, Long receiptId, UserDetails userDetails) {
+<span class="fc" id="L69">        Expense expense = getById(id);</span>
+<span class="fc" id="L70">        validateChangeRequest(expense, receiptId, userDetails);</span>
+
+<span class="fc" id="L72">        expenseRepository.delete(expense);</span>
+<span class="fc" id="L73">    }</span>
+
+    boolean hasPermissionOnChange(Expense expense, UserDetails userDetails) {
+<span class="fc" id="L76">        return expense.getReceipt().getEvent().getOwner().getEmail().equals(userDetails.getUsername());</span>
+    }
+
+    void validateChangeRequest(Expense expense, Long receiptId, UserDetails userDetails) {
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if (!expense.getReceipt().getId().equals(receiptId)) {</span>
+<span class="nc" id="L81">            throw new ServiceException(&quot;expense with id &quot; + expense.getId() + &quot; in receipt with id &quot; + receiptId + &quot; not found&quot;, HttpStatus.NOT_FOUND);</span>
+        }
+<span class="fc bfc" id="L83" title="All 2 branches covered.">        if (!hasPermissionOnChange(expense, userDetails)) {</span>
+<span class="fc" id="L84">            throw new ServiceException(&quot;you are not the owner of this expense&quot;, HttpStatus.FORBIDDEN);</span>
+        }
+<span class="fc" id="L86">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

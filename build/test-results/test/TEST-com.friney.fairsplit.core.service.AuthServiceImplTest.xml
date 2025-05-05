@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.friney.fairsplit.core.service.AuthServiceImplTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2025-05-04T22:46:23" hostname="Friney" time="0.548">
+  <properties/>
+  <testcase name="testLogin()" classname="com.friney.fairsplit.core.service.AuthServiceImplTest" time="0.501"/>
+  <testcase name="testUpdatePasswordWhenPasswordsNotMatch()" classname="com.friney.fairsplit.core.service.AuthServiceImplTest" time="0.008"/>
+  <testcase name="testUpdatePasswordWhenOldPasswordNotMatch()" classname="com.friney.fairsplit.core.service.AuthServiceImplTest" time="0.002"/>
+  <testcase name="testRegistration()" classname="com.friney.fairsplit.core.service.AuthServiceImplTest" time="0.014"/>
+  <testcase name="testRegistrationWhenPasswordsNotMatch()" classname="com.friney.fairsplit.core.service.AuthServiceImplTest" time="0.002"/>
+  <testcase name="testRefresh()" classname="com.friney.fairsplit.core.service.AuthServiceImplTest" time="0.003"/>
+  <testcase name="testUpdatePassword()" classname="com.friney.fairsplit.core.service.AuthServiceImplTest" time="0.003"/>
+  <testcase name="testDelete()" classname="com.friney.fairsplit.core.service.AuthServiceImplTest" time="0.002"/>
+  <testcase name="testRefreshWhenInvalidToken()" classname="com.friney.fairsplit.core.service.AuthServiceImplTest" time="0.009"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - SummaryControllerIT</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>SummaryControllerIT</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/com.friney.fairsplit.api.controller.html">com.friney.fairsplit.api.controller</a> &gt; SummaryControllerIT</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">4</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">4.940s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Tests</a>
+</li>
+<li>
+<a href="#tab1">Standard output</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">testCorrectCollectionResult()</td>
+<td class="success">0.487s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testCorrectCollectionResultWithoutExpenses()</td>
+<td class="success">3.906s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testCorrectCollectionResultWithoutExpensesMember()</td>
+<td class="success">0.300s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testCorrectCollectionResultWithoutReceipts()</td>
+<td class="success">0.247s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div id="tab1" class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>05:44:25.076 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.friney.fairsplit.api.controller.SummaryControllerIT]: SummaryControllerIT does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+05:44:27.348 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.friney.fairsplit.FairSplitApplication for test class com.friney.fairsplit.api.controller.SummaryControllerIT
+05:44:29.168 [Test worker] INFO org.testcontainers.images.PullPolicy -- Image pull policy will be performed by: DefaultPullPolicy()
+05:44:29.225 [Test worker] INFO org.testcontainers.utility.ImageNameSubstitutor -- Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+05:44:29.300 [Test worker] INFO org.testcontainers.DockerClientFactory -- Testcontainers version: 1.20.4
+05:44:31.782 [Test worker] INFO org.testcontainers.dockerclient.DockerClientProviderStrategy -- Loaded org.testcontainers.dockerclient.UnixSocketClientProviderStrategy from ~/.testcontainers.properties, will try it first
+05:44:36.359 [Test worker] INFO org.testcontainers.dockerclient.DockerClientProviderStrategy -- Found Docker environment with local Unix socket (unix:///var/run/docker.sock)
+05:44:36.371 [Test worker] INFO org.testcontainers.DockerClientFactory -- Docker host IP address is localhost
+05:44:36.490 [Test worker] INFO org.testcontainers.DockerClientFactory -- Connected to docker: 
+  Server Version: 28.0.4
+  API Version: 1.48
+  Operating System: Docker Desktop
+  Total Memory: 15958 MB
+  Labels: 
+    com.docker.desktop.address=unix:///var/run/docker-cli.sock
+05:44:36.691 [Test worker] INFO tc.testcontainers/ryuk:0.11.0 -- Creating container for image: testcontainers/ryuk:0.11.0
+05:44:38.266 [Test worker] INFO tc.testcontainers/ryuk:0.11.0 -- Container testcontainers/ryuk:0.11.0 is starting: 78488859a44713e15439bfa33a037f8dd0af1d9abf23ec69b23ddf05ccca71b1
+05:44:39.652 [Test worker] INFO tc.testcontainers/ryuk:0.11.0 -- Container testcontainers/ryuk:0.11.0 started in PT2.96088263S
+05:44:39.663 [Test worker] INFO org.testcontainers.utility.RyukResourceReaper -- Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
+05:44:39.663 [Test worker] INFO org.testcontainers.DockerClientFactory -- Checking the system...
+05:44:39.669 [Test worker] INFO org.testcontainers.DockerClientFactory -- ✔︎ Docker server version should be at least 1.6.0
+05:44:39.670 [Test worker] INFO tc.postgres:16 -- Creating container for image: postgres:16
+05:44:39.721 [Test worker] INFO tc.postgres:16 -- Container postgres:16 is starting: 10ae89c442280149fbe6834b877705727d6878e22d4974e165869422bfead025
+05:44:41.599 [Test worker] INFO tc.postgres:16 -- Container postgres:16 started in PT1.92859201S
+05:44:41.601 [Test worker] INFO tc.postgres:16 -- Container is started (JDBC URL: jdbc:postgresql://localhost:52321/test?loggerLevel=OFF)
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.4.1)
+
+2025-05-05T05:44:49.079+07:00  INFO 686587 --- [    Test worker] c.f.f.a.controller.SummaryControllerIT   : Starting SummaryControllerIT using Java 21.0.6 with PID 686587 (started by friney in /mnt/c/Projects/FairSplit-Backend)
+2025-05-05T05:44:49.084+07:00  INFO 686587 --- [    Test worker] c.f.f.a.controller.SummaryControllerIT   : No active profile set, falling back to 1 default profile: &quot;default&quot;
+2025-05-05T05:44:49.227+07:00 DEBUG 686587 --- [    Test worker] o.s.w.c.s.GenericWebApplicationContext   : Refreshing org.springframework.web.context.support.GenericWebApplicationContext@303ea430
+2025-05-05T05:45:03.081+07:00  INFO 686587 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-05T05:45:05.017+07:00  INFO 686587 --- [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 1852 ms. Found 7 JPA repository interfaces.
+2025-05-05T05:45:12.887+07:00  INFO 686587 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-05-05T05:45:14.355+07:00  INFO 686587 --- [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@2c8ee744
+2025-05-05T05:45:14.383+07:00  INFO 686587 --- [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-05-05T05:45:14.638+07:00  INFO 686587 --- [    Test worker] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:52321/test?loggerLevel=OFF (PostgreSQL 16.8)
+2025-05-05T05:45:15.081+07:00  INFO 686587 --- [    Test worker] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table &quot;public&quot;.&quot;flyway_schema_history&quot; does not exist yet
+2025-05-05T05:45:15.106+07:00  INFO 686587 --- [    Test worker] o.f.core.internal.command.DbValidate     : Successfully validated 5 migrations (execution time 00:00.266s)
+2025-05-05T05:45:15.161+07:00  INFO 686587 --- [    Test worker] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table &quot;public&quot;.&quot;flyway_schema_history&quot; ...
+2025-05-05T05:45:15.312+07:00  INFO 686587 --- [    Test worker] o.f.core.internal.command.DbMigrate      : Current version of schema &quot;public&quot;: &lt;&lt; Empty Schema &gt;&gt;
+2025-05-05T05:45:15.378+07:00  INFO 686587 --- [    Test worker] o.f.core.internal.command.DbMigrate      : Migrating schema &quot;public&quot; to version &quot;1 - create tables&quot;
+2025-05-05T05:45:15.491+07:00  INFO 686587 --- [    Test worker] o.f.core.internal.command.DbMigrate      : Migrating schema &quot;public&quot; to version &quot;2 - add trigger unique name for not registered users&quot;
+2025-05-05T05:45:15.533+07:00  INFO 686587 --- [    Test worker] o.f.core.internal.command.DbMigrate      : Migrating schema &quot;public&quot; to version &quot;3 - add password for registered users&quot;
+2025-05-05T05:45:15.580+07:00  INFO 686587 --- [    Test worker] o.f.core.internal.command.DbMigrate      : Migrating schema &quot;public&quot; to version &quot;4 - owner event column&quot;
+2025-05-05T05:45:15.649+07:00  INFO 686587 --- [    Test worker] o.f.core.internal.command.DbMigrate      : Migrating schema &quot;public&quot; to version &quot;5 - add on delete cascade&quot;
+2025-05-05T05:45:15.669+07:00  INFO 686587 --- [    Test worker] o.f.core.internal.command.DbMigrate      : Successfully applied 5 migrations to schema &quot;public&quot;, now at version v5 (execution time 00:00.061s)
+2025-05-05T05:45:17.008+07:00  INFO 686587 --- [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-05T05:45:18.956+07:00  INFO 686587 --- [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.4.Final
+2025-05-05T05:45:19.531+07:00  INFO 686587 --- [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-05-05T05:45:22.045+07:00  INFO 686587 --- [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-05T05:45:23.238+07:00  INFO 686587 --- [    Test worker] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 16.8
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-05-05T05:45:36.364+07:00  INFO 686587 --- [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-05T05:45:36.402+07:00  INFO 686587 --- [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-05T05:45:40.200+07:00  INFO 686587 --- [    Test worker] eAuthenticationProviderManagerConfigurer : Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2025-05-05T05:45:40.201+07:00  WARN 686587 --- [    Test worker] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2025-05-05T05:45:42.118+07:00  WARN 686587 --- [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-05T05:45:44.920+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : 32 mappings in 'requestMappingHandlerMapping'
+2025-05-05T05:45:46.158+07:00 DEBUG 686587 --- [    Test worker] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/webjars/**, /**, /swagger-ui*/*swagger-initializer.js, /swagger-ui*/**] in 'resourceHandlerMapping'
+2025-05-05T05:45:47.264+07:00  INFO 686587 --- [    Test worker] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2025-05-05T05:45:49.864+07:00  INFO 686587 --- [    Test worker] o.s.v.b.OptionalValidatorFactoryBean     : Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
+2025-05-05T05:45:50.304+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-05-05T05:45:50.962+07:00 DEBUG 686587 --- [    Test worker] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 2 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-05-05T05:45:53.724+07:00 DEBUG 686587 --- [    Test worker] o.s.w.f.ServerHttpObservationFilter      : Filter 'webMvcObservationFilter' configured for use
+2025-05-05T05:45:53.730+07:00  INFO 686587 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2025-05-05T05:45:53.731+07:00  INFO 686587 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2025-05-05T05:45:53.732+07:00  INFO 686587 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2025-05-05T05:45:54.196+07:00  INFO 686587 --- [    Test worker] c.f.f.a.controller.SummaryControllerIT   : Started SummaryControllerIT in 69.672 seconds (process running for 100.883)
+2025-05-05T05:45:55.070+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.UserController#create(CreateNotRegisteredUserDto)
+2025-05-05T05:45:55.368+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [CreateNotRegisteredUserDto[name=user 1]]
+2025-05-05T05:45:56.414+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        nru1_0.user_id,
+        nru1_1.name 
+    from
+        not_registered_users nru1_0 
+    join
+        users nru1_1 
+            on nru1_0.user_id=nru1_1.id 
+    where
+        nru1_1.name=?
+2025-05-05T05:45:56.974+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        users
+        (name) 
+    values
+        (?)
+2025-05-05T05:45:57.092+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        not_registered_users
+        (user_id) 
+    values
+        (?)
+2025-05-05T05:45:57.197+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:57.205+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [UserDto[id=1, name=user 1, displayName=user 1]]
+2025-05-05T05:45:57.360+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.UserController#create(CreateNotRegisteredUserDto)
+2025-05-05T05:45:57.361+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [CreateNotRegisteredUserDto[name=user 2]]
+2025-05-05T05:45:57.419+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        nru1_0.user_id,
+        nru1_1.name 
+    from
+        not_registered_users nru1_0 
+    join
+        users nru1_1 
+            on nru1_0.user_id=nru1_1.id 
+    where
+        nru1_1.name=?
+2025-05-05T05:45:57.422+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        users
+        (name) 
+    values
+        (?)
+2025-05-05T05:45:57.423+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        not_registered_users
+        (user_id) 
+    values
+        (?)
+2025-05-05T05:45:57.425+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:57.426+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [UserDto[id=2, name=user 2, displayName=user 2]]
+2025-05-05T05:45:57.434+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.AuthController#register(CreateRegisteredUserDto)
+2025-05-05T05:45:57.438+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [CreateRegisteredUserDto[name=user 3, email=email1@email.com, password=password, confirmPassword=pass (truncated)...]
+2025-05-05T05:45:57.529+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        ru1_0.user_id,
+        ru1_1.name,
+        ru1_0.email,
+        ru1_0.password 
+    from
+        registered_users ru1_0 
+    join
+        users ru1_1 
+            on ru1_0.user_id=ru1_1.id 
+    where
+        ru1_0.email=?
+2025-05-05T05:45:57.534+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        users
+        (name) 
+    values
+        (?)
+2025-05-05T05:45:57.535+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        registered_users
+        (email, password, user_id) 
+    values
+        (?, ?, ?)
+2025-05-05T05:45:57.538+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:57.538+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [UserDto[id=3, name=user 3, displayName=user 3 (email1@email.com)]]
+2025-05-05T05:45:57.544+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.AuthController#register(CreateRegisteredUserDto)
+2025-05-05T05:45:57.545+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [CreateRegisteredUserDto[name=user 4, email=email2@email.com, password=password, confirmPassword=pass (truncated)...]
+2025-05-05T05:45:57.613+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        ru1_0.user_id,
+        ru1_1.name,
+        ru1_0.email,
+        ru1_0.password 
+    from
+        registered_users ru1_0 
+    join
+        users ru1_1 
+            on ru1_0.user_id=ru1_1.id 
+    where
+        ru1_0.email=?
+2025-05-05T05:45:57.617+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        users
+        (name) 
+    values
+        (?)
+2025-05-05T05:45:57.618+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        registered_users
+        (email, password, user_id) 
+    values
+        (?, ?, ?)
+2025-05-05T05:45:57.621+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:57.621+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [UserDto[id=4, name=user 4, displayName=user 4 (email2@email.com)]]
+2025-05-05T05:45:57.628+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.EventController#create(EventCreateDto, UserDetails)
+2025-05-05T05:45:57.631+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [EventCreateDto[name=event, description=description]]
+2025-05-05T05:45:57.660+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        ru1_0.user_id,
+        ru1_1.name,
+        ru1_0.email,
+        ru1_0.password 
+    from
+        registered_users ru1_0 
+    join
+        users ru1_1 
+            on ru1_0.user_id=ru1_1.id 
+    where
+        ru1_0.email=?
+2025-05-05T05:45:57.707+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        events
+        (description, name, owner_id) 
+    values
+        (?, ?, ?)
+2025-05-05T05:45:57.718+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:57.718+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [EventDto[id=1, name=event, description=description, receipts=null]]
+2025-05-05T05:45:57.729+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.ReceiptController#createReceipt(ReceiptCreateDto, Long)
+2025-05-05T05:45:57.732+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [ReceiptCreateDto[name=receipt 1, userId=1]]
+2025-05-05T05:45:57.814+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        receipts
+        (event_id, name, paid_by_user_id) 
+    values
+        (?, ?, ?)
+2025-05-05T05:45:57.825+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:57.826+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [ReceiptDto[id=1, name=receipt 1, expenses=null, paidByUserName=user 1]]
+2025-05-05T05:45:57.834+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.ReceiptController#createReceipt(ReceiptCreateDto, Long)
+2025-05-05T05:45:57.836+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [ReceiptCreateDto[name=receipt 2, userId=2]]
+2025-05-05T05:45:57.838+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        receipts
+        (event_id, name, paid_by_user_id) 
+    values
+        (?, ?, ?)
+2025-05-05T05:45:57.841+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:57.842+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [ReceiptDto[id=2, name=receipt 2, expenses=null, paidByUserName=user 2]]
+2025-05-05T05:45:57.897+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.SummaryController#calculateSummary(Long)
+2025-05-05T05:45:57.973+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        e1_0.id,
+        e1_0.description,
+        e1_0.name,
+        o1_0.user_id,
+        o1_1.name,
+        o1_0.email,
+        o1_0.password,
+        r1_0.event_id,
+        r1_0.id,
+        e2_0.receipt_id,
+        e2_0.id,
+        e2_0.amount,
+        em1_0.expense_id,
+        em1_0.id,
+        u1_0.id,
+        case 
+            when u1_1.user_id is not null 
+                then 1 
+            when u1_2.user_id is not null 
+                then 2 
+            when u1_0.id is not null 
+                then 0 
+        end,
+        u1_0.name,
+        u1_2.email,
+        u1_2.password,
+        e2_0.name,
+        r1_0.name,
+        pbu1_0.id,
+        case 
+            when pbu1_1.user_id is not null 
+                then 1 
+            when pbu1_2.user_id is not null 
+                then 2 
+            when pbu1_0.id is not null 
+                then 0 
+        end,
+        pbu1_0.name,
+        pbu1_2.email,
+        pbu1_2.password 
+    from
+        events e1_0 
+    left join
+        registered_users o1_0 
+            on o1_0.user_id=e1_0.owner_id 
+    left join
+        users o1_1 
+            on o1_0.user_id=o1_1.id 
+    left join
+        receipts r1_0 
+            on e1_0.id=r1_0.event_id 
+    left join
+        expenses e2_0 
+            on r1_0.id=e2_0.receipt_id 
+    left join
+        expense_members em1_0 
+            on e2_0.id=em1_0.expense_id 
+    left join
+        users u1_0 
+            on u1_0.id=em1_0.user_id 
+    left join
+        not_registered_users u1_1 
+            on u1_0.id=u1_1.user_id 
+    left join
+        registered_users u1_2 
+            on u1_0.id=u1_2.user_id 
+    left join
+        users pbu1_0 
+            on pbu1_0.id=r1_0.paid_by_user_id 
+    left join
+        not_registered_users pbu1_1 
+            on pbu1_0.id=pbu1_1.user_id 
+    left join
+        registered_users pbu1_2 
+            on pbu1_0.id=pbu1_2.user_id 
+    where
+        e1_0.id=?
+2025-05-05T05:45:58.152+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:58.153+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [com.friney.fairsplit.core.entity.summary.Summary@2504a5a1]
+2025-05-05T05:45:58.391+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.UserController#create(CreateNotRegisteredUserDto)
+2025-05-05T05:45:58.392+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [CreateNotRegisteredUserDto[name=user 1]]
+2025-05-05T05:45:58.394+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        nru1_0.user_id,
+        nru1_1.name 
+    from
+        not_registered_users nru1_0 
+    join
+        users nru1_1 
+            on nru1_0.user_id=nru1_1.id 
+    where
+        nru1_1.name=?
+2025-05-05T05:45:58.397+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        users
+        (name) 
+    values
+        (?)
+2025-05-05T05:45:58.399+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        not_registered_users
+        (user_id) 
+    values
+        (?)
+2025-05-05T05:45:58.400+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:58.401+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [UserDto[id=5, name=user 1, displayName=user 1]]
+2025-05-05T05:45:58.407+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.UserController#create(CreateNotRegisteredUserDto)
+2025-05-05T05:45:58.408+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [CreateNotRegisteredUserDto[name=user 2]]
+2025-05-05T05:45:58.410+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        nru1_0.user_id,
+        nru1_1.name 
+    from
+        not_registered_users nru1_0 
+    join
+        users nru1_1 
+            on nru1_0.user_id=nru1_1.id 
+    where
+        nru1_1.name=?
+2025-05-05T05:45:58.412+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        users
+        (name) 
+    values
+        (?)
+2025-05-05T05:45:58.414+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        not_registered_users
+        (user_id) 
+    values
+        (?)
+2025-05-05T05:45:58.417+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:58.418+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [UserDto[id=6, name=user 2, displayName=user 2]]
+2025-05-05T05:45:58.426+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.AuthController#register(CreateRegisteredUserDto)
+2025-05-05T05:45:58.427+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [CreateRegisteredUserDto[name=user 3, email=email1@email.com, password=password, confirmPassword=pass (truncated)...]
+2025-05-05T05:45:58.496+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        ru1_0.user_id,
+        ru1_1.name,
+        ru1_0.email,
+        ru1_0.password 
+    from
+        registered_users ru1_0 
+    join
+        users ru1_1 
+            on ru1_0.user_id=ru1_1.id 
+    where
+        ru1_0.email=?
+2025-05-05T05:45:58.499+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        users
+        (name) 
+    values
+        (?)
+2025-05-05T05:45:58.500+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        registered_users
+        (email, password, user_id) 
+    values
+        (?, ?, ?)
+2025-05-05T05:45:58.502+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:58.503+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [UserDto[id=7, name=user 3, displayName=user 3 (email1@email.com)]]
+2025-05-05T05:45:58.510+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.AuthController#register(CreateRegisteredUserDto)
+2025-05-05T05:45:58.511+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [CreateRegisteredUserDto[name=user 4, email=email2@email.com, password=password, confirmPassword=pass (truncated)...]
+2025-05-05T05:45:58.578+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        ru1_0.user_id,
+        ru1_1.name,
+        ru1_0.email,
+        ru1_0.password 
+    from
+        registered_users ru1_0 
+    join
+        users ru1_1 
+            on ru1_0.user_id=ru1_1.id 
+    where
+        ru1_0.email=?
+2025-05-05T05:45:58.581+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        users
+        (name) 
+    values
+        (?)
+2025-05-05T05:45:58.582+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        registered_users
+        (email, password, user_id) 
+    values
+        (?, ?, ?)
+2025-05-05T05:45:58.583+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:58.584+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [UserDto[id=8, name=user 4, displayName=user 4 (email2@email.com)]]
+2025-05-05T05:45:58.590+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.EventController#create(EventCreateDto, UserDetails)
+2025-05-05T05:45:58.591+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [EventCreateDto[name=event, description=description]]
+2025-05-05T05:45:58.593+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        ru1_0.user_id,
+        ru1_1.name,
+        ru1_0.email,
+        ru1_0.password 
+    from
+        registered_users ru1_0 
+    join
+        users ru1_1 
+            on ru1_0.user_id=ru1_1.id 
+    where
+        ru1_0.email=?
+2025-05-05T05:45:58.596+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        events
+        (description, name, owner_id) 
+    values
+        (?, ?, ?)
+2025-05-05T05:45:58.599+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:58.599+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [EventDto[id=2, name=event, description=description, receipts=null]]
+2025-05-05T05:45:58.605+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.ReceiptController#createReceipt(ReceiptCreateDto, Long)
+2025-05-05T05:45:58.606+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [ReceiptCreateDto[name=receipt 1, userId=5]]
+2025-05-05T05:45:58.608+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        receipts
+        (event_id, name, paid_by_user_id) 
+    values
+        (?, ?, ?)
+2025-05-05T05:45:58.611+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:58.611+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [ReceiptDto[id=3, name=receipt 1, expenses=null, paidByUserName=user 1]]
+2025-05-05T05:45:58.616+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.ReceiptController#createReceipt(ReceiptCreateDto, Long)
+2025-05-05T05:45:58.617+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [ReceiptCreateDto[name=receipt 2, userId=6]]
+2025-05-05T05:45:58.619+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        receipts
+        (event_id, name, paid_by_user_id) 
+    values
+        (?, ?, ?)
+2025-05-05T05:45:58.623+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:58.623+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [ReceiptDto[id=4, name=receipt 2, expenses=null, paidByUserName=user 2]]
+2025-05-05T05:45:58.631+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.ExpenseController#create(ExpenseCreateDto, Long)
+2025-05-05T05:45:58.641+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [ExpenseCreateDto[name=expense 1, amount=100]]
+2025-05-05T05:45:58.645+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        expenses
+        (amount, name, receipt_id) 
+    values
+        (?, ?, ?)
+2025-05-05T05:45:58.663+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:58.664+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [ExpenseDto[id=1, name=expense 1, amount=100, expenseMembers=null]]
+2025-05-05T05:45:58.671+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.ExpenseController#create(ExpenseCreateDto, Long)
+2025-05-05T05:45:58.671+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [ExpenseCreateDto[name=expense 2, amount=100]]
+2025-05-05T05:45:58.673+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        expenses
+        (amount, name, receipt_id) 
+    values
+        (?, ?, ?)
+2025-05-05T05:45:58.677+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:58.678+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [ExpenseDto[id=2, name=expense 2, amount=100, expenseMembers=null]]
+2025-05-05T05:45:58.684+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.ExpenseController#create(ExpenseCreateDto, Long)
+2025-05-05T05:45:58.685+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [ExpenseCreateDto[name=expense 3, amount=300]]
+2025-05-05T05:45:58.686+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        expenses
+        (amount, name, receipt_id) 
+    values
+        (?, ?, ?)
+2025-05-05T05:45:58.689+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:58.690+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [ExpenseDto[id=3, name=expense 3, amount=300, expenseMembers=null]]
+2025-05-05T05:45:58.696+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.ExpenseMemberController#create(ExpenseMemberCreateDto, Long)
+2025-05-05T05:45:58.699+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [ExpenseMemberCreateDto[userId=5]]
+2025-05-05T05:45:58.704+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        expense_members
+        (expense_id, user_id) 
+    values
+        (?, ?)
+2025-05-05T05:45:58.708+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:58.708+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [ExpenseMemberDto[name=user 1]]
+2025-05-05T05:45:58.715+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.ExpenseMemberController#create(ExpenseMemberCreateDto, Long)
+2025-05-05T05:45:58.716+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [ExpenseMemberCreateDto[userId=6]]
+2025-05-05T05:45:58.718+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        expense_members
+        (expense_id, user_id) 
+    values
+        (?, ?)
+2025-05-05T05:45:58.721+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:58.721+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [ExpenseMemberDto[name=user 2]]
+2025-05-05T05:45:58.726+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.ExpenseMemberController#create(ExpenseMemberCreateDto, Long)
+2025-05-05T05:45:58.727+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [ExpenseMemberCreateDto[userId=8]]
+2025-05-05T05:45:58.730+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        expense_members
+        (expense_id, user_id) 
+    values
+        (?, ?)
+2025-05-05T05:45:58.732+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:58.732+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [ExpenseMemberDto[name=user 4]]
+2025-05-05T05:45:58.736+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.ExpenseMemberController#create(ExpenseMemberCreateDto, Long)
+2025-05-05T05:45:58.737+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [ExpenseMemberCreateDto[userId=6]]
+2025-05-05T05:45:58.739+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        expense_members
+        (expense_id, user_id) 
+    values
+        (?, ?)
+2025-05-05T05:45:58.741+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:58.742+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [ExpenseMemberDto[name=user 2]]
+2025-05-05T05:45:58.745+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.ExpenseMemberController#create(ExpenseMemberCreateDto, Long)
+2025-05-05T05:45:58.746+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [ExpenseMemberCreateDto[userId=7]]
+2025-05-05T05:45:58.748+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        expense_members
+        (expense_id, user_id) 
+    values
+        (?, ?)
+2025-05-05T05:45:58.750+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:58.750+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [ExpenseMemberDto[name=user 3]]
+2025-05-05T05:45:58.755+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.ExpenseMemberController#create(ExpenseMemberCreateDto, Long)
+2025-05-05T05:45:58.756+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [ExpenseMemberCreateDto[userId=5]]
+2025-05-05T05:45:58.758+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        expense_members
+        (expense_id, user_id) 
+    values
+        (?, ?)
+2025-05-05T05:45:58.760+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:58.761+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [ExpenseMemberDto[name=user 1]]
+2025-05-05T05:45:58.765+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.ExpenseMemberController#create(ExpenseMemberCreateDto, Long)
+2025-05-05T05:45:58.767+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [ExpenseMemberCreateDto[userId=6]]
+2025-05-05T05:45:58.769+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        expense_members
+        (expense_id, user_id) 
+    values
+        (?, ?)
+2025-05-05T05:45:58.771+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:58.771+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [ExpenseMemberDto[name=user 2]]
+2025-05-05T05:45:58.776+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.ExpenseMemberController#create(ExpenseMemberCreateDto, Long)
+2025-05-05T05:45:58.777+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [ExpenseMemberCreateDto[userId=7]]
+2025-05-05T05:45:58.780+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        expense_members
+        (expense_id, user_id) 
+    values
+        (?, ?)
+2025-05-05T05:45:58.783+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:58.783+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [ExpenseMemberDto[name=user 3]]
+2025-05-05T05:45:58.787+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.ExpenseMemberController#create(ExpenseMemberCreateDto, Long)
+2025-05-05T05:45:58.788+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [ExpenseMemberCreateDto[userId=8]]
+2025-05-05T05:45:58.790+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        expense_members
+        (expense_id, user_id) 
+    values
+        (?, ?)
+2025-05-05T05:45:58.792+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:58.792+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [ExpenseMemberDto[name=user 4]]
+2025-05-05T05:45:58.798+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.SummaryController#calculateSummary(Long)
+2025-05-05T05:45:58.807+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        e1_0.id,
+        e1_0.description,
+        e1_0.name,
+        o1_0.user_id,
+        o1_1.name,
+        o1_0.email,
+        o1_0.password,
+        r1_0.event_id,
+        r1_0.id,
+        e2_0.receipt_id,
+        e2_0.id,
+        e2_0.amount,
+        em1_0.expense_id,
+        em1_0.id,
+        u1_0.id,
+        case 
+            when u1_1.user_id is not null 
+                then 1 
+            when u1_2.user_id is not null 
+                then 2 
+            when u1_0.id is not null 
+                then 0 
+        end,
+        u1_0.name,
+        u1_2.email,
+        u1_2.password,
+        e2_0.name,
+        r1_0.name,
+        pbu1_0.id,
+        case 
+            when pbu1_1.user_id is not null 
+                then 1 
+            when pbu1_2.user_id is not null 
+                then 2 
+            when pbu1_0.id is not null 
+                then 0 
+        end,
+        pbu1_0.name,
+        pbu1_2.email,
+        pbu1_2.password 
+    from
+        events e1_0 
+    left join
+        registered_users o1_0 
+            on o1_0.user_id=e1_0.owner_id 
+    left join
+        users o1_1 
+            on o1_0.user_id=o1_1.id 
+    left join
+        receipts r1_0 
+            on e1_0.id=r1_0.event_id 
+    left join
+        expenses e2_0 
+            on r1_0.id=e2_0.receipt_id 
+    left join
+        expense_members em1_0 
+            on e2_0.id=em1_0.expense_id 
+    left join
+        users u1_0 
+            on u1_0.id=em1_0.user_id 
+    left join
+        not_registered_users u1_1 
+            on u1_0.id=u1_1.user_id 
+    left join
+        registered_users u1_2 
+            on u1_0.id=u1_2.user_id 
+    left join
+        users pbu1_0 
+            on pbu1_0.id=r1_0.paid_by_user_id 
+    left join
+        not_registered_users pbu1_1 
+            on pbu1_0.id=pbu1_1.user_id 
+    left join
+        registered_users pbu1_2 
+            on pbu1_0.id=pbu1_2.user_id 
+    where
+        e1_0.id=?
+2025-05-05T05:45:58.816+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:58.817+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [com.friney.fairsplit.core.entity.summary.Summary@65bfaa2e]
+2025-05-05T05:45:58.878+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.UserController#create(CreateNotRegisteredUserDto)
+2025-05-05T05:45:58.879+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [CreateNotRegisteredUserDto[name=user 1]]
+2025-05-05T05:45:58.881+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        nru1_0.user_id,
+        nru1_1.name 
+    from
+        not_registered_users nru1_0 
+    join
+        users nru1_1 
+            on nru1_0.user_id=nru1_1.id 
+    where
+        nru1_1.name=?
+2025-05-05T05:45:58.884+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        users
+        (name) 
+    values
+        (?)
+2025-05-05T05:45:58.885+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        not_registered_users
+        (user_id) 
+    values
+        (?)
+2025-05-05T05:45:58.887+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:58.887+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [UserDto[id=9, name=user 1, displayName=user 1]]
+2025-05-05T05:45:58.892+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.UserController#create(CreateNotRegisteredUserDto)
+2025-05-05T05:45:58.893+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [CreateNotRegisteredUserDto[name=user 2]]
+2025-05-05T05:45:58.895+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        nru1_0.user_id,
+        nru1_1.name 
+    from
+        not_registered_users nru1_0 
+    join
+        users nru1_1 
+            on nru1_0.user_id=nru1_1.id 
+    where
+        nru1_1.name=?
+2025-05-05T05:45:58.898+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        users
+        (name) 
+    values
+        (?)
+2025-05-05T05:45:58.900+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        not_registered_users
+        (user_id) 
+    values
+        (?)
+2025-05-05T05:45:58.901+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:58.902+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [UserDto[id=10, name=user 2, displayName=user 2]]
+2025-05-05T05:45:58.907+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.AuthController#register(CreateRegisteredUserDto)
+2025-05-05T05:45:58.909+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [CreateRegisteredUserDto[name=user 3, email=email1@email.com, password=password, confirmPassword=pass (truncated)...]
+2025-05-05T05:45:58.977+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        ru1_0.user_id,
+        ru1_1.name,
+        ru1_0.email,
+        ru1_0.password 
+    from
+        registered_users ru1_0 
+    join
+        users ru1_1 
+            on ru1_0.user_id=ru1_1.id 
+    where
+        ru1_0.email=?
+2025-05-05T05:45:58.980+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        users
+        (name) 
+    values
+        (?)
+2025-05-05T05:45:58.982+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        registered_users
+        (email, password, user_id) 
+    values
+        (?, ?, ?)
+2025-05-05T05:45:58.983+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:58.984+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [UserDto[id=11, name=user 3, displayName=user 3 (email1@email.com)]]
+2025-05-05T05:45:58.988+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.AuthController#register(CreateRegisteredUserDto)
+2025-05-05T05:45:58.989+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [CreateRegisteredUserDto[name=user 4, email=email2@email.com, password=password, confirmPassword=pass (truncated)...]
+2025-05-05T05:45:59.058+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        ru1_0.user_id,
+        ru1_1.name,
+        ru1_0.email,
+        ru1_0.password 
+    from
+        registered_users ru1_0 
+    join
+        users ru1_1 
+            on ru1_0.user_id=ru1_1.id 
+    where
+        ru1_0.email=?
+2025-05-05T05:45:59.060+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        users
+        (name) 
+    values
+        (?)
+2025-05-05T05:45:59.061+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        registered_users
+        (email, password, user_id) 
+    values
+        (?, ?, ?)
+2025-05-05T05:45:59.063+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:59.064+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [UserDto[id=12, name=user 4, displayName=user 4 (email2@email.com)]]
+2025-05-05T05:45:59.069+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.EventController#create(EventCreateDto, UserDetails)
+2025-05-05T05:45:59.070+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [EventCreateDto[name=event, description=description]]
+2025-05-05T05:45:59.073+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        ru1_0.user_id,
+        ru1_1.name,
+        ru1_0.email,
+        ru1_0.password 
+    from
+        registered_users ru1_0 
+    join
+        users ru1_1 
+            on ru1_0.user_id=ru1_1.id 
+    where
+        ru1_0.email=?
+2025-05-05T05:45:59.076+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        events
+        (description, name, owner_id) 
+    values
+        (?, ?, ?)
+2025-05-05T05:45:59.079+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:59.079+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [EventDto[id=3, name=event, description=description, receipts=null]]
+2025-05-05T05:45:59.084+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.SummaryController#calculateSummary(Long)
+2025-05-05T05:45:59.093+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        e1_0.id,
+        e1_0.description,
+        e1_0.name,
+        o1_0.user_id,
+        o1_1.name,
+        o1_0.email,
+        o1_0.password,
+        r1_0.event_id,
+        r1_0.id,
+        e2_0.receipt_id,
+        e2_0.id,
+        e2_0.amount,
+        em1_0.expense_id,
+        em1_0.id,
+        u1_0.id,
+        case 
+            when u1_1.user_id is not null 
+                then 1 
+            when u1_2.user_id is not null 
+                then 2 
+            when u1_0.id is not null 
+                then 0 
+        end,
+        u1_0.name,
+        u1_2.email,
+        u1_2.password,
+        e2_0.name,
+        r1_0.name,
+        pbu1_0.id,
+        case 
+            when pbu1_1.user_id is not null 
+                then 1 
+            when pbu1_2.user_id is not null 
+                then 2 
+            when pbu1_0.id is not null 
+                then 0 
+        end,
+        pbu1_0.name,
+        pbu1_2.email,
+        pbu1_2.password 
+    from
+        events e1_0 
+    left join
+        registered_users o1_0 
+            on o1_0.user_id=e1_0.owner_id 
+    left join
+        users o1_1 
+            on o1_0.user_id=o1_1.id 
+    left join
+        receipts r1_0 
+            on e1_0.id=r1_0.event_id 
+    left join
+        expenses e2_0 
+            on r1_0.id=e2_0.receipt_id 
+    left join
+        expense_members em1_0 
+            on e2_0.id=em1_0.expense_id 
+    left join
+        users u1_0 
+            on u1_0.id=em1_0.user_id 
+    left join
+        not_registered_users u1_1 
+            on u1_0.id=u1_1.user_id 
+    left join
+        registered_users u1_2 
+            on u1_0.id=u1_2.user_id 
+    left join
+        users pbu1_0 
+            on pbu1_0.id=r1_0.paid_by_user_id 
+    left join
+        not_registered_users pbu1_1 
+            on pbu1_0.id=pbu1_1.user_id 
+    left join
+        registered_users pbu1_2 
+            on pbu1_0.id=pbu1_2.user_id 
+    where
+        e1_0.id=?
+2025-05-05T05:45:59.097+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:59.098+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [com.friney.fairsplit.core.entity.summary.Summary@783ad2a]
+2025-05-05T05:45:59.126+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.UserController#create(CreateNotRegisteredUserDto)
+2025-05-05T05:45:59.127+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [CreateNotRegisteredUserDto[name=user 1]]
+2025-05-05T05:45:59.130+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        nru1_0.user_id,
+        nru1_1.name 
+    from
+        not_registered_users nru1_0 
+    join
+        users nru1_1 
+            on nru1_0.user_id=nru1_1.id 
+    where
+        nru1_1.name=?
+2025-05-05T05:45:59.133+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        users
+        (name) 
+    values
+        (?)
+2025-05-05T05:45:59.135+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        not_registered_users
+        (user_id) 
+    values
+        (?)
+2025-05-05T05:45:59.137+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:59.137+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [UserDto[id=13, name=user 1, displayName=user 1]]
+2025-05-05T05:45:59.140+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.UserController#create(CreateNotRegisteredUserDto)
+2025-05-05T05:45:59.141+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [CreateNotRegisteredUserDto[name=user 2]]
+2025-05-05T05:45:59.144+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        nru1_0.user_id,
+        nru1_1.name 
+    from
+        not_registered_users nru1_0 
+    join
+        users nru1_1 
+            on nru1_0.user_id=nru1_1.id 
+    where
+        nru1_1.name=?
+2025-05-05T05:45:59.146+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        users
+        (name) 
+    values
+        (?)
+2025-05-05T05:45:59.147+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        not_registered_users
+        (user_id) 
+    values
+        (?)
+2025-05-05T05:45:59.149+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:59.149+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [UserDto[id=14, name=user 2, displayName=user 2]]
+2025-05-05T05:45:59.154+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.AuthController#register(CreateRegisteredUserDto)
+2025-05-05T05:45:59.155+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [CreateRegisteredUserDto[name=user 3, email=email1@email.com, password=password, confirmPassword=pass (truncated)...]
+2025-05-05T05:45:59.223+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        ru1_0.user_id,
+        ru1_1.name,
+        ru1_0.email,
+        ru1_0.password 
+    from
+        registered_users ru1_0 
+    join
+        users ru1_1 
+            on ru1_0.user_id=ru1_1.id 
+    where
+        ru1_0.email=?
+2025-05-05T05:45:59.225+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        users
+        (name) 
+    values
+        (?)
+2025-05-05T05:45:59.226+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        registered_users
+        (email, password, user_id) 
+    values
+        (?, ?, ?)
+2025-05-05T05:45:59.228+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:59.228+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [UserDto[id=15, name=user 3, displayName=user 3 (email1@email.com)]]
+2025-05-05T05:45:59.233+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.AuthController#register(CreateRegisteredUserDto)
+2025-05-05T05:45:59.237+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [CreateRegisteredUserDto[name=user 4, email=email2@email.com, password=password, confirmPassword=pass (truncated)...]
+2025-05-05T05:45:59.305+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        ru1_0.user_id,
+        ru1_1.name,
+        ru1_0.email,
+        ru1_0.password 
+    from
+        registered_users ru1_0 
+    join
+        users ru1_1 
+            on ru1_0.user_id=ru1_1.id 
+    where
+        ru1_0.email=?
+2025-05-05T05:45:59.307+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        users
+        (name) 
+    values
+        (?)
+2025-05-05T05:45:59.308+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        registered_users
+        (email, password, user_id) 
+    values
+        (?, ?, ?)
+2025-05-05T05:45:59.309+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:59.310+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [UserDto[id=16, name=user 4, displayName=user 4 (email2@email.com)]]
+2025-05-05T05:45:59.315+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.EventController#create(EventCreateDto, UserDetails)
+2025-05-05T05:45:59.316+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [EventCreateDto[name=event, description=description]]
+2025-05-05T05:45:59.318+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        ru1_0.user_id,
+        ru1_1.name,
+        ru1_0.email,
+        ru1_0.password 
+    from
+        registered_users ru1_0 
+    join
+        users ru1_1 
+            on ru1_0.user_id=ru1_1.id 
+    where
+        ru1_0.email=?
+2025-05-05T05:45:59.321+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        events
+        (description, name, owner_id) 
+    values
+        (?, ?, ?)
+2025-05-05T05:45:59.323+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:59.323+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [EventDto[id=4, name=event, description=description, receipts=null]]
+2025-05-05T05:45:59.329+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.ReceiptController#createReceipt(ReceiptCreateDto, Long)
+2025-05-05T05:45:59.329+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [ReceiptCreateDto[name=receipt 1, userId=13]]
+2025-05-05T05:45:59.331+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        receipts
+        (event_id, name, paid_by_user_id) 
+    values
+        (?, ?, ?)
+2025-05-05T05:45:59.333+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:59.333+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [ReceiptDto[id=5, name=receipt 1, expenses=null, paidByUserName=user 1]]
+2025-05-05T05:45:59.338+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.ReceiptController#createReceipt(ReceiptCreateDto, Long)
+2025-05-05T05:45:59.340+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [ReceiptCreateDto[name=receipt 2, userId=14]]
+2025-05-05T05:45:59.341+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        receipts
+        (event_id, name, paid_by_user_id) 
+    values
+        (?, ?, ?)
+2025-05-05T05:45:59.343+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:59.344+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [ReceiptDto[id=6, name=receipt 2, expenses=null, paidByUserName=user 2]]
+2025-05-05T05:45:59.349+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.ExpenseController#create(ExpenseCreateDto, Long)
+2025-05-05T05:45:59.351+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [ExpenseCreateDto[name=expense 1, amount=100]]
+2025-05-05T05:45:59.353+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        expenses
+        (amount, name, receipt_id) 
+    values
+        (?, ?, ?)
+2025-05-05T05:45:59.355+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:59.355+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [ExpenseDto[id=4, name=expense 1, amount=100, expenseMembers=null]]
+2025-05-05T05:45:59.361+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.ExpenseController#create(ExpenseCreateDto, Long)
+2025-05-05T05:45:59.362+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [ExpenseCreateDto[name=expense 2, amount=100]]
+2025-05-05T05:45:59.364+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        expenses
+        (amount, name, receipt_id) 
+    values
+        (?, ?, ?)
+2025-05-05T05:45:59.367+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:59.368+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [ExpenseDto[id=5, name=expense 2, amount=100, expenseMembers=null]]
+2025-05-05T05:45:59.373+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.ExpenseController#create(ExpenseCreateDto, Long)
+2025-05-05T05:45:59.374+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Read &quot;application/json;charset=UTF-8&quot; to [ExpenseCreateDto[name=expense 3, amount=300]]
+2025-05-05T05:45:59.376+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    insert 
+    into
+        expenses
+        (amount, name, receipt_id) 
+    values
+        (?, ?, ?)
+2025-05-05T05:45:59.379+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:59.379+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [ExpenseDto[id=6, name=expense 3, amount=300, expenseMembers=null]]
+2025-05-05T05:45:59.384+07:00 DEBUG 686587 --- [    Test worker] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to com.friney.fairsplit.api.controller.SummaryController#calculateSummary(Long)
+2025-05-05T05:45:59.392+07:00 DEBUG 686587 --- [    Test worker] org.hibernate.SQL                        : 
+    select
+        e1_0.id,
+        e1_0.description,
+        e1_0.name,
+        o1_0.user_id,
+        o1_1.name,
+        o1_0.email,
+        o1_0.password,
+        r1_0.event_id,
+        r1_0.id,
+        e2_0.receipt_id,
+        e2_0.id,
+        e2_0.amount,
+        em1_0.expense_id,
+        em1_0.id,
+        u1_0.id,
+        case 
+            when u1_1.user_id is not null 
+                then 1 
+            when u1_2.user_id is not null 
+                then 2 
+            when u1_0.id is not null 
+                then 0 
+        end,
+        u1_0.name,
+        u1_2.email,
+        u1_2.password,
+        e2_0.name,
+        r1_0.name,
+        pbu1_0.id,
+        case 
+            when pbu1_1.user_id is not null 
+                then 1 
+            when pbu1_2.user_id is not null 
+                then 2 
+            when pbu1_0.id is not null 
+                then 0 
+        end,
+        pbu1_0.name,
+        pbu1_2.email,
+        pbu1_2.password 
+    from
+        events e1_0 
+    left join
+        registered_users o1_0 
+            on o1_0.user_id=e1_0.owner_id 
+    left join
+        users o1_1 
+            on o1_0.user_id=o1_1.id 
+    left join
+        receipts r1_0 
+            on e1_0.id=r1_0.event_id 
+    left join
+        expenses e2_0 
+            on r1_0.id=e2_0.receipt_id 
+    left join
+        expense_members em1_0 
+            on e2_0.id=em1_0.expense_id 
+    left join
+        users u1_0 
+            on u1_0.id=em1_0.user_id 
+    left join
+        not_registered_users u1_1 
+            on u1_0.id=u1_1.user_id 
+    left join
+        registered_users u1_2 
+            on u1_0.id=u1_2.user_id 
+    left join
+        users pbu1_0 
+            on pbu1_0.id=r1_0.paid_by_user_id 
+    left join
+        not_registered_users pbu1_1 
+            on pbu1_0.id=pbu1_1.user_id 
+    left join
+        registered_users pbu1_2 
+            on pbu1_0.id=pbu1_2.user_id 
+    where
+        e1_0.id=?
+2025-05-05T05:45:59.403+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Using 'application/json', given [*/*] and supported [application/json, application/*+json, application/yaml]
+2025-05-05T05:45:59.404+07:00 DEBUG 686587 --- [    Test worker] m.m.a.RequestResponseBodyMethodProcessor : Writing [com.friney.fairsplit.core.entity.summary.Summary@458ed629]
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 8.11.1</a> at May 5, 2025, 5:46:43 AM</p>
+</div>
+</div>
+</body>
+</html>
