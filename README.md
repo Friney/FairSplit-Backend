@@ -9,4 +9,7 @@ Backend представляет из себя сервер на Spring.<br>
 ## Запуск
 
 Переименовать файл `.env.example` в `.env` и заменить все значения в нем на свои.<br>
-Для запуска необходимо выполнить команду `gradle build && gradle bootRun`.
+Запустить postgres контейнер командой
+`docker compose --env-file ../.env -f docker/docker-compose.yml -p docker up -d --build postgres`.<br>
+Запустить сервер командой
+`docker compose --env-file ../.env -f docker/docker-compose.yml -p docker up -d --build fair_split`.
