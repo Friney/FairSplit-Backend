@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.friney.fairsplit.api.controller.ExpenseMemberControllerTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2025-05-04T22:44:23" hostname="Friney" time="0.146">
-  <properties/>
-  <testcase name="testGetAllByExpenseId()" classname="com.friney.fairsplit.api.controller.ExpenseMemberControllerTest" time="0.123"/>
-  <testcase name="testCreate()" classname="com.friney.fairsplit.api.controller.ExpenseMemberControllerTest" time="0.022"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
