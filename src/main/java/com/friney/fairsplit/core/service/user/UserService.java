@@ -21,11 +21,15 @@ public interface UserService extends UserDetailsService {
 
     RegisteredUser findByEmail(String email);
 
+    UserDto findDtoByEmail(String username);
+
     UserDto updateRegisteredUser(RegisteredUser user);
 
     void deleteRegisteredUser(RegisteredUser registeredUser);
 
-    UserDto updateNotRegisteredUser(UserUpdateDto userUpdateDto);
+    UserDto updateNotRegisteredUser(UserUpdateDto userUpdateDto, Long id);
+
+    void deleteNotRegisteredUser(Long id);
 
     @Override
     UserDetails loadUserByUsername(String username);

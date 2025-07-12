@@ -77,7 +77,7 @@ class AuthServiceImplTest {
     @Test
     void testRegistration() {
         CreateRegisteredUserDto userDto = CreateRegisteredUserDto.builder()
-                .name("user")
+                .name("controller")
                 .email("test@example.com")
                 .password("password")
                 .confirmPassword("password")
@@ -101,7 +101,7 @@ class AuthServiceImplTest {
     @Test
     void testRegistrationWhenPasswordsNotMatch() {
         CreateRegisteredUserDto userDto = CreateRegisteredUserDto.builder()
-                .name("user")
+                .name("controller")
                 .email("test@example.com")
                 .password("password")
                 .confirmPassword("wrongPassword")
@@ -162,8 +162,8 @@ class AuthServiceImplTest {
                 .build();
         UserDto expectedUser = UserDto.builder()
                 .id(1L)
-                .name("user")
-                .displayName("user" + " (test@example.com)")
+                .name("controller")
+                .displayName("controller" + " (test@example.com)")
                 .build();
         UserDetails userDetails = createTestUserDetails();
         RegisteredUser registeredUser = RegisteredUser.builder()

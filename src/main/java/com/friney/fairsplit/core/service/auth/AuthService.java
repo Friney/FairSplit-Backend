@@ -22,4 +22,6 @@ public interface AuthService {
     UserDto update(UserUpdateDto userUpdateDto, UserDetails userDetails);
 
     void delete(UserDetails userDetails);
+
+    UserDto loadUser(UserDetails userDetails);
 }

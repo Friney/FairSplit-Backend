@@ -1,8 +1,8 @@
 package com.friney.fairsplit.core.service.summary;
 
-import com.friney.fairsplit.core.entity.summary.Summary;
+import com.friney.fairsplit.api.dto.summary.SummaryDto;
 
 public interface SummaryService {
 
-    Summary calculateSummary(Long eventId);
+    SummaryDto calculateSummary(Long eventId);
 }

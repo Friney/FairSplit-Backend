@@ -53,24 +53,24 @@ class UserServiceImplTest {
     void testGetAll() {
         User user1 = User.builder()
                 .id(1L)
-                .name("user 1")
+                .name("controller 1")
                 .build();
 
         User user2 = User.builder()
                 .id(2L)
-                .name("user 2")
+                .name("controller 2")
                 .build();
 
         UserDto userDto1 = UserDto.builder()
                 .id(1L)
-                .name("user 1")
-                .displayName("user 1")
+                .name("controller 1")
+                .displayName("controller 1")
                 .build();
 
         UserDto userDto2 = UserDto.builder()
                 .id(2L)
-                .name("user 2")
-                .displayName("user 2")
+                .name("controller 2")
+                .displayName("controller 2")
                 .build();
 
         List<User> users = Arrays.asList(user1, user2);
@@ -99,7 +99,7 @@ class UserServiceImplTest {
     void testGetById() {
         User user = User.builder()
                 .id(1L)
-                .name("user")
+                .name("controller")
                 .build();
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
@@ -125,7 +125,7 @@ class UserServiceImplTest {
     void testAddRegisteredUserRegisteredUser() {
         RegisteredUser savedUser = RegisteredUser.builder()
                 .id(1L)
-                .name("user")
+                .name("controller")
                 .email("example@example.com")
                 .build();
 
@@ -147,7 +147,7 @@ class UserServiceImplTest {
     @Test
     void testAddNotRegisteredUser() {
         CreateNotRegisteredUserDto userDto = CreateNotRegisteredUserDto.builder()
-                .name("user")
+                .name("controller")
                 .build();
         NotRegisteredUser savedUser = NotRegisteredUser.builder()
                 .id(1L)
@@ -174,7 +174,7 @@ class UserServiceImplTest {
         String email = "example@example.com";
         RegisteredUser savedUser = RegisteredUser.builder()
                 .id(1L)
-                .name("user")
+                .name("controller")
                 .email(email)
                 .password("password")
                 .build();
@@ -192,7 +192,7 @@ class UserServiceImplTest {
     void testUpdateRegisteredUser() {
         RegisteredUser user = RegisteredUser.builder()
                 .id(1L)
-                .name("user")
+                .name("controller")
                 .email("example@example.com")
                 .password("password")
                 .build();
@@ -216,7 +216,7 @@ class UserServiceImplTest {
     void testDeleteRegisteredUser() {
         RegisteredUser user = RegisteredUser.builder()
                 .id(1L)
-                .name("user")
+                .name("controller")
                 .email("example@example.com")
                 .password("password")
                 .build();
@@ -231,7 +231,7 @@ class UserServiceImplTest {
     @Test
     void testUpdateNotRegisteredUser() {
         UserUpdateDto userUpdateDto = UserUpdateDto.builder()
-                .name("user")
+                .name("controller")
                 .build();
 
         NotRegisteredUser user = NotRegisteredUser.builder()
@@ -248,7 +248,7 @@ class UserServiceImplTest {
         when(notRegisteredUserRepository.save(any(NotRegisteredUser.class))).thenReturn(user);
         when(userMapper.map(any(User.class))).thenReturn(userDto);
 
-        UserDto result = userService.updateNotRegisteredUser(userUpdateDto);
+        UserDto result = userService.updateNotRegisteredUser(userUpdateDto, 1L);
 
         assertEquals(userDto, result);
         verify(notRegisteredUserRepository, times(1)).save(any(NotRegisteredUser.class));

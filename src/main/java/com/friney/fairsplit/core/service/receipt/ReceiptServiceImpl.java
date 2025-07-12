@@ -10,6 +10,7 @@ import com.friney.fairsplit.core.mapper.ReceiptMapper;
 import com.friney.fairsplit.core.repository.ReceiptRepository;
 import com.friney.fairsplit.core.service.event.EventService;
 import com.friney.fairsplit.core.service.user.UserService;
+import java.util.Comparator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,9 @@ public class ReceiptServiceImpl implements ReceiptService {
     @Override
     public List<ReceiptDto> getAllByEventId(Long eventId) {
         EventDto event = eventService.getDtoById(eventId);
-        return event.receipts();
+        List<ReceiptDto> receipts = event.receipts();
+        receipts.sort(Comparator.comparing(ReceiptDto::id));
+        return receipts;
     }
 
     @Override

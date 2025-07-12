@@ -1,6 +1,5 @@
 package com.friney.fairsplit.core.configs;
 
-import com.friney.fairsplit.api.Paths;
 import com.friney.fairsplit.core.security.JwtFilter;
 import com.friney.fairsplit.core.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -37,8 +36,9 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers(Paths.AUTH + "/**", "/swagger-ui/**").permitAll()
-                                .anyRequest().authenticated()
+                                .requestMatchers("/**", "/swagger-ui/**").permitAll()
+//                                .requestMatchers(Paths.AUTH + "/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+//                                .anyRequest().authenticated()
                 )
                 .sessionManagement(
                         session -> session
@@ -62,8 +62,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
-            throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 }

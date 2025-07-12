@@ -13,10 +13,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReceiptSummary {
+public class ExpenseSummary {
     private String name;
     private BigDecimal total;
     private List<PayerInfo> payerInfos;
     private List<Debt> debts;
-    private List<ExpenseSummary> expenses;
 }
