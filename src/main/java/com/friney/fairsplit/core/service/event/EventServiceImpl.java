@@ -10,6 +10,7 @@ import com.friney.fairsplit.core.repository.EventRepository;
 import com.friney.fairsplit.core.service.user.UserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,11 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<EventDto> getAllByUserDetails(UserDetails userDetails) {
         return eventMapper.map(eventRepository.findAllByOwner(userService.findByEmail(userDetails.getUsername())));
+    }
+
+    @Override
+    public List<EventDto> getAll() {
+        return eventMapper.map(eventRepository.findAll(Sort.by(Sort.Direction.DESC, "id")));
     }
 
     @Override

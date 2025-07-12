@@ -33,7 +33,7 @@ class AuthControllerTest {
     @Test
     void testLogin() {
         UserCredentialsDto credentials = UserCredentialsDto.builder()
-                .email("user@example.com")
+                .email("controller@example.com")
                 .password("password")
                 .build();
         JwtAuthenticationDto expectedResponse = JwtAuthenticationDto.builder()
@@ -70,8 +70,8 @@ class AuthControllerTest {
     @Test
     void testRegister() {
         CreateRegisteredUserDto registrationDto = CreateRegisteredUserDto.builder()
-                .name("user")
-                .email("user@example.com")
+                .name("controller")
+                .email("controller@example.com")
                 .password("password")
                 .confirmPassword("password")
                 .build();
@@ -112,7 +112,7 @@ class AuthControllerTest {
         UserDto expectedUser = UserDto.builder()
                 .id(1L)
                 .name("newName")
-                .displayName("newName (user@example.com)")
+                .displayName("newName (controller@example.com)")
                 .build();
         UserDetails userDetails = createTestUserDetails();
 

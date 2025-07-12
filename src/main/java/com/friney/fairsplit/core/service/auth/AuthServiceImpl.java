@@ -74,6 +74,11 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    public UserDto loadUser(UserDetails userDetails) {
+        return userService.findDtoByEmail(userDetails.getUsername());
+    }
+
+    @Override
     public UserDto update(UserUpdateDto userUpdateDto, UserDetails userDetails) {
         RegisteredUser registeredUser = userService.findByEmail(userDetails.getUsername());
         if (userUpdateDto.name() != null) {

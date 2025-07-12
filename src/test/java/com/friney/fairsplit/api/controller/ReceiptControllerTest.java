@@ -3,6 +3,7 @@ package com.friney.fairsplit.api.controller;
 import com.friney.fairsplit.api.dto.receipt.ReceiptCreateDto;
 import com.friney.fairsplit.api.dto.receipt.ReceiptDto;
 import com.friney.fairsplit.api.dto.receipt.ReceiptUpdateDto;
+import com.friney.fairsplit.api.dto.user.UserDto;
 import com.friney.fairsplit.core.service.receipt.ReceiptService;
 import java.util.Arrays;
 import java.util.List;
@@ -29,16 +30,28 @@ class ReceiptControllerTest {
 
     @Test
     void testGetAllByEventId() {
+        UserDto user1 = UserDto.builder()
+                .id(1L)
+                .name("user 1")
+                .displayName("user 1")
+                .build();
+
+        UserDto user2 = UserDto.builder()
+                .id(2L)
+                .name("user 2")
+                .displayName("user 2")
+                .build();
+
         ReceiptDto dto1 = ReceiptDto.builder()
                 .id(1L)
                 .name("receipt 1")
-                .paidByUserName("user 1")
+                .paidByUser(user1)
                 .build();
 
         ReceiptDto dto2 = ReceiptDto.builder()
                 .id(2L)
                 .name("receipt 2")
-                .paidByUserName("user 2")
+                .paidByUser(user2)
                 .build();
 
         List<ReceiptDto> expectedDtos = Arrays.asList(dto1, dto2);
@@ -58,10 +71,16 @@ class ReceiptControllerTest {
                 .userId(1L)
                 .build();
 
+        UserDto user = UserDto.builder()
+                .id(1L)
+                .name("user")
+                .displayName("user")
+                .build();
+
         ReceiptDto expectedDto = ReceiptDto.builder()
                 .id(1L)
                 .name(createDto.name())
-                .paidByUserName("Test user")
+                .paidByUser(user)
                 .build();
 
         when(receiptService.create(createDto, 1L)).thenReturn(expectedDto);
@@ -78,10 +97,16 @@ class ReceiptControllerTest {
                 .name("Updated receipt")
                 .build();
 
+        UserDto user = UserDto.builder()
+                .id(1L)
+                .name("user")
+                .displayName("user")
+                .build();
+
         ReceiptDto expectedDto = ReceiptDto.builder()
                 .id(1L)
                 .name(updateDto.name())
-                .paidByUserName("Test user")
+                .paidByUser(user)
                 .build();
 
         UserDetails userDetails = createTestUserDetails();

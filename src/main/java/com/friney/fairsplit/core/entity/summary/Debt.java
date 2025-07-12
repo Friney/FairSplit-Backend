@@ -1,12 +1,12 @@
 package com.friney.fairsplit.core.entity.summary;
 
+import com.friney.fairsplit.api.dto.user.UserDto;
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.math.BigDecimal;
 
 @Builder
 @Getter
@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Debt {
-    private String from;
-    private String to;
+    private UserDto from;
+    private UserDto to;
     private BigDecimal amount;
 }

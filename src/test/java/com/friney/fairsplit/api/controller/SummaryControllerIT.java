@@ -9,11 +9,14 @@ import com.friney.fairsplit.api.dto.expense.ExpenseDto;
 import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberCreateDto;
 import com.friney.fairsplit.api.dto.receipt.ReceiptCreateDto;
 import com.friney.fairsplit.api.dto.receipt.ReceiptDto;
+import com.friney.fairsplit.api.dto.summary.ExpenseSummaryDto;
+import com.friney.fairsplit.api.dto.summary.ReceiptSummaryDto;
+import com.friney.fairsplit.api.dto.summary.SummaryDto;
 import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserDto;
 import com.friney.fairsplit.api.dto.user.CreateRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.UserDto;
 import com.friney.fairsplit.core.entity.summary.Debt;
-import com.friney.fairsplit.core.entity.summary.ReceiptSummary;
-import com.friney.fairsplit.core.entity.summary.Summary;
+import com.friney.fairsplit.core.entity.summary.PayerInfo;
 import com.friney.fairsplit.core.entity.user.User;
 import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
@@ -49,7 +52,7 @@ class SummaryControllerIT {
     private EntityManager entityManager;
 
     @Container
-    private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16");
+    private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:17");
 
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {
@@ -65,16 +68,18 @@ class SummaryControllerIT {
     @Test
     @WithMockUser(username = userEmailOwnerEvent)
     void testCorrectCollectionResultWithoutReceipts() throws Exception {
-        createNotRegisteredUser("user 1");
-        createNotRegisteredUser("user 2");
-        createRegisteredUser("user 3", userEmailOwnerEvent);
-        createRegisteredUser("user 4", "email2@email.com");
+        createNotRegisteredUser("controller 1");
+        createNotRegisteredUser("controller 2");
+        createRegisteredUser("controller 3", userEmailOwnerEvent);
+        createRegisteredUser("controller 4", "email2@email.com");
 
         EventDto eventDto = createEvent();
 
         saveInTransactional();
-        Summary expected = Summary.builder()
+        SummaryDto expected = SummaryDto.builder()
                 .total(BigDecimal.ZERO)
+                .debts(List.of())
+                .payerInfos(List.of())
                 .receipts(List.of())
                 .build();
         testSummaryEndpoint(eventDto.id(), expected);
@@ -83,10 +88,10 @@ class SummaryControllerIT {
     @Test
     @WithMockUser(username = userEmailOwnerEvent)
     void testCorrectCollectionResultWithoutExpenses() throws Exception {
-        User user1 = createNotRegisteredUser("user 1");
-        User user2 = createNotRegisteredUser("user 2");
-        createRegisteredUser("user 3", userEmailOwnerEvent);
-        createRegisteredUser("user 4", "email2@email.com");
+        User user1 = createNotRegisteredUser("controller 1");
+        User user2 = createNotRegisteredUser("controller 2");
+        createRegisteredUser("controller 3", userEmailOwnerEvent);
+        createRegisteredUser("controller 4", "email2@email.com");
 
         EventDto eventDto = createEvent();
 
@@ -95,9 +100,14 @@ class SummaryControllerIT {
 
         saveInTransactional();
 
-        Summary expected = Summary.builder()
+        SummaryDto expected = SummaryDto.builder()
                 .total(BigDecimal.ZERO)
-                .receipts(List.of())
+                .debts(List.of())
+                .payerInfos(List.of())
+                .receipts(List.of(
+                        ReceiptSummaryDto.builder().name("receipt 1").total(BigDecimal.valueOf(0)).payerInfos(List.of()).expenses(List.of()).build(),
+                        ReceiptSummaryDto.builder().name("receipt 2").total(BigDecimal.valueOf(0)).payerInfos(List.of()).expenses(List.of()).build()
+                ))
                 .build();
         testSummaryEndpoint(eventDto.id(), expected);
     }
@@ -105,10 +115,10 @@ class SummaryControllerIT {
     @Test
     @WithMockUser(username = userEmailOwnerEvent)
     void testCorrectCollectionResultWithoutExpensesMember() throws Exception {
-        User user1 = createNotRegisteredUser("user 1");
-        User user2 = createNotRegisteredUser("user 2");
-        createRegisteredUser("user 3", userEmailOwnerEvent);
-        createRegisteredUser("user 4", "email2@email.com");
+        User user1 = createNotRegisteredUser("controller 1");
+        User user2 = createNotRegisteredUser("controller 2");
+        createRegisteredUser("controller 3", userEmailOwnerEvent);
+        createRegisteredUser("controller 4", "email2@email.com");
 
         EventDto eventDto = createEvent();
 
@@ -121,12 +131,28 @@ class SummaryControllerIT {
 
         saveInTransactional();
 
-        Summary expected = Summary.builder()
-                .total(BigDecimal.valueOf(500))
-                .receipts(List.of(
-                        new ReceiptSummary(receipt1.name(), BigDecimal.valueOf(200.0), List.of()),
-                        new ReceiptSummary(receipt2.name(), BigDecimal.valueOf(300.0), List.of())
+        ReceiptSummaryDto rs1 = ReceiptSummaryDto.builder()
+                .name(receipt1.name())
+                .total(BigDecimal.valueOf(200.0))
+                .payerInfos(List.of())
+                .expenses(List.of(
+                        ExpenseSummaryDto.builder().name("expense 1").total(BigDecimal.valueOf(100)).payerInfos(List.of()).build(),
+                        ExpenseSummaryDto.builder().name("expense 2").total(BigDecimal.valueOf(100)).payerInfos(List.of()).build()
                 ))
+                .build();
+        ReceiptSummaryDto rs2 = ReceiptSummaryDto.builder()
+                .name(receipt2.name())
+                .total(BigDecimal.valueOf(300.0))
+                .payerInfos(List.of())
+                .expenses(List.of(
+                        ExpenseSummaryDto.builder().name("expense 3").total(BigDecimal.valueOf(300)).payerInfos(List.of()).build()
+                ))
+                .build();
+        SummaryDto expected = SummaryDto.builder()
+                .total(BigDecimal.valueOf(500))
+                .debts(List.of())
+                .payerInfos(List.of())
+                .receipts(List.of(rs1, rs2))
                 .build();
         testSummaryEndpoint(eventDto.id(), expected);
     }
@@ -134,10 +160,10 @@ class SummaryControllerIT {
     @Test
     @WithMockUser(username = userEmailOwnerEvent)
     void testCorrectCollectionResult() throws Exception {
-        User user1 = createNotRegisteredUser("user 1");
-        User user2 = createNotRegisteredUser("user 2");
-        User user3 = createRegisteredUser("user 3", userEmailOwnerEvent);
-        User user4 = createRegisteredUser("user 4", "email2@email.com");
+        User user1 = createNotRegisteredUser("controller 1");
+        User user2 = createNotRegisteredUser("controller 2");
+        User user3 = createRegisteredUser("controller 3", userEmailOwnerEvent);
+        User user4 = createRegisteredUser("controller 4", "email2@email.com");
 
         EventDto eventDto = createEvent();
 
@@ -162,26 +188,156 @@ class SummaryControllerIT {
 
         saveInTransactional();
 
-        Summary expected = Summary.builder()
-                .total(BigDecimal.valueOf(500))
-                .receipts(List.of(
-                        new ReceiptSummary(
-                                receipt1.name(),
-                                BigDecimal.valueOf(200.0),
-                                List.of(
-                                        new Debt("user 2", "user 1", BigDecimal.valueOf(83.33)),
-                                        new Debt("user 3", "user 1", BigDecimal.valueOf(50.00)),
-                                        new Debt("user 4", "user 1", BigDecimal.valueOf(33.33))
-                                )),
-                        new ReceiptSummary(
-                                receipt2.name(),
-                                BigDecimal.valueOf(300.0),
-                                List.of(
-                                        new Debt("user 1", "user 2", BigDecimal.valueOf(75.00)),
-                                        new Debt("user 3", "user 2", BigDecimal.valueOf(75.00)),
-                                        new Debt("user 4", "user 2", BigDecimal.valueOf(75.00))
-                                ))
+        UserDto userDto1 = UserDto.builder()
+                .id(user1.getId())
+                .name(user1.getName())
+                .displayName(user1.getName())
+                .build();
+        UserDto userDto2 = UserDto.builder()
+                .id(user2.getId())
+                .name(user2.getName())
+                .displayName(user2.getName())
+                .build();
+        UserDto userDto3 = UserDto.builder()
+                .id(user3.getId())
+                .name(user3.getName())
+                .displayName(user3.getName() + " (" + userEmailOwnerEvent + ")")
+                .build();
+        UserDto userDto4 = UserDto.builder()
+                .id(user4.getId())
+                .name(user4.getName())
+                .displayName(user4.getName() + " (email2@email.com)")
+                .build();
+
+        PayerInfo payer1 = PayerInfo.builder()
+                .user(userDto1)
+                .total(new BigDecimal("108.33"))
+                .build();
+        PayerInfo payer2 = PayerInfo.builder()
+                .user(userDto2)
+                .total(new BigDecimal("158.33"))
+                .build();
+        PayerInfo payer3 = PayerInfo.builder()
+                .user(userDto3)
+                .total(new BigDecimal("125.00"))
+                .build();
+        PayerInfo payer4 = PayerInfo.builder()
+                .user(userDto4)
+                .total(new BigDecimal("108.33"))
+                .build();
+
+        ExpenseSummaryDto expenseSummaryDto1 = ExpenseSummaryDto.builder()
+                .name("expense 1")
+                .total(new BigDecimal("100.00"))
+                .payerInfos(List.of(
+                        PayerInfo.builder().user(userDto1).total(new BigDecimal("33.33")).build(),
+                        PayerInfo.builder().user(userDto2).total(new BigDecimal("33.33")).build(),
+                        PayerInfo.builder().user(userDto4).total(new BigDecimal("33.33")).build()
                 ))
+                .build();
+
+        ExpenseSummaryDto expenseSummaryDto2 = ExpenseSummaryDto.builder()
+                .name("expense 2")
+                .total(new BigDecimal("100.00"))
+                .payerInfos(List.of(
+                        PayerInfo.builder().user(userDto2).total(new BigDecimal("50.00")).build(),
+                        PayerInfo.builder().user(userDto3).total(new BigDecimal("50.00")).build()
+                ))
+                .build();
+
+        ExpenseSummaryDto expenseSummaryDto3 = ExpenseSummaryDto.builder()
+                .name("expense 3")
+                .total(new BigDecimal("300.00"))
+                .payerInfos(List.of(
+                        PayerInfo.builder().user(userDto1).total(new BigDecimal("75.00")).build(),
+                        PayerInfo.builder().user(userDto2).total(new BigDecimal("75.00")).build(),
+                        PayerInfo.builder().user(userDto3).total(new BigDecimal("75.00")).build(),
+                        PayerInfo.builder().user(userDto4).total(new BigDecimal("75.00")).build()
+                ))
+                .build();
+
+        ReceiptSummaryDto rs1 = ReceiptSummaryDto.builder()
+                .name(receipt1.name())
+                .total(BigDecimal.valueOf(200.0))
+                .payerInfos(List.of(
+                        PayerInfo.builder()
+                                .user(userDto1)
+                                .total(new BigDecimal("33.33"))
+                                .build(),
+                        PayerInfo.builder()
+                                .user(userDto2)
+                                .total(new BigDecimal("83.33"))
+                                .build(),
+                        PayerInfo.builder()
+                                .user(userDto3)
+                                .total(new BigDecimal("50.00"))
+                                .build(),
+                        PayerInfo.builder()
+                                .user(userDto4)
+                                .total(new BigDecimal("33.33"))
+                                .build()
+                ))
+                .expenses(List.of(expenseSummaryDto1, expenseSummaryDto2))
+                .build();
+        ReceiptSummaryDto rs2 = ReceiptSummaryDto.builder()
+                .name(receipt2.name())
+                .total(BigDecimal.valueOf(300.0))
+                .payerInfos(List.of(
+                        PayerInfo.builder()
+                                .user(userDto1)
+                                .total(new BigDecimal("75.00"))
+                                .build(),
+                        PayerInfo.builder()
+                                .user(userDto2)
+                                .total(new BigDecimal("75.00"))
+                                .build(),
+                        PayerInfo.builder()
+                                .user(userDto3)
+                                .total(new BigDecimal("75.00"))
+                                .build(),
+                        PayerInfo.builder()
+                                .user(userDto4)
+                                .total(new BigDecimal("75.00"))
+                                .build()
+                ))
+                .expenses(List.of(expenseSummaryDto3))
+                .build();
+        Debt d1 = Debt.builder()
+                .from(userDto4)
+                .to(userDto1)
+                .amount(BigDecimal.valueOf(33.33))
+                .build();
+        Debt d2 = Debt.builder()
+                .from(userDto2)
+                .to(userDto1)
+                .amount(BigDecimal.valueOf(83.33))
+                .build();
+        Debt d3 = Debt.builder()
+                .from(userDto3)
+                .to(userDto1)
+                .amount(BigDecimal.valueOf(50.00))
+                .build();
+        Debt d4 = Debt.builder()
+                .from(userDto4)
+                .to(userDto2)
+                .amount(BigDecimal.valueOf(75.00))
+                .build();
+        Debt d5 = Debt.builder()
+                .from(userDto1)
+                .to(userDto2)
+                .amount(BigDecimal.valueOf(75.00))
+                .build();
+        Debt d6 = Debt.builder()
+                .from(userDto3)
+                .to(userDto2)
+                .amount(BigDecimal.valueOf(75.00))
+                .build();
+
+        SummaryDto expected = SummaryDto.builder()
+                .total(BigDecimal.valueOf(500))
+                .debts(List.of(d1, d2, d3, d4, d5, d6))
+                .payerInfos(List.of(payer1, payer2, payer3, payer4))
+                .receipts(List.of(rs1, rs2))
                 .build();
         testSummaryEndpoint(eventDto.id(), expected);
     }
@@ -257,7 +413,7 @@ class SummaryControllerIT {
         return ReceiptDto.builder()
                 .id(objectMapper.readTree(response).get("id").asLong())
                 .name(objectMapper.readTree(response).get("name").asText())
-                .paidByUserName(objectMapper.readTree(response).get("paidByUserName").asText())
+                .paidByUser(objectMapper.treeToValue(objectMapper.readTree(response).get("paidByUser"), UserDto.class))
                 .build();
     }
 
@@ -296,7 +452,7 @@ class SummaryControllerIT {
         entityManager.clear();
     }
 
-    private void testSummaryEndpoint(Long id, Summary expected) throws Exception {
+    private void testSummaryEndpoint(Long id, SummaryDto expected) throws Exception {
         mockMvc.perform(get("/events/" + id + "/summary"))
                 .andExpectAll(
                         status().isOk(),

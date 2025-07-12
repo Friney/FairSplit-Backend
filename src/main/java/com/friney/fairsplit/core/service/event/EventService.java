@@ -11,6 +11,8 @@ public interface EventService {
 
     List<EventDto> getAllByUserDetails(UserDetails userDetails);
 
+    List<EventDto> getAll();
+
     EventDto getDtoById(Long id);
 
     Event getById(Long id);

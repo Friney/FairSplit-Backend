@@ -4,6 +4,7 @@ import com.friney.fairsplit.api.dto.event.EventDto;
 import com.friney.fairsplit.api.dto.receipt.ReceiptCreateDto;
 import com.friney.fairsplit.api.dto.receipt.ReceiptDto;
 import com.friney.fairsplit.api.dto.receipt.ReceiptUpdateDto;
+import com.friney.fairsplit.api.dto.user.UserDto;
 import com.friney.fairsplit.core.entity.event.Event;
 import com.friney.fairsplit.core.entity.receipt.Receipt;
 import com.friney.fairsplit.core.entity.user.RegisteredUser;
@@ -52,16 +53,28 @@ class ReceiptServiceImplTest {
 
     @Test
     void testGetAllByEventId() {
+        UserDto user1 = UserDto.builder()
+                .id(1L)
+                .name("user 1")
+                .displayName("user 1")
+                .build();
+
+        UserDto user2 = UserDto.builder()
+                .id(2L)
+                .name("user 2")
+                .displayName("user 2")
+                .build();
+
         ReceiptDto dto1 = ReceiptDto.builder()
                 .id(1L)
                 .name("receipt 1")
-                .paidByUserName("user 1")
+                .paidByUser(user1)
                 .build();
 
         ReceiptDto dto2 = ReceiptDto.builder()
                 .id(2L)
                 .name("receipt 2")
-                .paidByUserName("user 2")
+                .paidByUser(user2)
                 .build();
 
         List<ReceiptDto> expectedDtos = Arrays.asList(dto1, dto2);
@@ -91,19 +104,28 @@ class ReceiptServiceImplTest {
 
     @Test
     void testGetDtoById() {
+        User user = User.builder()
+                .id(1L)
+                .name("user")
+                .build();
+
+        UserDto userDto = UserDto.builder()
+                .id(1L)
+                .name("user")
+                .displayName("user")
+                .build();
+
         Receipt receipt = Receipt.builder()
                 .id(1L)
                 .name("Test receipt")
-                .paidByUser(User.builder()
-                        .id(1L)
-                        .name("Test user")
-                        .build())
+                .paidByUser(user)
                 .build();
+
 
         ReceiptDto expectedDto = ReceiptDto.builder()
                 .id(receipt.getId())
                 .name(receipt.getName())
-                .paidByUserName(receipt.getPaidByUser().getName())
+                .paidByUser(userDto)
                 .build();
 
         when(receiptRepository.findById(1L)).thenReturn(Optional.of(receipt));
@@ -141,7 +163,13 @@ class ReceiptServiceImplTest {
 
         User user = User.builder()
                 .id(1L)
-                .name("Test user")
+                .name("user")
+                .build();
+
+        UserDto userDto = UserDto.builder()
+                .id(1L)
+                .name("user")
+                .displayName("user")
                 .build();
 
         Receipt savedReceipt = Receipt.builder()
@@ -154,7 +182,7 @@ class ReceiptServiceImplTest {
         ReceiptDto expectedDto = ReceiptDto.builder()
                 .id(savedReceipt.getId())
                 .name(savedReceipt.getName())
-                .paidByUserName(user.getName())
+                .paidByUser(userDto)
                 .build();
 
         when(eventService.getById(1L)).thenReturn(event);
@@ -203,11 +231,11 @@ class ReceiptServiceImplTest {
 
         when(eventService.getById(1L)).thenReturn(event);
         when(userService.getById(1L))
-                .thenThrow(new ServiceException("user with id 1 not found", HttpStatus.NOT_FOUND));
+                .thenThrow(new ServiceException("controller with id 1 not found", HttpStatus.NOT_FOUND));
 
         ServiceException exception = assertThrows(ServiceException.class, () -> receiptService.create(createDto, 1L));
 
-        assertEquals("user with id 1 not found", exception.getMessage());
+        assertEquals("controller with id 1 not found", exception.getMessage());
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
         verify(eventService, times(1)).getById(1L);
         verify(userService, times(1)).getById(1L);

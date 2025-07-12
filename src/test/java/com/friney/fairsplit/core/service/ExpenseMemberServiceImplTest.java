@@ -4,6 +4,7 @@ import com.friney.fairsplit.api.dto.expense.ExpenseDto;
 import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberCreateDto;
 import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberDto;
 import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberUpdateDto;
+import com.friney.fairsplit.api.dto.user.UserDto;
 import com.friney.fairsplit.core.entity.event.Event;
 import com.friney.fairsplit.core.entity.expense.Expense;
 import com.friney.fairsplit.core.entity.expense.member.ExpenseMember;
@@ -54,12 +55,26 @@ class ExpenseMemberServiceImplTest {
 
     @Test
     void testGetAllByExpenseId() {
-        ExpenseMemberDto dto1 = ExpenseMemberDto.builder()
+        UserDto user1 = UserDto.builder()
+                .id(1L)
                 .name("user 1")
+                .displayName("user 1")
+                .build();
+
+        UserDto user2 = UserDto.builder()
+                .id(2L)
+                .name("user 2")
+                .displayName("user 2")
+                .build();
+
+        ExpenseMemberDto dto1 = ExpenseMemberDto.builder()
+                .id(1L)
+                .user(user1)
                 .build();
 
         ExpenseMemberDto dto2 = ExpenseMemberDto.builder()
-                .name("user 2")
+                .id(2L)
+                .user(user2)
                 .build();
 
         List<ExpenseMemberDto> expectedDtos = Arrays.asList(dto1, dto2);
@@ -93,7 +108,7 @@ class ExpenseMemberServiceImplTest {
 
         User user = User.builder()
                 .id(1L)
-                .name("user")
+                .name("controller")
                 .build();
 
         Expense expense = Expense.builder()
@@ -107,8 +122,14 @@ class ExpenseMemberServiceImplTest {
                 .expense(expense)
                 .build();
 
+        UserDto userDto = UserDto.builder()
+                .id(1L)
+                .name("controller")
+                .displayName("controller")
+                .build();
+
         ExpenseMemberDto expectedDto = ExpenseMemberDto.builder()
-                .name(user.getName())
+                .user(userDto)
                 .build();
 
         when(userService.getById(1L)).thenReturn(user);
@@ -132,11 +153,11 @@ class ExpenseMemberServiceImplTest {
                 .build();
 
         when(userService.getById(1L))
-                .thenThrow(new ServiceException("user with id 1 not found", HttpStatus.NOT_FOUND));
+                .thenThrow(new ServiceException("controller with id 1 not found", HttpStatus.NOT_FOUND));
 
         ServiceException exception = assertThrows(ServiceException.class, () -> expenseMemberService.create(createDto, 1L));
 
-        assertEquals("user with id 1 not found", exception.getMessage());
+        assertEquals("controller with id 1 not found", exception.getMessage());
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
         verify(userService, times(1)).getById(1L);
         verify(expenseService, times(0)).getById(any());
@@ -152,7 +173,7 @@ class ExpenseMemberServiceImplTest {
 
         User user = User.builder()
                 .id(1L)
-                .name("user")
+                .name("controller")
                 .build();
 
         when(userService.getById(1L)).thenReturn(user);
@@ -175,8 +196,14 @@ class ExpenseMemberServiceImplTest {
                 .userId(1L)
                 .build();
 
-        ExpenseMemberDto expectedDto = ExpenseMemberDto.builder()
+        UserDto userDto = UserDto.builder()
+                .id(1L)
                 .name("username")
+                .displayName("username")
+                .build();
+
+        ExpenseMemberDto expectedDto = ExpenseMemberDto.builder()
+                .user(userDto)
                 .build();
 
         RegisteredUser user = RegisteredUser.builder()
