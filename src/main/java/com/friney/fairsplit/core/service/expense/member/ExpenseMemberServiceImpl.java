@@ -10,6 +10,7 @@ import com.friney.fairsplit.core.mapper.ExpenseMemberMapper;
 import com.friney.fairsplit.core.repository.ExpenseMemberRepository;
 import com.friney.fairsplit.core.service.expense.ExpenseService;
 import com.friney.fairsplit.core.service.user.UserService;
+import java.util.Comparator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,9 @@ public class ExpenseMemberServiceImpl implements ExpenseMemberService {
     @Override
     public List<ExpenseMemberDto> getAllByExpenseId(Long expenseId) {
         ExpenseDto expense = expenseService.getDtoById(expenseId);
-        return expense.expenseMembers();
+        List<ExpenseMemberDto> expenseMembers = expense.expenseMembers();
+        expenseMembers.sort(Comparator.comparing(ExpenseMemberDto::id));
+        return expenseMembers;
     }
 
     @Override

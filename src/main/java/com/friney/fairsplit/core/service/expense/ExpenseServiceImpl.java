@@ -9,6 +9,7 @@ import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.mapper.ExpenseMapper;
 import com.friney.fairsplit.core.repository.ExpenseRepository;
 import com.friney.fairsplit.core.service.receipt.ReceiptService;
+import java.util.Comparator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,9 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Override
     public List<ExpenseDto> getAllByReceiptId(Long receiptId) {
         ReceiptDto receipt = receiptService.getDtoById(receiptId);
-        return receipt.expenses();
+        List<ExpenseDto> expenses = receipt.expenses();
+        expenses.sort(Comparator.comparing(ExpenseDto::id));
+        return expenses;
     }
 
     @Override

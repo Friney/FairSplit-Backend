@@ -1,21 +1,20 @@
 package com.friney.fairsplit.api.controller;
 
+import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberCreateDto;
+import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberDto;
+import com.friney.fairsplit.api.dto.user.UserDto;
 import com.friney.fairsplit.core.service.expense.member.ExpenseMemberService;
 import java.util.Arrays;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberCreateDto;
-import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberDto;
 
 @ExtendWith(MockitoExtension.class)
 class ExpenseMemberControllerTest {
@@ -28,12 +27,24 @@ class ExpenseMemberControllerTest {
 
     @Test
     void testGetAllByExpenseId() {
-        ExpenseMemberDto dto1 = ExpenseMemberDto.builder()
+        UserDto user1 = UserDto.builder()
+                .id(1L)
                 .name("user 1")
+                .displayName("user 1")
+                .build();
+
+        UserDto user2 = UserDto.builder()
+                .id(2L)
+                .name("user 2")
+                .displayName("user 2")
+                .build();
+
+        ExpenseMemberDto dto1 = ExpenseMemberDto.builder()
+                .user(user1)
                 .build();
 
         ExpenseMemberDto dto2 = ExpenseMemberDto.builder()
-                .name("user 2")
+                .user(user2)
                 .build();
 
         List<ExpenseMemberDto> expectedDtos = Arrays.asList(dto1, dto2);
@@ -48,12 +59,18 @@ class ExpenseMemberControllerTest {
 
     @Test
     void testCreate() {
+        UserDto user = UserDto.builder()
+                .id(1L)
+                .name("user")
+                .displayName("user")
+                .build();
+
         ExpenseMemberCreateDto createDto = ExpenseMemberCreateDto.builder()
                 .userId(1L)
                 .build();
 
         ExpenseMemberDto expectedDto = ExpenseMemberDto.builder()
-                .name("Test user")
+                .user(user)
                 .build();
 
         when(expenseMemberService.create(createDto, 1L)).thenReturn(expectedDto);

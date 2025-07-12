@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+@SuppressWarnings("java:S1135")  // Suppress "TODO" comment warning
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -68,6 +69,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto findDtoByEmail(String username) {
+        return userMapper.map(findByEmail(username));
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) {
         RegisteredUser registeredUser = findByEmail(username);
         return org.springframework.security.core.userdetails.User.builder()
@@ -87,10 +93,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto updateNotRegisteredUser(UserUpdateDto userUpdateDto) {
+    public UserDto updateNotRegisteredUser(UserUpdateDto userUpdateDto, Long id) {
+        // TODO Сделать проверку использования юзера, если не где не используется, то обновить
         CreateNotRegisteredUserDto createNotRegisteredUserDto = CreateNotRegisteredUserDto.builder()
                 .name(userUpdateDto.name())
                 .build();
         return addNotRegisteredUser(createNotRegisteredUserDto);
+    }
+
+    @Override
+    public void deleteNotRegisteredUser(Long id) {
+        // TODO Сделать проверку использования юзера, если не где не используется, то удалить
     }
 }

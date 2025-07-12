@@ -28,7 +28,7 @@ class UserControllerTest {
     @Test
     void testCreateNotRegisteredUser() {
         CreateNotRegisteredUserDto notRegisteredUser = CreateNotRegisteredUserDto.builder()
-                .name("user")
+                .name("controller")
                 .build();
 
         NotRegisteredUser user = NotRegisteredUser.builder()
@@ -53,14 +53,14 @@ class UserControllerTest {
     void testGetAll() {
         UserDto user1 = UserDto.builder()
                 .id(1L)
-                .name("user 1")
-                .displayName("user 1")
+                .name("controller 1")
+                .displayName("controller 1")
                 .build();
 
         UserDto user2 = UserDto.builder()
                 .id(2L)
-                .name("user 2")
-                .displayName("user 2 (example@example.com)")
+                .name("controller 2")
+                .displayName("controller 2 (example@example.com)")
                 .build();
 
         List<UserDto> expectedUsers = List.of(user1, user2);
@@ -82,14 +82,13 @@ class UserControllerTest {
         UserDto expectedUser = UserDto.builder()
                 .id(1L)
                 .name("new name")
-                .displayName("new name (example@example.com)")
                 .build();
 
-        when(userService.updateNotRegisteredUser(userUpdateDto)).thenReturn(expectedUser);
+        when(userService.updateNotRegisteredUser(userUpdateDto, 1L)).thenReturn(expectedUser);
 
-        UserDto result = userController.update(userUpdateDto);
+        UserDto result = userController.update(userUpdateDto, 1L);
 
         assertEquals(expectedUser, result);
-        verify(userService, times(1)).updateNotRegisteredUser(userUpdateDto);
+        verify(userService, times(1)).updateNotRegisteredUser(userUpdateDto, 1L);
     }
 }

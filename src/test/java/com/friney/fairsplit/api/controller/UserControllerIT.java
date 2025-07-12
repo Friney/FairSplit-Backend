@@ -53,7 +53,7 @@ class UserControllerIT {
     @WithMockUser
     void testCreateAndGetNotRegisteredUser() throws Exception {
         CreateNotRegisteredUserDto userDto = CreateNotRegisteredUserDto.builder()
-                .name("user")
+                .name("controller")
                 .build();
 
         mockMvc.perform(post(Paths.USERS)
@@ -77,7 +77,7 @@ class UserControllerIT {
     @WithMockUser
     void testCreateAndGetRegisteredUser() throws Exception {
         CreateRegisteredUserDto createRegisteredUserDto = CreateRegisteredUserDto.builder()
-                .name("user")
+                .name("controller")
                 .email("email@email.com")
                 .password("password")
                 .confirmPassword("password")
@@ -108,7 +108,7 @@ class UserControllerIT {
     @WithMockUser
     void testCreateTwoNotRegisteredUsersWithSameName() throws Exception {
         CreateNotRegisteredUserDto createNotRegisteredUserDto = CreateNotRegisteredUserDto.builder()
-                .name("user")
+                .name("controller")
                 .build();
         UserDto notRegistereduserDto = UserDto.builder()
                 .name(createNotRegisteredUserDto.name())
@@ -149,7 +149,7 @@ class UserControllerIT {
     @WithMockUser
     void testGetAllUsers() throws Exception {
         CreateNotRegisteredUserDto createNotRegisteredUserDto = CreateNotRegisteredUserDto.builder()
-                .name("user")
+                .name("controller")
                 .build();
         UserDto notRegistereduserDto = UserDto.builder()
                 .name(createNotRegisteredUserDto.name())

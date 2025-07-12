@@ -1,22 +1,19 @@
 package com.friney.fairsplit.core.entity.summary;
 
+import com.friney.fairsplit.api.dto.user.UserDto;
 import java.math.BigDecimal;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Builder
 @Getter
 @Setter
-@AllArgsConstructor
+@Builder
 @NoArgsConstructor
-public class ReceiptSummary {
-    private String name;
+@AllArgsConstructor
+public class PayerInfo {
+    private UserDto user;
     private BigDecimal total;
-    private List<PayerInfo> payerInfos;
-    private List<Debt> debts;
-    private List<ExpenseSummary> expenses;
 }
