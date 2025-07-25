@@ -14,6 +14,7 @@ import com.friney.fairsplit.core.repository.RegisteredUserRepository;
 import com.friney.fairsplit.core.repository.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAll() {
-        return userMapper.mapUser(userRepository.findAll());
+        Sort sort = Sort.sort(User.class).by(User::getName);
+        return userMapper.mapUser(userRepository.findAll(sort));
     }
 
     @Override

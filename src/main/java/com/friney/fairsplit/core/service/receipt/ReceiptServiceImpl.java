@@ -1,6 +1,5 @@
 package com.friney.fairsplit.core.service.receipt;
 
-import com.friney.fairsplit.api.dto.event.EventDto;
 import com.friney.fairsplit.api.dto.receipt.ReceiptCreateDto;
 import com.friney.fairsplit.api.dto.receipt.ReceiptDto;
 import com.friney.fairsplit.api.dto.receipt.ReceiptUpdateDto;
@@ -10,9 +9,9 @@ import com.friney.fairsplit.core.mapper.ReceiptMapper;
 import com.friney.fairsplit.core.repository.ReceiptRepository;
 import com.friney.fairsplit.core.service.event.EventService;
 import com.friney.fairsplit.core.service.user.UserService;
-import java.util.Comparator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -28,10 +27,11 @@ public class ReceiptServiceImpl implements ReceiptService {
 
     @Override
     public List<ReceiptDto> getAllByEventId(Long eventId) {
-        EventDto event = eventService.getDtoById(eventId);
-        List<ReceiptDto> receipts = event.receipts();
-        receipts.sort(Comparator.comparing(ReceiptDto::id));
-        return receipts;
+        if (!eventService.isExists(eventId)) {
+            throw new ServiceException("event with id " + eventId + " not found", HttpStatus.NOT_FOUND);
+        }
+        Sort sort = Sort.sort(Receipt.class).by(Receipt::getId).descending();
+        return receiptMapper.map(receiptRepository.findAllByEventId(eventId, sort));
     }
 
     @Override
@@ -88,5 +88,10 @@ public class ReceiptServiceImpl implements ReceiptService {
         if (!hasPermissionOnChange(receipt, userDetails)) {
             throw new ServiceException("you are not the owner of this receipt", HttpStatus.FORBIDDEN);
         }
+    }
+
+    @Override
+    public boolean isExists(Long id) {
+        return receiptRepository.existsById(id);
     }
 }

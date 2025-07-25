@@ -1,6 +1,5 @@
 package com.friney.fairsplit.core.service.expense.member;
 
-import com.friney.fairsplit.api.dto.expense.ExpenseDto;
 import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberCreateDto;
 import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberDto;
 import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberUpdateDto;
@@ -10,9 +9,9 @@ import com.friney.fairsplit.core.mapper.ExpenseMemberMapper;
 import com.friney.fairsplit.core.repository.ExpenseMemberRepository;
 import com.friney.fairsplit.core.service.expense.ExpenseService;
 import com.friney.fairsplit.core.service.user.UserService;
-import java.util.Comparator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -28,10 +27,11 @@ public class ExpenseMemberServiceImpl implements ExpenseMemberService {
 
     @Override
     public List<ExpenseMemberDto> getAllByExpenseId(Long expenseId) {
-        ExpenseDto expense = expenseService.getDtoById(expenseId);
-        List<ExpenseMemberDto> expenseMembers = expense.expenseMembers();
-        expenseMembers.sort(Comparator.comparing(ExpenseMemberDto::id));
-        return expenseMembers;
+        if (!expenseService.isExists(expenseId)) {
+            throw new ServiceException("expense with id " + expenseId + " not found", HttpStatus.NOT_FOUND);
+        }
+        Sort sort = Sort.sort(ExpenseMember.class).by(ExpenseMember::getId).descending();
+        return expenseMemberMapper.map(expenseMemberRepository.findAllByExpenseId(expenseId, sort));
     }
 
     @Override

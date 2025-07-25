@@ -20,4 +20,6 @@ public interface ExpenseService {
     ExpenseDto update(ExpenseUpdateDto expenseCreateDto, Long id, Long receiptId, UserDetails userDetails);
 
     void delete(Long id, Long receiptId, UserDetails userDetails);
+
+    boolean isExists(Long id);
 }
