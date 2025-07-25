@@ -1,6 +1,7 @@
 package com.friney.fairsplit.core.service;
 
 import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.RegisteredUserDto;
 import com.friney.fairsplit.api.dto.user.UserDto;
 import com.friney.fairsplit.api.dto.user.UserUpdateDto;
 import com.friney.fairsplit.core.entity.user.NotRegisteredUser;
@@ -77,7 +78,7 @@ class UserServiceImplTest {
 
         List<UserDto> expectedUsers = Arrays.asList(userDto1, userDto2);
         when(userRepository.findAll()).thenReturn(users);
-        when(userMapper.map(users)).thenReturn(expectedUsers);
+        when(userMapper.mapUser(users)).thenReturn(expectedUsers);
 
         List<UserDto> result = userService.getAll();
 
@@ -129,16 +130,17 @@ class UserServiceImplTest {
                 .email("example@example.com")
                 .build();
 
-        UserDto expectedUser = UserDto.builder()
+        RegisteredUserDto expectedUser = RegisteredUserDto.builder()
                 .id(savedUser.getId())
+                .email(savedUser.getEmail())
                 .name(savedUser.getName())
-                .displayName(savedUser.getName() + " (example@example.com)")
+                .displayName(savedUser.getName() + " " + savedUser.getEmail())
                 .build();
 
         when(registeredUserRepository.save(any(RegisteredUser.class))).thenReturn(savedUser);
-        when(userMapper.map(any(User.class))).thenReturn(expectedUser);
+        when(userMapper.mapRegisteredUser(any(RegisteredUser.class))).thenReturn(expectedUser);
 
-        UserDto result = userService.addRegisteredUser(savedUser);
+        RegisteredUserDto result = userService.addRegisteredUser(savedUser);
 
         assertEquals(expectedUser, result);
         verify(registeredUserRepository, times(1)).save(any(RegisteredUser.class));
@@ -161,7 +163,7 @@ class UserServiceImplTest {
                 .build();
 
         when(notRegisteredUserRepository.save(any(NotRegisteredUser.class))).thenReturn(savedUser);
-        when(userMapper.map(any(User.class))).thenReturn(expectedUser);
+        when(userMapper.mapUser(any(User.class))).thenReturn(expectedUser);
 
         UserDto result = userService.addNotRegisteredUser(userDto);
 
@@ -197,16 +199,17 @@ class UserServiceImplTest {
                 .password("password")
                 .build();
 
-        UserDto userDto = UserDto.builder()
+        RegisteredUserDto userDto = RegisteredUserDto.builder()
                 .id(user.getId())
+                .email(user.getEmail())
                 .name(user.getName())
                 .displayName(user.getName() + " (example@example.com)")
                 .build();
 
         when(registeredUserRepository.save(any(RegisteredUser.class))).thenReturn(user);
-        when(userMapper.map(any(User.class))).thenReturn(userDto);
+        when(userMapper.mapRegisteredUser(any(RegisteredUser.class))).thenReturn(userDto);
 
-        UserDto result = userService.updateRegisteredUser(user);
+        RegisteredUserDto result = userService.updateRegisteredUser(user);
 
         assertEquals(userDto, result);
         verify(registeredUserRepository, times(1)).save(any(RegisteredUser.class));
@@ -246,7 +249,7 @@ class UserServiceImplTest {
                 .build();
 
         when(notRegisteredUserRepository.save(any(NotRegisteredUser.class))).thenReturn(user);
-        when(userMapper.map(any(User.class))).thenReturn(userDto);
+        when(userMapper.mapUser(any(User.class))).thenReturn(userDto);
 
         UserDto result = userService.updateNotRegisteredUser(userUpdateDto, 1L);
 

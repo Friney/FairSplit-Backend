@@ -3,9 +3,9 @@ package com.friney.fairsplit.core.service.auth;
 import com.friney.fairsplit.api.dto.jwt.JwtAuthenticationDto;
 import com.friney.fairsplit.api.dto.jwt.RefreshTokenDto;
 import com.friney.fairsplit.api.dto.user.CreateRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.RegisteredUserDto;
 import com.friney.fairsplit.api.dto.user.UserChangePasswordDto;
 import com.friney.fairsplit.api.dto.user.UserCredentialsDto;
-import com.friney.fairsplit.api.dto.user.UserDto;
 import com.friney.fairsplit.api.dto.user.UserUpdateDto;
 import com.friney.fairsplit.core.entity.user.RegisteredUser;
 import com.friney.fairsplit.core.exception.ServiceException;
@@ -37,7 +37,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public UserDto registration(CreateRegisteredUserDto userDto) {
+    public RegisteredUserDto registration(CreateRegisteredUserDto userDto) {
         if (!userDto.password().equals(userDto.confirmPassword())) {
             throw new ServiceException("passwords do not match", HttpStatus.BAD_REQUEST);
         }
@@ -74,12 +74,12 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public UserDto loadUser(UserDetails userDetails) {
-        return userService.findDtoByEmail(userDetails.getUsername());
+    public RegisteredUserDto loadUser(UserDetails userDetails) {
+        return userService.findRegisteredDtoByEmail(userDetails.getUsername());
     }
 
     @Override
-    public UserDto update(UserUpdateDto userUpdateDto, UserDetails userDetails) {
+    public RegisteredUserDto update(UserUpdateDto userUpdateDto, UserDetails userDetails) {
         RegisteredUser registeredUser = userService.findByEmail(userDetails.getUsername());
         if (userUpdateDto.name() != null) {
             registeredUser.setName(userUpdateDto.name());

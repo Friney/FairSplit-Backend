@@ -3,9 +3,9 @@ package com.friney.fairsplit.api.controller;
 import com.friney.fairsplit.api.dto.jwt.JwtAuthenticationDto;
 import com.friney.fairsplit.api.dto.jwt.RefreshTokenDto;
 import com.friney.fairsplit.api.dto.user.CreateRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.RegisteredUserDto;
 import com.friney.fairsplit.api.dto.user.UserChangePasswordDto;
 import com.friney.fairsplit.api.dto.user.UserCredentialsDto;
-import com.friney.fairsplit.api.dto.user.UserDto;
 import com.friney.fairsplit.api.dto.user.UserUpdateDto;
 import com.friney.fairsplit.core.service.auth.AuthService;
 import java.util.List;
@@ -75,8 +75,9 @@ class AuthControllerTest {
                 .password("password")
                 .confirmPassword("password")
                 .build();
-        UserDto expectedUser = UserDto.builder()
+        RegisteredUserDto expectedUser = RegisteredUserDto.builder()
                 .id(1L)
+                .email(registrationDto.email())
                 .name(registrationDto.name())
                 .displayName(registrationDto.name() + " (" + registrationDto.email() + ")")
                 .build();
@@ -84,7 +85,7 @@ class AuthControllerTest {
 
         when(authService.registration(registrationDto)).thenReturn(expectedUser);
 
-        UserDto result = authController.register(registrationDto);
+        RegisteredUserDto result = authController.register(registrationDto);
 
         assertEquals(expectedUser, result);
         verify(authService, times(1)).registration(registrationDto);
@@ -109,8 +110,9 @@ class AuthControllerTest {
         UserUpdateDto userUpdateDto = UserUpdateDto.builder()
                 .name("newName")
                 .build();
-        UserDto expectedUser = UserDto.builder()
+        RegisteredUserDto expectedUser = RegisteredUserDto.builder()
                 .id(1L)
+                .email("controller@example.com")
                 .name("newName")
                 .displayName("newName (controller@example.com)")
                 .build();
@@ -118,7 +120,7 @@ class AuthControllerTest {
 
         when(authService.update(userUpdateDto, userDetails)).thenReturn(expectedUser);
 
-        UserDto result = authController.update(userUpdateDto, userDetails);
+        RegisteredUserDto result = authController.update(userUpdateDto, userDetails);
 
         assertEquals(expectedUser, result);
         verify(authService, times(1)).update(userUpdateDto, userDetails);

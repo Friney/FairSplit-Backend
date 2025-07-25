@@ -1,21 +1,17 @@
 package com.friney.fairsplit.core.mapper;
 
-import com.friney.fairsplit.api.dto.receipt.ReceiptDto;
+import com.friney.fairsplit.api.dto.user.RegisteredUserDto;
 import com.friney.fairsplit.api.dto.user.UserDto;
-import com.friney.fairsplit.core.entity.receipt.Receipt;
 import com.friney.fairsplit.core.entity.user.RegisteredUser;
 import com.friney.fairsplit.core.entity.user.User;
 import java.util.List;
-import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
-import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface UserMapper {
 
-    default UserDto map(User user) {
+    default UserDto mapUser(User user) {
         String displayName;
         if (user instanceof RegisteredUser registeredUser) {
             displayName = registeredUser.getName() + " (" + registeredUser.getEmail() + ")";
@@ -29,9 +25,18 @@ public interface UserMapper {
                 .build();
     }
 
-    default List<UserDto> map(List<User> users) {
+    default RegisteredUserDto mapRegisteredUser(RegisteredUser registeredUser) {
+        return RegisteredUserDto.builder()
+                .id(registeredUser.getId())
+                .name(registeredUser.getName())
+                .displayName(registeredUser.getName() + " (" + registeredUser.getEmail() + ")")
+                .email(registeredUser.getEmail())
+                .build();
+    }
+
+    default List<UserDto> mapUser(List<User> users) {
         return users.stream()
-                .map(this::map)
+                .map(this::mapUser)
                 .toList();
     }
 }

@@ -1,6 +1,7 @@
 package com.friney.fairsplit.core.service.user;
 
 import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.RegisteredUserDto;
 import com.friney.fairsplit.api.dto.user.UserDto;
 import com.friney.fairsplit.api.dto.user.UserUpdateDto;
 import com.friney.fairsplit.core.entity.user.RegisteredUser;
@@ -15,15 +16,15 @@ public interface UserService extends UserDetailsService {
 
     User getById(Long id);
 
-    UserDto addRegisteredUser(RegisteredUser user);
+    RegisteredUserDto addRegisteredUser(RegisteredUser user);
 
     UserDto addNotRegisteredUser(CreateNotRegisteredUserDto user);
 
     RegisteredUser findByEmail(String email);
 
-    UserDto findDtoByEmail(String username);
+    RegisteredUserDto findRegisteredDtoByEmail(String username);
 
-    UserDto updateRegisteredUser(RegisteredUser user);
+    RegisteredUserDto updateRegisteredUser(RegisteredUser user);
 
     void deleteRegisteredUser(RegisteredUser registeredUser);
 
