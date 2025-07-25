@@ -4,6 +4,7 @@ import com.friney.fairsplit.api.dto.event.EventCreateDto;
 import com.friney.fairsplit.api.dto.event.EventDto;
 import com.friney.fairsplit.api.dto.event.EventUpdateDto;
 import com.friney.fairsplit.core.entity.event.Event;
+import com.friney.fairsplit.core.entity.user.RegisteredUser;
 import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.mapper.EventMapper;
 import com.friney.fairsplit.core.repository.EventRepository;
@@ -25,12 +26,9 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<EventDto> getAllByUserDetails(UserDetails userDetails) {
-        return eventMapper.map(eventRepository.findAllByOwner(userService.findByEmail(userDetails.getUsername())));
-    }
-
-    @Override
-    public List<EventDto> getAll() {
-        return eventMapper.map(eventRepository.findAll(Sort.by(Sort.Direction.DESC, "id")));
+        Sort sort = Sort.sort(Event.class).by(Event::getId).descending();
+        RegisteredUser owner = userService.findByEmail(userDetails.getUsername());
+        return eventMapper.map(eventRepository.findAllByOwner(owner, sort));
     }
 
     @Override
@@ -84,5 +82,10 @@ public class EventServiceImpl implements EventService {
         if (!hasPermissionOnChange(event, userDetails)) {
             throw new ServiceException("you are not the owner of this event", HttpStatus.FORBIDDEN);
         }
+    }
+
+    @Override
+    public boolean isExists(Long id) {
+        return eventRepository.existsById(id);
     }
 }

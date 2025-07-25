@@ -3,7 +3,6 @@ package com.friney.fairsplit.core.service;
 import com.friney.fairsplit.api.dto.expense.ExpenseCreateDto;
 import com.friney.fairsplit.api.dto.expense.ExpenseDto;
 import com.friney.fairsplit.api.dto.expense.ExpenseUpdateDto;
-import com.friney.fairsplit.api.dto.receipt.ReceiptDto;
 import com.friney.fairsplit.core.entity.event.Event;
 import com.friney.fairsplit.core.entity.expense.Expense;
 import com.friney.fairsplit.core.entity.receipt.Receipt;
@@ -22,6 +21,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -49,41 +49,55 @@ class ExpenseServiceImplTest {
 
     @Test
     void testGetAllByReceiptId() {
-        ExpenseDto dto1 = ExpenseDto.builder()
+        Expense expense1 = Expense.builder()
                 .id(1L)
                 .name("expense 1")
                 .amount(BigDecimal.valueOf(100))
                 .build();
 
-        ExpenseDto dto2 = ExpenseDto.builder()
+        Expense expense2 = Expense.builder()
                 .id(2L)
                 .name("expense 2")
                 .amount(BigDecimal.valueOf(200))
                 .build();
 
-        List<ExpenseDto> expectedDtos = Arrays.asList(dto1, dto2);
-        ReceiptDto receiptDto = ReceiptDto.builder()
-                .expenses(expectedDtos)
+        ExpenseDto dto1 = ExpenseDto.builder()
+                .id(expense1.getId())
+                .name(expense1.getName())
+                .amount(expense1.getAmount())
                 .build();
 
-        when(receiptService.getDtoById(1L)).thenReturn(receiptDto);
+        ExpenseDto dto2 = ExpenseDto.builder()
+                .id(expense2.getId())
+                .name(expense2.getName())
+                .amount(expense2.getAmount())
+                .build();
+
+        List<ExpenseDto> expensesDto = Arrays.asList(dto1, dto2);
+        List<Expense> expenses = Arrays.asList(expense1, expense2);
+
+        Sort sort = Sort.sort(Expense.class).by(Expense::getId).descending();
+
+        when(receiptService.isExists(1L)).thenReturn(true);
+        when(expenseRepository.findAllByReceiptId(1L, sort)).thenReturn(expenses);
+        when(expenseMapper.map(expenses)).thenReturn(expensesDto);
 
         List<ExpenseDto> result = expenseService.getAllByReceiptId(1L);
 
-        assertEquals(expectedDtos, result);
-        verify(receiptService, times(1)).getDtoById(1L);
+        assertEquals(expensesDto, result);
+        verify(receiptService, times(1)).isExists(1L);
+        verify(expenseRepository, times(1)).findAllByReceiptId(1L, sort);
     }
 
     @Test
     void testGetAllByReceiptIdNotFound() {
-        when(receiptService.getDtoById(1L))
-                .thenThrow(new ServiceException("receipt with id 1 not found", HttpStatus.NOT_FOUND));
+        when(receiptService.isExists(1L)).thenReturn(false);
 
         ServiceException exception = assertThrows(ServiceException.class, () -> expenseService.getAllByReceiptId(1L));
 
         assertEquals("receipt with id 1 not found", exception.getMessage());
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
-        verify(receiptService, times(1)).getDtoById(1L);
+        verify(receiptService, times(1)).isExists(1L);
     }
 
     @Test

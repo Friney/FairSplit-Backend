@@ -21,6 +21,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -77,23 +78,27 @@ class UserServiceImplTest {
         List<User> users = Arrays.asList(user1, user2);
 
         List<UserDto> expectedUsers = Arrays.asList(userDto1, userDto2);
-        when(userRepository.findAll()).thenReturn(users);
+
+        Sort sort = Sort.sort(User.class).by(User::getName);
+
+        when(userRepository.findAll(sort)).thenReturn(users);
         when(userMapper.mapUser(users)).thenReturn(expectedUsers);
 
         List<UserDto> result = userService.getAll();
 
         assertEquals(expectedUsers, result);
-        verify(userRepository, times(1)).findAll();
+        verify(userRepository, times(1)).findAll(sort);
     }
 
     @Test
     void testGetAllNoUsers() {
-        when(userRepository.findAll()).thenReturn(List.of());
+        Sort sort = Sort.sort(User.class).by(User::getName);
+        when(userRepository.findAll(sort)).thenReturn(List.of());
 
         List<UserDto> result = userService.getAll();
 
         assertTrue(result.isEmpty());
-        verify(userRepository, times(1)).findAll();
+        verify(userRepository, times(1)).findAll(sort);
     }
 
     @Test

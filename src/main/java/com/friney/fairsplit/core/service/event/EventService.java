@@ -11,8 +11,6 @@ public interface EventService {
 
     List<EventDto> getAllByUserDetails(UserDetails userDetails);
 
-    List<EventDto> getAll();
-
     EventDto getDtoById(Long id);
 
     Event getById(Long id);
@@ -22,4 +20,6 @@ public interface EventService {
     EventDto update(EventUpdateDto eventUpdateDto, Long id, UserDetails userDetails);
 
     void delete(Long id, UserDetails userDetails);
+
+    boolean isExists(Long id);
 }

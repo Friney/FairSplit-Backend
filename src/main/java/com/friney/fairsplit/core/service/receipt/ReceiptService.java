@@ -20,4 +20,6 @@ public interface ReceiptService {
     ReceiptDto update(ReceiptUpdateDto receiptUpdateDto, Long id, Long eventId, UserDetails userDetails);
 
     void delete(Long id, Long eventId, UserDetails userDetails);
+
+    boolean isExists(Long id);
 }

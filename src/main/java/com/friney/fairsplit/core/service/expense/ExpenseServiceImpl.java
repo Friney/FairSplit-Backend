@@ -3,15 +3,14 @@ package com.friney.fairsplit.core.service.expense;
 import com.friney.fairsplit.api.dto.expense.ExpenseCreateDto;
 import com.friney.fairsplit.api.dto.expense.ExpenseDto;
 import com.friney.fairsplit.api.dto.expense.ExpenseUpdateDto;
-import com.friney.fairsplit.api.dto.receipt.ReceiptDto;
 import com.friney.fairsplit.core.entity.expense.Expense;
 import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.mapper.ExpenseMapper;
 import com.friney.fairsplit.core.repository.ExpenseRepository;
 import com.friney.fairsplit.core.service.receipt.ReceiptService;
-import java.util.Comparator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -26,10 +25,11 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Override
     public List<ExpenseDto> getAllByReceiptId(Long receiptId) {
-        ReceiptDto receipt = receiptService.getDtoById(receiptId);
-        List<ExpenseDto> expenses = receipt.expenses();
-        expenses.sort(Comparator.comparing(ExpenseDto::id));
-        return expenses;
+        if (!receiptService.isExists(receiptId)) {
+            throw new ServiceException("receipt with id " + receiptId + " not found", HttpStatus.NOT_FOUND);
+        }
+        Sort sort = Sort.sort(Expense.class).by(Expense::getId).descending();
+        return expenseMapper.map(expenseRepository.findAllByReceiptId(receiptId, sort));
     }
 
     @Override
@@ -86,5 +86,10 @@ public class ExpenseServiceImpl implements ExpenseService {
         if (!hasPermissionOnChange(expense, userDetails)) {
             throw new ServiceException("you are not the owner of this expense", HttpStatus.FORBIDDEN);
         }
+    }
+
+    @Override
+    public boolean isExists(Long id) {
+        return expenseRepository.existsById(id);
     }
 }
