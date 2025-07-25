@@ -3,9 +3,9 @@ package com.friney.fairsplit.core.service;
 import com.friney.fairsplit.api.dto.jwt.JwtAuthenticationDto;
 import com.friney.fairsplit.api.dto.jwt.RefreshTokenDto;
 import com.friney.fairsplit.api.dto.user.CreateRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.RegisteredUserDto;
 import com.friney.fairsplit.api.dto.user.UserChangePasswordDto;
 import com.friney.fairsplit.api.dto.user.UserCredentialsDto;
-import com.friney.fairsplit.api.dto.user.UserDto;
 import com.friney.fairsplit.core.entity.user.RegisteredUser;
 import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.service.auth.AuthServiceImpl;
@@ -82,8 +82,9 @@ class AuthServiceImplTest {
                 .password("password")
                 .confirmPassword("password")
                 .build();
-        UserDto expectedUser = UserDto.builder()
+        RegisteredUserDto expectedUser = RegisteredUserDto.builder()
                 .id(1L)
+                .email(userDto.email())
                 .name(userDto.email())
                 .displayName(userDto.name() + " (" + userDto.email() + ")")
                 .build();
@@ -91,7 +92,7 @@ class AuthServiceImplTest {
         when(passwordEncoder.encode(userDto.password())).thenReturn("encodedPassword");
         when(userService.addRegisteredUser(any(RegisteredUser.class))).thenReturn(expectedUser);
 
-        UserDto result = authService.registration(userDto);
+        RegisteredUserDto result = authService.registration(userDto);
 
         assertEquals(expectedUser, result);
         verify(passwordEncoder, times(1)).encode(userDto.password());
@@ -160,8 +161,9 @@ class AuthServiceImplTest {
                 .newPassword("newPassword")
                 .confirmPassword("newPassword")
                 .build();
-        UserDto expectedUser = UserDto.builder()
+        RegisteredUserDto expectedUser = RegisteredUserDto.builder()
                 .id(1L)
+                .email("test@example.com")
                 .name("controller")
                 .displayName("controller" + " (test@example.com)")
                 .build();

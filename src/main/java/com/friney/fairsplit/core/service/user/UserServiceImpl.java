@@ -1,6 +1,7 @@
 package com.friney.fairsplit.core.service.user;
 
 import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.RegisteredUserDto;
 import com.friney.fairsplit.api.dto.user.UserDto;
 import com.friney.fairsplit.api.dto.user.UserUpdateDto;
 import com.friney.fairsplit.core.entity.user.NotRegisteredUser;
@@ -29,7 +30,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAll() {
-        return userMapper.map(userRepository.findAll());
+        return userMapper.mapUser(userRepository.findAll());
     }
 
     @Override
@@ -39,25 +40,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto addRegisteredUser(RegisteredUser user) {
+    public RegisteredUserDto addRegisteredUser(RegisteredUser user) {
         registeredUserRepository.findByEmail(user.getEmail()).ifPresent(
                 u -> {
                     throw new ServiceException("user with email " + u.getEmail() + " already exists", HttpStatus.BAD_REQUEST);
                 });
 
-        return userMapper.map(registeredUserRepository.save(user));
+        return userMapper.mapRegisteredUser(registeredUserRepository.save(user));
     }
 
     @Override
     public UserDto addNotRegisteredUser(CreateNotRegisteredUserDto userDto) {
         return notRegisteredUserRepository.findByName(userDto.name())
-                .map(userMapper::map)
+                .map(userMapper::mapUser)
                 .orElseGet(() -> {
                             NotRegisteredUser user = NotRegisteredUser.builder()
                                     .name(userDto.name())
                                     .build();
 
-                            return userMapper.map(notRegisteredUserRepository.save(user));
+                            return userMapper.mapUser(notRegisteredUserRepository.save(user));
                         }
                 );
     }
@@ -69,8 +70,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto findDtoByEmail(String username) {
-        return userMapper.map(findByEmail(username));
+    public RegisteredUserDto findRegisteredDtoByEmail(String username) {
+        return userMapper.mapRegisteredUser(findByEmail(username));
     }
 
     @Override
@@ -83,8 +84,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto updateRegisteredUser(RegisteredUser user) {
-        return userMapper.map(registeredUserRepository.save(user));
+    public RegisteredUserDto updateRegisteredUser(RegisteredUser user) {
+        return userMapper.mapRegisteredUser(registeredUserRepository.save(user));
     }
 
     @Override

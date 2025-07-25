@@ -4,9 +4,9 @@ import com.friney.fairsplit.api.Paths;
 import com.friney.fairsplit.api.dto.jwt.JwtAuthenticationDto;
 import com.friney.fairsplit.api.dto.jwt.RefreshTokenDto;
 import com.friney.fairsplit.api.dto.user.CreateRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.RegisteredUserDto;
 import com.friney.fairsplit.api.dto.user.UserChangePasswordDto;
 import com.friney.fairsplit.api.dto.user.UserCredentialsDto;
-import com.friney.fairsplit.api.dto.user.UserDto;
 import com.friney.fairsplit.api.dto.user.UserUpdateDto;
 import com.friney.fairsplit.core.service.auth.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,7 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public UserDto me(@AuthenticationPrincipal UserDetails userDetails) {
+    public RegisteredUserDto me(@AuthenticationPrincipal UserDetails userDetails) {
         return authService.loadUser(userDetails);
     }
 
@@ -46,7 +46,7 @@ public class AuthController {
 
     @PostMapping("/registration")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto register(@RequestBody CreateRegisteredUserDto createRegisteredUserDto) {
+    public RegisteredUserDto register(@RequestBody CreateRegisteredUserDto createRegisteredUserDto) {
         return authService.registration(createRegisteredUserDto);
     }
 
@@ -57,7 +57,7 @@ public class AuthController {
     }
 
     @PatchMapping
-    public UserDto update(UserUpdateDto userUpdateDto, @AuthenticationPrincipal UserDetails userDetails) {
+    public RegisteredUserDto update(UserUpdateDto userUpdateDto, @AuthenticationPrincipal UserDetails userDetails) {
         return authService.update(userUpdateDto, userDetails);
     }
 
