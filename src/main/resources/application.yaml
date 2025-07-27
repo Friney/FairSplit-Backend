@@ -1,6 +1,4 @@
 spring:
-  config:
-    import: optional:file:.env[.properties]
   datasource:
     url: jdbc:postgresql://localhost:5433/${DB_NAME}
     username: ${DB_USERNAME}
@@ -19,4 +17,5 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 jwt:
   secret: ${JWT_SECRET}
-  lifetime: ${JWT_LIFETIME}
+  token-lifetime: ${JWT_LIFETIME}
+  refresh-lifetime: ${REFRESH_LIFETIME}

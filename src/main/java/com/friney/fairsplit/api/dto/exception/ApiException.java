@@ -1,4 +1,4 @@
-package com.friney.fairsplit.core.entity.api_exception;
+package com.friney.fairsplit.api.dto.exception;
 
 public record ApiException(
         String message

@@ -10,6 +10,7 @@ import com.friney.fairsplit.api.dto.user.UserUpdateDto;
 import com.friney.fairsplit.core.entity.user.RegisteredUser;
 import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.service.jwt.JwtService;
+import com.friney.fairsplit.core.service.jwt.version.JwtVersionService;
 import com.friney.fairsplit.core.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,16 +29,20 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private final JwtVersionService jwtVersionService;
 
     @Override
     public JwtAuthenticationDto login(UserCredentialsDto userDto) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDto.email(), userDto.password()));
-        UserDetails user = userService.loadUserByUsername(userDto.email());
-
-        return jwtService.generateAuthToken(user.getUsername());
+        RegisteredUser user = userService.findByEmail(userDto.email());
+        if (!jwtVersionService.isExists(user.getId())) {
+            jwtVersionService.createInitialVersion(user.getId());
+        }
+        return jwtService.generateAuthToken(user.getEmail());
     }
 
     @Override
+    @Transactional
     public RegisteredUserDto registration(CreateRegisteredUserDto userDto) {
         if (!userDto.password().equals(userDto.confirmPassword())) {
             throw new ServiceException("passwords do not match", HttpStatus.BAD_REQUEST);
@@ -48,7 +54,10 @@ public class AuthServiceImpl implements AuthService {
                 .password(passwordEncoder.encode(userDto.password()))
                 .build();
 
-        return userService.addRegisteredUser(registeredUser);
+        RegisteredUserDto user = userService.addRegisteredUser(registeredUser);
+        jwtVersionService.createInitialVersion(user.id());
+
+        return user;
     }
 
     @Override
@@ -57,10 +66,16 @@ public class AuthServiceImpl implements AuthService {
         if (refreshToken == null || !jwtService.validateToken(refreshToken)) {
             throw new ServiceException("invalid refresh token", HttpStatus.BAD_REQUEST);
         }
-        return jwtService.refreshBaseToken(jwtService.getEmailFromToken(refreshToken), refreshToken);
+
+        String email = jwtService.getEmailFromToken(refreshToken);
+        Long userId = userService.findByEmail(email).getId();
+        jwtVersionService.incrementVersion(userId);
+
+        return jwtService.refreshTokens(email, refreshToken);
     }
 
     @Override
+    @Transactional
     public void changePassword(UserChangePasswordDto userChangePasswordDto, UserDetails userDetails) {
         if (!userChangePasswordDto.newPassword().equals(userChangePasswordDto.confirmPassword())) {
             throw new ServiceException("passwords do not match", HttpStatus.BAD_REQUEST);
@@ -70,6 +85,9 @@ public class AuthServiceImpl implements AuthService {
             throw new ServiceException("old password is incorrect", HttpStatus.BAD_REQUEST);
         }
         registeredUser.setPassword(passwordEncoder.encode(userChangePasswordDto.newPassword()));
+
+        jwtVersionService.incrementVersion(registeredUser.getId());
+
         userService.updateRegisteredUser(registeredUser);
     }
 
@@ -79,11 +97,15 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public RegisteredUserDto update(UserUpdateDto userUpdateDto, UserDetails userDetails) {
         RegisteredUser registeredUser = userService.findByEmail(userDetails.getUsername());
         if (userUpdateDto.name() != null) {
             registeredUser.setName(userUpdateDto.name());
         }
+
+        jwtVersionService.incrementVersion(registeredUser.getId());
+
         return userService.updateRegisteredUser(registeredUser);
     }
 
