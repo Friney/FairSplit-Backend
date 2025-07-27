@@ -8,7 +8,7 @@ public interface JwtService {
 
     JwtAuthenticationDto generateAuthToken(String email);
 
-    JwtAuthenticationDto refreshBaseToken(String email, String refreshToken);
+    JwtAuthenticationDto refreshTokens(String email, String refreshToken);
 
     String getEmailFromToken(String token);
 

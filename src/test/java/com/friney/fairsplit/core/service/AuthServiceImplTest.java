@@ -10,6 +10,7 @@ import com.friney.fairsplit.core.entity.user.RegisteredUser;
 import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.service.auth.AuthServiceImpl;
 import com.friney.fairsplit.core.service.jwt.JwtService;
+import com.friney.fairsplit.core.service.jwt.version.JwtVersionService;
 import com.friney.fairsplit.core.service.user.UserService;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -42,6 +44,8 @@ class AuthServiceImplTest {
     private PasswordEncoder passwordEncoder;
     @Mock
     private AuthenticationManager authenticationManager;
+    @Mock
+    private JwtVersionService jwtVersionService;
 
     @InjectMocks
     private AuthServiceImpl authService;
@@ -52,25 +56,26 @@ class AuthServiceImplTest {
                 .email("test@example.com")
                 .password("password")
                 .build();
-        UserDetails userDetails = User.builder()
-                .username(credentials.email())
-                .password(credentials.password())
-                .authorities(List.of())
+        RegisteredUser user = RegisteredUser.builder()
+                .id(1L)
+                .email(credentials.email())
+                .password("encodedPassword")
                 .build();
         JwtAuthenticationDto expectedToken = JwtAuthenticationDto.builder()
                 .token("accessToken")
                 .refreshToken("refreshToken")
                 .build();
 
-        when(userService.loadUserByUsername(credentials.email())).thenReturn(userDetails);
+        when(userService.findByEmail(credentials.email())).thenReturn(user);
         when(jwtService.generateAuthToken(credentials.email())).thenReturn(expectedToken);
+        when(jwtVersionService.isExists(user.getId())).thenReturn(true);
 
         JwtAuthenticationDto result = authService.login(credentials);
 
         assertEquals(expectedToken, result);
-        verify(authenticationManager).authenticate(
+        verify(authenticationManager, times(1)).authenticate(
                 new UsernamePasswordAuthenticationToken(credentials.email(), credentials.password()));
-        verify(userService, times(1)).loadUserByUsername(credentials.email());
+        verify(userService, times(1)).findByEmail(credentials.email());
         verify(jwtService, times(1)).generateAuthToken(credentials.email());
     }
 
@@ -91,6 +96,7 @@ class AuthServiceImplTest {
 
         when(passwordEncoder.encode(userDto.password())).thenReturn("encodedPassword");
         when(userService.addRegisteredUser(any(RegisteredUser.class))).thenReturn(expectedUser);
+        doNothing().when(jwtVersionService).createInitialVersion(expectedUser.id());
 
         RegisteredUserDto result = authService.registration(userDto);
 
@@ -121,21 +127,29 @@ class AuthServiceImplTest {
         RefreshTokenDto refreshTokenDto = RefreshTokenDto.builder()
                 .refreshToken("refreshToken")
                 .build();
+
         JwtAuthenticationDto expectedToken = JwtAuthenticationDto.builder()
                 .token("newAccessToken")
                 .refreshToken(refreshTokenDto.refreshToken())
                 .build();
 
+        RegisteredUser expectedUser = RegisteredUser.builder()
+                .id(1L)
+                .email(email)
+                .build();
+
         when(jwtService.validateToken(refreshTokenDto.refreshToken())).thenReturn(true);
         when(jwtService.getEmailFromToken(refreshTokenDto.refreshToken())).thenReturn(email);
-        when(jwtService.refreshBaseToken(email, refreshTokenDto.refreshToken())).thenReturn(expectedToken);
+        when(userService.findByEmail(email)).thenReturn(expectedUser);
+        when(jwtService.refreshTokens(email, refreshTokenDto.refreshToken())).thenReturn(expectedToken);
+        doNothing().when(jwtVersionService).incrementVersion(expectedUser.getId());
 
         JwtAuthenticationDto result = authService.refresh(refreshTokenDto);
 
         assertEquals(expectedToken, result);
         verify(jwtService, times(1)).validateToken(refreshTokenDto.refreshToken());
         verify(jwtService, times(1)).getEmailFromToken(refreshTokenDto.refreshToken());
-        verify(jwtService, times(1)).refreshBaseToken(email, refreshTokenDto.refreshToken());
+        verify(jwtService, times(1)).refreshTokens(email, refreshTokenDto.refreshToken());
     }
 
     @Test
@@ -161,16 +175,19 @@ class AuthServiceImplTest {
                 .newPassword("newPassword")
                 .confirmPassword("newPassword")
                 .build();
+
         RegisteredUserDto expectedUser = RegisteredUserDto.builder()
                 .id(1L)
                 .email("test@example.com")
                 .name("controller")
                 .displayName("controller" + " (test@example.com)")
                 .build();
+
         UserDetails userDetails = createTestUserDetails();
         RegisteredUser registeredUser = RegisteredUser.builder()
-                .email(expectedUser.name())
-                .email(userDetails.getUsername())
+                .id(expectedUser.id())
+                .name(expectedUser.name())
+                .email(expectedUser.email())
                 .password("oldPassword")
                 .build();
 
@@ -178,6 +195,7 @@ class AuthServiceImplTest {
         when(passwordEncoder.matches(updatePasswordDto.oldPassword(), registeredUser.getPassword())).thenReturn(true);
         when(passwordEncoder.encode(updatePasswordDto.newPassword())).thenReturn("newPassword");
         when(userService.updateRegisteredUser(registeredUser)).thenReturn(expectedUser);
+        doNothing().when(jwtVersionService).incrementVersion(registeredUser.getId());
 
         authService.changePassword(updatePasswordDto, createTestUserDetails());
         registeredUser.setPassword("oldPassword");
