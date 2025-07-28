@@ -1,5 +1,6 @@
 package com.friney.fairsplit.api.controller;
 
+import com.friney.fairsplit.api.controller.v1.AuthController;
 import com.friney.fairsplit.api.dto.jwt.JwtAuthenticationDto;
 import com.friney.fairsplit.api.dto.jwt.RefreshTokenRequest;
 import com.friney.fairsplit.api.dto.user.CreateRegisteredUserRequest;

@@ -1,5 +1,6 @@
 package com.friney.fairsplit.api.controller;
 
+import com.friney.fairsplit.api.controller.v1.ReceiptController;
 import com.friney.fairsplit.api.dto.receipt.ReceiptCreateRequest;
 import com.friney.fairsplit.api.dto.receipt.ReceiptDto;
 import com.friney.fairsplit.api.dto.receipt.ReceiptUpdateRequest;

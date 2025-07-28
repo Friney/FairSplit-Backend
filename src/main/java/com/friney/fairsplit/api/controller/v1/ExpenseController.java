@@ -1,4 +1,4 @@
-package com.friney.fairsplit.api.controller;
+package com.friney.fairsplit.api.controller.v1;
 
 import com.friney.fairsplit.api.Paths;
 import com.friney.fairsplit.api.dto.expense.ExpenseCreateRequest;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(Paths.EXPENSES)
+@RequestMapping(Paths.EXPENSES_V1)
 @RequiredArgsConstructor
 public class ExpenseController {
 

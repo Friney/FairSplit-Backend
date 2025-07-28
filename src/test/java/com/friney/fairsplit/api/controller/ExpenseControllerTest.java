@@ -1,5 +1,6 @@
 package com.friney.fairsplit.api.controller;
 
+import com.friney.fairsplit.api.controller.v1.ExpenseController;
 import com.friney.fairsplit.api.dto.expense.ExpenseCreateRequest;
 import com.friney.fairsplit.api.dto.expense.ExpenseDto;
 import com.friney.fairsplit.api.dto.expense.ExpenseUpdateRequest;

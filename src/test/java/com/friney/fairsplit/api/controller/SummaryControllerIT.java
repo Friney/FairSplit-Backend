@@ -348,7 +348,7 @@ class SummaryControllerIT {
                 .description("description")
                 .build();
 
-        String response = mockMvc.perform(post(Paths.EVENTS)
+        String response = mockMvc.perform(post(Paths.EVENTS_V1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createDto)))
                 .andExpect(status().isCreated())
@@ -366,7 +366,7 @@ class SummaryControllerIT {
                 .name(name)
                 .build();
 
-        String response = mockMvc.perform(post(Paths.USERS)
+        String response = mockMvc.perform(post(Paths.USERS_V1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isCreated())
@@ -386,7 +386,7 @@ class SummaryControllerIT {
                 .confirmPassword("password")
                 .build();
 
-        String response = mockMvc.perform(post(Paths.AUTH + "/registration")
+        String response = mockMvc.perform(post(Paths.AUTH_V1 + "/registration")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isCreated())

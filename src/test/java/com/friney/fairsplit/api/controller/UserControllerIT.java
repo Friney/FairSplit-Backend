@@ -56,7 +56,7 @@ class UserControllerIT {
                 .name("controller")
                 .build();
 
-        mockMvc.perform(post(Paths.USERS)
+        mockMvc.perform(post(Paths.USERS_V1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(userDto)))
                 .andExpectAll(
@@ -87,7 +87,7 @@ class UserControllerIT {
                 .displayName(createRegisteredUserRequest.name() + " (" + createRegisteredUserRequest.email() + ")")
                 .build();
 
-        mockMvc.perform(post(Paths.AUTH + "/registration")
+        mockMvc.perform(post(Paths.AUTH_V1 + "/registration")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(createRegisteredUserRequest)))
                 .andExpectAll(
@@ -115,7 +115,7 @@ class UserControllerIT {
                 .displayName(createNotRegisteredUserRequest.name())
                 .build();
 
-        mockMvc.perform(post(Paths.USERS)
+        mockMvc.perform(post(Paths.USERS_V1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(createNotRegisteredUserRequest)))
                 .andExpectAll(
@@ -124,7 +124,7 @@ class UserControllerIT {
                         jsonPath("$.displayName").value(notRegistereduserDto.displayName())
                 );
 
-        mockMvc.perform(post(Paths.USERS)
+        mockMvc.perform(post(Paths.USERS_V1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(createNotRegisteredUserRequest)))
                 .andExpectAll(
@@ -137,7 +137,7 @@ class UserControllerIT {
     @Test
     @WithMockUser
     void testGetAllUsersEmpty() throws Exception {
-        mockMvc.perform(get(Paths.USERS))
+        mockMvc.perform(get(Paths.USERS_V1))
                 .andExpectAll(
                         status().isOk(),
                         content().json(new ObjectMapper().writeValueAsString(List.of())
@@ -155,7 +155,7 @@ class UserControllerIT {
                 .name(createNotRegisteredUserRequest.name())
                 .displayName(createNotRegisteredUserRequest.name())
                 .build();
-        mockMvc.perform(post(Paths.USERS)
+        mockMvc.perform(post(Paths.USERS_V1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(createNotRegisteredUserRequest))
                 )
@@ -176,7 +176,7 @@ class UserControllerIT {
                 .displayName(createRegisteredUserRequest.name() + " (" + createRegisteredUserRequest.email() + ")")
                 .build();
 
-        mockMvc.perform(post(Paths.AUTH + "/registration")
+        mockMvc.perform(post(Paths.AUTH_V1 + "/registration")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(createRegisteredUserRequest)))
                 .andExpectAll(
@@ -185,7 +185,7 @@ class UserControllerIT {
                         jsonPath("$.displayName").value(registeredUserDto.displayName())
                 );
 
-        mockMvc.perform(get(Paths.USERS))
+        mockMvc.perform(get(Paths.USERS_V1))
                 .andExpectAll(
                         status().isOk(),
                         jsonPath("$[0].name").value(notRegistereduserDto.name()),
