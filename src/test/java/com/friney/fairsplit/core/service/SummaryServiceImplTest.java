@@ -61,9 +61,9 @@ class SummaryServiceImplTest {
         UserDto userDto1 = UserDto.builder().id(1L).name("controller 1").displayName("controller 1").build();
         UserDto userDto2 = UserDto.builder().id(2L).name("controller 2").displayName("controller 2").build();
         UserDto userDto3 = UserDto.builder().id(3L).name("controller 3").displayName("controller 3").build();
-        when(userMapper.map(user1)).thenReturn(userDto1);
-        when(userMapper.map(user2)).thenReturn(userDto2);
-        when(userMapper.map(user3)).thenReturn(userDto3);
+        when(userMapper.mapUser(user1)).thenReturn(userDto1);
+        when(userMapper.mapUser(user2)).thenReturn(userDto2);
+        when(userMapper.mapUser(user3)).thenReturn(userDto3);
         Expense expense1 = Expense.builder()
                 .id(1L)
                 .amount(BigDecimal.valueOf(100))

@@ -1,10 +1,11 @@
-package com.friney.fairsplit.api.controller;
+package com.friney.fairsplit.api.controller.v1;
 
 import com.friney.fairsplit.api.Paths;
-import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberCreateDto;
+import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberCreateRequest;
 import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberDto;
-import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberUpdateDto;
+import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberUpdateRequest;
 import com.friney.fairsplit.core.service.expense.member.ExpenseMemberService;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(Paths.EXPENSES_MEMBERS)
+@RequestMapping(Paths.EXPENSES_MEMBERS_V1)
 @RequiredArgsConstructor
 public class ExpenseMemberController {
 
@@ -34,14 +35,14 @@ public class ExpenseMemberController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ExpenseMemberDto create(@RequestBody ExpenseMemberCreateDto expenseMemberCreateDto, @PathVariable Long expenseId) {
-        return expenseMemberService.create(expenseMemberCreateDto, expenseId);
+    public ExpenseMemberDto create(@Valid @RequestBody ExpenseMemberCreateRequest expenseMemberCreateRequest, @PathVariable Long expenseId) {
+        return expenseMemberService.create(expenseMemberCreateRequest, expenseId);
     }
 
     @PatchMapping("{id}")
-    public ExpenseMemberDto update(@RequestBody ExpenseMemberUpdateDto expenseMemberUpdateDto, @PathVariable Long id,
+    public ExpenseMemberDto update(@Valid @RequestBody ExpenseMemberUpdateRequest expenseMemberUpdateRequest, @PathVariable Long id,
                                    @PathVariable Long expenseId, @AuthenticationPrincipal UserDetails userDetails) {
-        return expenseMemberService.update(expenseMemberUpdateDto, id, expenseId, userDetails);
+        return expenseMemberService.update(expenseMemberUpdateRequest, id, expenseId, userDetails);
     }
 
     @DeleteMapping("{id}")

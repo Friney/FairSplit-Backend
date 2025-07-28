@@ -1,10 +1,11 @@
-package com.friney.fairsplit.api.controller;
+package com.friney.fairsplit.api.controller.v1;
 
 import com.friney.fairsplit.api.Paths;
-import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserRequest;
 import com.friney.fairsplit.api.dto.user.UserDto;
-import com.friney.fairsplit.api.dto.user.UserUpdateDto;
+import com.friney.fairsplit.api.dto.user.UserUpdateRequest;
 import com.friney.fairsplit.core.service.user.UserService;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(Paths.USERS)
+@RequestMapping(Paths.USERS_V1)
 @RequiredArgsConstructor
 public class UserController {
 
@@ -27,7 +28,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto create(@RequestBody CreateNotRegisteredUserDto user) {
+    public UserDto create(@Valid @RequestBody CreateNotRegisteredUserRequest user) {
         return userService.addNotRegisteredUser(user);
     }
 
@@ -37,8 +38,8 @@ public class UserController {
     }
 
     @PatchMapping("{id}")
-    public UserDto update(@RequestBody UserUpdateDto userUpdateDto, @PathVariable Long id) {
-        return userService.updateNotRegisteredUser(userUpdateDto, id);
+    public UserDto update(@Valid @RequestBody UserUpdateRequest userUpdateRequest, @PathVariable Long id) {
+        return userService.updateNotRegisteredUser(userUpdateRequest, id);
     }
 
 

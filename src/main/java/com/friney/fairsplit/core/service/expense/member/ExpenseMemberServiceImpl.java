@@ -1,18 +1,17 @@
 package com.friney.fairsplit.core.service.expense.member;
 
-import com.friney.fairsplit.api.dto.expense.ExpenseDto;
-import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberCreateDto;
+import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberCreateRequest;
 import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberDto;
-import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberUpdateDto;
+import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberUpdateRequest;
 import com.friney.fairsplit.core.entity.expense.member.ExpenseMember;
 import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.mapper.ExpenseMemberMapper;
 import com.friney.fairsplit.core.repository.ExpenseMemberRepository;
 import com.friney.fairsplit.core.service.expense.ExpenseService;
 import com.friney.fairsplit.core.service.user.UserService;
-import java.util.Comparator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -28,16 +27,17 @@ public class ExpenseMemberServiceImpl implements ExpenseMemberService {
 
     @Override
     public List<ExpenseMemberDto> getAllByExpenseId(Long expenseId) {
-        ExpenseDto expense = expenseService.getDtoById(expenseId);
-        List<ExpenseMemberDto> expenseMembers = expense.expenseMembers();
-        expenseMembers.sort(Comparator.comparing(ExpenseMemberDto::id));
-        return expenseMembers;
+        if (!expenseService.isExists(expenseId)) {
+            throw new ServiceException("expense with id " + expenseId + " not found", HttpStatus.NOT_FOUND);
+        }
+        Sort sort = Sort.sort(ExpenseMember.class).by(ExpenseMember::getId).descending();
+        return expenseMemberMapper.map(expenseMemberRepository.findAllByExpenseId(expenseId, sort));
     }
 
     @Override
-    public ExpenseMemberDto create(ExpenseMemberCreateDto expenseMemberCreateDto, Long expenseId) {
+    public ExpenseMemberDto create(ExpenseMemberCreateRequest expenseMemberCreateRequest, Long expenseId) {
         ExpenseMember expenseMember = ExpenseMember.builder()
-                .user(userService.getById(expenseMemberCreateDto.userId()))
+                .user(userService.getById(expenseMemberCreateRequest.userId()))
                 .expense(expenseService.getById(expenseId))
                 .build();
         return expenseMemberMapper.map(expenseMemberRepository.save(expenseMember));
@@ -50,7 +50,7 @@ public class ExpenseMemberServiceImpl implements ExpenseMemberService {
     }
 
     @Override
-    public ExpenseMemberDto update(ExpenseMemberUpdateDto expenseMemberCreateDto, Long id, Long expenseId, UserDetails userDetails) {
+    public ExpenseMemberDto update(ExpenseMemberUpdateRequest expenseMemberCreateDto, Long id, Long expenseId, UserDetails userDetails) {
         ExpenseMember expenseMember = getById(id);
         validateChangeRequest(expenseMember, expenseId, userDetails);
 

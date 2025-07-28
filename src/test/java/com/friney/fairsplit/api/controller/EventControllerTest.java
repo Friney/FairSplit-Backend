@@ -1,8 +1,9 @@
 package com.friney.fairsplit.api.controller;
 
-import com.friney.fairsplit.api.dto.event.EventCreateDto;
+import com.friney.fairsplit.api.controller.v1.EventController;
+import com.friney.fairsplit.api.dto.event.EventCreateRequest;
 import com.friney.fairsplit.api.dto.event.EventDto;
-import com.friney.fairsplit.api.dto.event.EventUpdateDto;
+import com.friney.fairsplit.api.dto.event.EventUpdateRequest;
 import com.friney.fairsplit.core.service.event.EventService;
 import java.util.Arrays;
 import java.util.List;
@@ -51,7 +52,7 @@ class EventControllerTest {
 
     @Test
     void testCreate() {
-        EventCreateDto createDto = EventCreateDto.builder()
+        EventCreateRequest createDto = EventCreateRequest.builder()
                 .name("New event")
                 .build();
 
@@ -70,7 +71,7 @@ class EventControllerTest {
 
     @Test
     void testUpdate() {
-        EventUpdateDto updateDto = EventUpdateDto.builder()
+        EventUpdateRequest updateDto = EventUpdateRequest.builder()
                 .name("Updated event")
                 .build();
 

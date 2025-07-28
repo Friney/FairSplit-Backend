@@ -1,14 +1,14 @@
 package com.friney.fairsplit.core.configs;
 
+import com.friney.fairsplit.api.Paths;
 import com.friney.fairsplit.core.security.JwtFilter;
 import com.friney.fairsplit.core.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -36,9 +36,8 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/**", "/swagger-ui/**").permitAll()
-//                                .requestMatchers(Paths.AUTH + "/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-//                                .anyRequest().authenticated()
+                                .requestMatchers(Paths.AUTH_V1 + "/login", Paths.AUTH_V1 + "/refresh", Paths.AUTH_V1 + "/registration", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                                .anyRequest().authenticated()
                 )
                 .sessionManagement(
                         session -> session
@@ -54,15 +53,10 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider() {
+    public AuthenticationManager authenticationManager() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userService);
         authProvider.setPasswordEncoder(getPasswordEncoder());
-        return authProvider;
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
+        return new ProviderManager(authProvider);
     }
 }

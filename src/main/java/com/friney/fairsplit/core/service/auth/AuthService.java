@@ -1,27 +1,27 @@
 package com.friney.fairsplit.core.service.auth;
 
 import com.friney.fairsplit.api.dto.jwt.JwtAuthenticationDto;
-import com.friney.fairsplit.api.dto.jwt.RefreshTokenDto;
-import com.friney.fairsplit.api.dto.user.CreateRegisteredUserDto;
-import com.friney.fairsplit.api.dto.user.UserChangePasswordDto;
-import com.friney.fairsplit.api.dto.user.UserCredentialsDto;
-import com.friney.fairsplit.api.dto.user.UserDto;
-import com.friney.fairsplit.api.dto.user.UserUpdateDto;
+import com.friney.fairsplit.api.dto.jwt.RefreshTokenRequest;
+import com.friney.fairsplit.api.dto.user.CreateRegisteredUserRequest;
+import com.friney.fairsplit.api.dto.user.RegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.UserChangePasswordRequest;
+import com.friney.fairsplit.api.dto.user.UserCredentialsRequest;
+import com.friney.fairsplit.api.dto.user.UserUpdateRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public interface AuthService {
 
-    JwtAuthenticationDto login(UserCredentialsDto user);
+    JwtAuthenticationDto login(UserCredentialsRequest user);
 
-    UserDto registration(CreateRegisteredUserDto user);
+    RegisteredUserDto registration(CreateRegisteredUserRequest user);
 
-    JwtAuthenticationDto refresh(RefreshTokenDto refreshTokenDto);
+    JwtAuthenticationDto refresh(RefreshTokenRequest refreshTokenRequest);
 
-    void changePassword(UserChangePasswordDto userChangePasswordDto, UserDetails userDetails);
+    void changePassword(UserChangePasswordRequest userChangePasswordRequest, UserDetails userDetails);
 
-    UserDto update(UserUpdateDto userUpdateDto, UserDetails userDetails);
+    RegisteredUserDto update(UserUpdateRequest userUpdateRequest, UserDetails userDetails);
 
     void delete(UserDetails userDetails);
 
-    UserDto loadUser(UserDetails userDetails);
+    RegisteredUserDto loadUser(UserDetails userDetails);
 }

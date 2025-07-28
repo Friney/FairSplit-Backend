@@ -1,5 +1,6 @@
 package com.friney.fairsplit.api.controller;
 
+import com.friney.fairsplit.api.controller.v1.SummaryController;
 import com.friney.fairsplit.api.dto.summary.SummaryDto;
 import com.friney.fairsplit.core.service.summary.SummaryService;
 import java.math.BigDecimal;

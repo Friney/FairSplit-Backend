@@ -1,8 +1,9 @@
 package com.friney.fairsplit.core.service.user;
 
-import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserRequest;
+import com.friney.fairsplit.api.dto.user.RegisteredUserDto;
 import com.friney.fairsplit.api.dto.user.UserDto;
-import com.friney.fairsplit.api.dto.user.UserUpdateDto;
+import com.friney.fairsplit.api.dto.user.UserUpdateRequest;
 import com.friney.fairsplit.core.entity.user.NotRegisteredUser;
 import com.friney.fairsplit.core.entity.user.RegisteredUser;
 import com.friney.fairsplit.core.entity.user.User;
@@ -13,6 +14,7 @@ import com.friney.fairsplit.core.repository.RegisteredUserRepository;
 import com.friney.fairsplit.core.repository.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -29,7 +31,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> getAll() {
-        return userMapper.map(userRepository.findAll());
+        Sort sort = Sort.sort(User.class).by(User::getName);
+        return userMapper.mapUser(userRepository.findAll(sort));
     }
 
     @Override
@@ -39,25 +42,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto addRegisteredUser(RegisteredUser user) {
+    public RegisteredUserDto addRegisteredUser(RegisteredUser user) {
         registeredUserRepository.findByEmail(user.getEmail()).ifPresent(
                 u -> {
                     throw new ServiceException("user with email " + u.getEmail() + " already exists", HttpStatus.BAD_REQUEST);
                 });
 
-        return userMapper.map(registeredUserRepository.save(user));
+        return userMapper.mapRegisteredUser(registeredUserRepository.save(user));
     }
 
     @Override
-    public UserDto addNotRegisteredUser(CreateNotRegisteredUserDto userDto) {
+    public UserDto addNotRegisteredUser(CreateNotRegisteredUserRequest userDto) {
         return notRegisteredUserRepository.findByName(userDto.name())
-                .map(userMapper::map)
+                .map(userMapper::mapUser)
                 .orElseGet(() -> {
                             NotRegisteredUser user = NotRegisteredUser.builder()
                                     .name(userDto.name())
                                     .build();
 
-                            return userMapper.map(notRegisteredUserRepository.save(user));
+                            return userMapper.mapUser(notRegisteredUserRepository.save(user));
                         }
                 );
     }
@@ -69,8 +72,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto findDtoByEmail(String username) {
-        return userMapper.map(findByEmail(username));
+    public RegisteredUserDto findRegisteredDtoByEmail(String username) {
+        return userMapper.mapRegisteredUser(findByEmail(username));
     }
 
     @Override
@@ -83,8 +86,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto updateRegisteredUser(RegisteredUser user) {
-        return userMapper.map(registeredUserRepository.save(user));
+    public RegisteredUserDto updateRegisteredUser(RegisteredUser user) {
+        return userMapper.mapRegisteredUser(registeredUserRepository.save(user));
     }
 
     @Override
@@ -93,12 +96,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto updateNotRegisteredUser(UserUpdateDto userUpdateDto, Long id) {
+    public UserDto updateNotRegisteredUser(UserUpdateRequest userUpdateRequest, Long id) {
         // TODO Сделать проверку использования юзера, если не где не используется, то обновить
-        CreateNotRegisteredUserDto createNotRegisteredUserDto = CreateNotRegisteredUserDto.builder()
-                .name(userUpdateDto.name())
+        CreateNotRegisteredUserRequest createNotRegisteredUserRequest = CreateNotRegisteredUserRequest.builder()
+                .name(userUpdateRequest.name())
                 .build();
-        return addNotRegisteredUser(createNotRegisteredUserDto);
+        return addNotRegisteredUser(createNotRegisteredUserRequest);
     }
 
     @Override

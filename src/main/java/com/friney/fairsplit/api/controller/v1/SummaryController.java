@@ -1,4 +1,4 @@
-package com.friney.fairsplit.api.controller;
+package com.friney.fairsplit.api.controller.v1;
 
 import com.friney.fairsplit.api.Paths;
 import com.friney.fairsplit.api.dto.summary.SummaryDto;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(Paths.SUMMARY)
+@RequestMapping(Paths.SUMMARY_V1)
 @RequiredArgsConstructor
 public class SummaryController {
 

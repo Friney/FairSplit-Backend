@@ -1,8 +1,8 @@
 package com.friney.fairsplit.core.service;
 
-import com.friney.fairsplit.api.dto.event.EventCreateDto;
+import com.friney.fairsplit.api.dto.event.EventCreateRequest;
 import com.friney.fairsplit.api.dto.event.EventDto;
-import com.friney.fairsplit.api.dto.event.EventUpdateDto;
+import com.friney.fairsplit.api.dto.event.EventUpdateRequest;
 import com.friney.fairsplit.core.entity.event.Event;
 import com.friney.fairsplit.core.entity.user.RegisteredUser;
 import com.friney.fairsplit.core.exception.ServiceException;
@@ -18,6 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -73,14 +74,16 @@ class EventServiceImplTest {
                 .email(userDetails.getUsername())
                 .build();
 
+
+        Sort sort = Sort.sort(Event.class).by(Event::getId).descending();
         when(userService.findByEmail(userDetails.getUsername())).thenReturn(registeredUser);
-        when(eventRepository.findAllByOwner(registeredUser)).thenReturn(events);
+        when(eventRepository.findAllByOwner(registeredUser, sort)).thenReturn(events);
         when(eventMapper.map(events)).thenReturn(Arrays.asList(dto1, dto2));
 
         List<EventDto> result = eventService.getAllByUserDetails(userDetails);
 
         assertEquals(Arrays.asList(dto1, dto2), result);
-        verify(eventRepository, times(1)).findAllByOwner(registeredUser);
+        verify(eventRepository, times(1)).findAllByOwner(registeredUser, sort);
         verify(eventMapper, times(1)).map(events);
     }
 
@@ -91,13 +94,15 @@ class EventServiceImplTest {
                 .email(userDetails.getUsername())
                 .build();
 
+
+        Sort.TypedSort<Event> sort = Sort.sort(Event.class);
         when(userService.findByEmail(userDetails.getUsername())).thenReturn(registeredUser);
-        when(eventRepository.findAllByOwner(registeredUser)).thenReturn(List.of());
+        when(eventRepository.findAllByOwner(registeredUser, sort.by(Event::getId).descending())).thenReturn(List.of());
 
         List<EventDto> result = eventService.getAllByUserDetails(userDetails);
 
         assertTrue(result.isEmpty());
-        verify(eventRepository, times(1)).findAllByOwner(registeredUser);
+        verify(eventRepository, times(1)).findAllByOwner(registeredUser, sort.by(Event::getId).descending());
     }
 
     @Test
@@ -161,7 +166,7 @@ class EventServiceImplTest {
 
     @Test
     void testCreate() {
-        EventCreateDto createDto = EventCreateDto.builder()
+        EventCreateRequest createDto = EventCreateRequest.builder()
                 .name("event")
                 .build();
         Event event = Event.builder()
@@ -196,7 +201,7 @@ class EventServiceImplTest {
                 .owner(user)
                 .build();
 
-        EventUpdateDto updateDto = EventUpdateDto.builder()
+        EventUpdateRequest updateDto = EventUpdateRequest.builder()
                 .name("new name")
                 .build();
         EventDto dto = EventDto.builder()

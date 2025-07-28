@@ -1,8 +1,9 @@
 package com.friney.fairsplit.core.service;
 
-import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserRequest;
+import com.friney.fairsplit.api.dto.user.RegisteredUserDto;
 import com.friney.fairsplit.api.dto.user.UserDto;
-import com.friney.fairsplit.api.dto.user.UserUpdateDto;
+import com.friney.fairsplit.api.dto.user.UserUpdateRequest;
 import com.friney.fairsplit.core.entity.user.NotRegisteredUser;
 import com.friney.fairsplit.core.entity.user.RegisteredUser;
 import com.friney.fairsplit.core.entity.user.User;
@@ -20,6 +21,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -76,23 +78,27 @@ class UserServiceImplTest {
         List<User> users = Arrays.asList(user1, user2);
 
         List<UserDto> expectedUsers = Arrays.asList(userDto1, userDto2);
-        when(userRepository.findAll()).thenReturn(users);
-        when(userMapper.map(users)).thenReturn(expectedUsers);
+
+        Sort sort = Sort.sort(User.class).by(User::getName);
+
+        when(userRepository.findAll(sort)).thenReturn(users);
+        when(userMapper.mapUser(users)).thenReturn(expectedUsers);
 
         List<UserDto> result = userService.getAll();
 
         assertEquals(expectedUsers, result);
-        verify(userRepository, times(1)).findAll();
+        verify(userRepository, times(1)).findAll(sort);
     }
 
     @Test
     void testGetAllNoUsers() {
-        when(userRepository.findAll()).thenReturn(List.of());
+        Sort sort = Sort.sort(User.class).by(User::getName);
+        when(userRepository.findAll(sort)).thenReturn(List.of());
 
         List<UserDto> result = userService.getAll();
 
         assertTrue(result.isEmpty());
-        verify(userRepository, times(1)).findAll();
+        verify(userRepository, times(1)).findAll(sort);
     }
 
     @Test
@@ -129,16 +135,17 @@ class UserServiceImplTest {
                 .email("example@example.com")
                 .build();
 
-        UserDto expectedUser = UserDto.builder()
+        RegisteredUserDto expectedUser = RegisteredUserDto.builder()
                 .id(savedUser.getId())
+                .email(savedUser.getEmail())
                 .name(savedUser.getName())
-                .displayName(savedUser.getName() + " (example@example.com)")
+                .displayName(savedUser.getName() + " " + savedUser.getEmail())
                 .build();
 
         when(registeredUserRepository.save(any(RegisteredUser.class))).thenReturn(savedUser);
-        when(userMapper.map(any(User.class))).thenReturn(expectedUser);
+        when(userMapper.mapRegisteredUser(any(RegisteredUser.class))).thenReturn(expectedUser);
 
-        UserDto result = userService.addRegisteredUser(savedUser);
+        RegisteredUserDto result = userService.addRegisteredUser(savedUser);
 
         assertEquals(expectedUser, result);
         verify(registeredUserRepository, times(1)).save(any(RegisteredUser.class));
@@ -146,7 +153,7 @@ class UserServiceImplTest {
 
     @Test
     void testAddNotRegisteredUser() {
-        CreateNotRegisteredUserDto userDto = CreateNotRegisteredUserDto.builder()
+        CreateNotRegisteredUserRequest userDto = CreateNotRegisteredUserRequest.builder()
                 .name("controller")
                 .build();
         NotRegisteredUser savedUser = NotRegisteredUser.builder()
@@ -161,7 +168,7 @@ class UserServiceImplTest {
                 .build();
 
         when(notRegisteredUserRepository.save(any(NotRegisteredUser.class))).thenReturn(savedUser);
-        when(userMapper.map(any(User.class))).thenReturn(expectedUser);
+        when(userMapper.mapUser(any(User.class))).thenReturn(expectedUser);
 
         UserDto result = userService.addNotRegisteredUser(userDto);
 
@@ -197,16 +204,17 @@ class UserServiceImplTest {
                 .password("password")
                 .build();
 
-        UserDto userDto = UserDto.builder()
+        RegisteredUserDto userDto = RegisteredUserDto.builder()
                 .id(user.getId())
+                .email(user.getEmail())
                 .name(user.getName())
                 .displayName(user.getName() + " (example@example.com)")
                 .build();
 
         when(registeredUserRepository.save(any(RegisteredUser.class))).thenReturn(user);
-        when(userMapper.map(any(User.class))).thenReturn(userDto);
+        when(userMapper.mapRegisteredUser(any(RegisteredUser.class))).thenReturn(userDto);
 
-        UserDto result = userService.updateRegisteredUser(user);
+        RegisteredUserDto result = userService.updateRegisteredUser(user);
 
         assertEquals(userDto, result);
         verify(registeredUserRepository, times(1)).save(any(RegisteredUser.class));
@@ -230,13 +238,13 @@ class UserServiceImplTest {
 
     @Test
     void testUpdateNotRegisteredUser() {
-        UserUpdateDto userUpdateDto = UserUpdateDto.builder()
+        UserUpdateRequest userUpdateRequest = UserUpdateRequest.builder()
                 .name("controller")
                 .build();
 
         NotRegisteredUser user = NotRegisteredUser.builder()
                 .id(1L)
-                .name(userUpdateDto.name())
+                .name(userUpdateRequest.name())
                 .build();
 
         UserDto userDto = UserDto.builder()
@@ -246,9 +254,9 @@ class UserServiceImplTest {
                 .build();
 
         when(notRegisteredUserRepository.save(any(NotRegisteredUser.class))).thenReturn(user);
-        when(userMapper.map(any(User.class))).thenReturn(userDto);
+        when(userMapper.mapUser(any(User.class))).thenReturn(userDto);
 
-        UserDto result = userService.updateNotRegisteredUser(userUpdateDto, 1L);
+        UserDto result = userService.updateNotRegisteredUser(userUpdateRequest, 1L);
 
         assertEquals(userDto, result);
         verify(notRegisteredUserRepository, times(1)).save(any(NotRegisteredUser.class));

@@ -1,9 +1,8 @@
 package com.friney.fairsplit.core.service;
 
-import com.friney.fairsplit.api.dto.expense.ExpenseDto;
-import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberCreateDto;
+import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberCreateRequest;
 import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberDto;
-import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberUpdateDto;
+import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberUpdateRequest;
 import com.friney.fairsplit.api.dto.user.UserDto;
 import com.friney.fairsplit.core.entity.event.Event;
 import com.friney.fairsplit.core.entity.expense.Expense;
@@ -25,6 +24,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -67,42 +67,53 @@ class ExpenseMemberServiceImplTest {
                 .displayName("user 2")
                 .build();
 
-        ExpenseMemberDto dto1 = ExpenseMemberDto.builder()
+        ExpenseMember expenseMember1 = ExpenseMember.builder()
                 .id(1L)
+                .build();
+
+        ExpenseMember expenseMember2 = ExpenseMember.builder()
+                .id(2L)
+                .build();
+
+        ExpenseMemberDto dto1 = ExpenseMemberDto.builder()
+                .id(expenseMember1.getId())
                 .user(user1)
                 .build();
 
         ExpenseMemberDto dto2 = ExpenseMemberDto.builder()
-                .id(2L)
+                .id(expenseMember2.getId())
                 .user(user2)
                 .build();
 
-        List<ExpenseMemberDto> expectedDtos = Arrays.asList(dto1, dto2);
-        ExpenseDto expenseDto = ExpenseDto.builder()
-                .expenseMembers(expectedDtos)
-                .build();
+        List<ExpenseMemberDto> expenseMembersDto = Arrays.asList(dto1, dto2);
+        List<ExpenseMember> expenseMembers = Arrays.asList(expenseMember1, expenseMember2);
 
-        when(expenseService.getDtoById(1L)).thenReturn(expenseDto);
+        Sort sort = Sort.sort(ExpenseMember.class).by(ExpenseMember::getId).descending();
+
+        when(expenseService.isExists(1L)).thenReturn(true);
+        when(expenseMemberRepository.findAllByExpenseId(1L, sort)).thenReturn(expenseMembers);
+        when(expenseMemberMapper.map(expenseMembers)).thenReturn(expenseMembersDto);
+
         List<ExpenseMemberDto> result = expenseMemberService.getAllByExpenseId(1L);
-        assertEquals(expectedDtos, result);
-        verify(expenseService, times(1)).getDtoById(1L);
+        assertEquals(expenseMembersDto, result);
+        verify(expenseService, times(1)).isExists(1L);
+        verify(expenseMemberRepository, times(1)).findAllByExpenseId(1L, sort);
     }
 
     @Test
     void testGetAllByExpenseIdNotFound() {
-        when(expenseService.getDtoById(1L))
-                .thenThrow(new ServiceException("expense with id 1 not found", HttpStatus.NOT_FOUND));
+        when(expenseService.isExists(1L)).thenReturn(false);
 
         ServiceException exception = assertThrows(ServiceException.class, () -> expenseMemberService.getAllByExpenseId(1L));
 
         assertEquals("expense with id 1 not found", exception.getMessage());
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
-        verify(expenseService, times(1)).getDtoById(1L);
+        verify(expenseService, times(1)).isExists(1L);
     }
 
     @Test
     void testCreate() {
-        ExpenseMemberCreateDto createDto = ExpenseMemberCreateDto.builder()
+        ExpenseMemberCreateRequest createDto = ExpenseMemberCreateRequest.builder()
                 .userId(1L)
                 .build();
 
@@ -148,7 +159,7 @@ class ExpenseMemberServiceImplTest {
 
     @Test
     void testCreateUserNotFound() {
-        ExpenseMemberCreateDto createDto = ExpenseMemberCreateDto.builder()
+        ExpenseMemberCreateRequest createDto = ExpenseMemberCreateRequest.builder()
                 .userId(1L)
                 .build();
 
@@ -167,7 +178,7 @@ class ExpenseMemberServiceImplTest {
 
     @Test
     void testCreateExpenseNotFound() {
-        ExpenseMemberCreateDto createDto = ExpenseMemberCreateDto.builder()
+        ExpenseMemberCreateRequest createDto = ExpenseMemberCreateRequest.builder()
                 .userId(1L)
                 .build();
 
@@ -192,7 +203,7 @@ class ExpenseMemberServiceImplTest {
 
     @Test
     void testUpdate() {
-        ExpenseMemberUpdateDto updateDto = ExpenseMemberUpdateDto.builder()
+        ExpenseMemberUpdateRequest updateDto = ExpenseMemberUpdateRequest.builder()
                 .userId(1L)
                 .build();
 

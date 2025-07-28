@@ -29,7 +29,9 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     runtimeOnly 'org.postgresql:postgresql'
 
@@ -47,7 +49,8 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.mockito:mockito-core:5.17.0'
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9'
+    implementation 'org.apache.commons:commons-lang3:3.18.0'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     testImplementation 'org.springframework.boot:spring-boot-testcontainers'
@@ -58,13 +61,6 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
     jvmArgs "-javaagent:${configurations.testRuntimeClasspath.find { it.name.contains("byte-buddy-agent") }.absolutePath}"
-}
-
-sonar {
-    properties {
-        property 'sonar.host.url', System.getenv('SONAR_HOST_URL')
-        property 'sonar.token', System.getenv('SONAR_TOKEN')
-    }
 }
 
 jacocoTestReport {

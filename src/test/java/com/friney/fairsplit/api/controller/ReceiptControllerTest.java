@@ -1,8 +1,9 @@
 package com.friney.fairsplit.api.controller;
 
-import com.friney.fairsplit.api.dto.receipt.ReceiptCreateDto;
+import com.friney.fairsplit.api.controller.v1.ReceiptController;
+import com.friney.fairsplit.api.dto.receipt.ReceiptCreateRequest;
 import com.friney.fairsplit.api.dto.receipt.ReceiptDto;
-import com.friney.fairsplit.api.dto.receipt.ReceiptUpdateDto;
+import com.friney.fairsplit.api.dto.receipt.ReceiptUpdateRequest;
 import com.friney.fairsplit.api.dto.user.UserDto;
 import com.friney.fairsplit.core.service.receipt.ReceiptService;
 import java.util.Arrays;
@@ -66,7 +67,7 @@ class ReceiptControllerTest {
 
     @Test
     void testCreateReceipt() {
-        ReceiptCreateDto createDto = ReceiptCreateDto.builder()
+        ReceiptCreateRequest createDto = ReceiptCreateRequest.builder()
                 .name("Test receipt")
                 .userId(1L)
                 .build();
@@ -93,7 +94,7 @@ class ReceiptControllerTest {
 
     @Test
     void testUpdateReceipt() {
-        ReceiptUpdateDto updateDto = ReceiptUpdateDto.builder()
+        ReceiptUpdateRequest updateDto = ReceiptUpdateRequest.builder()
                 .name("Updated receipt")
                 .build();
 

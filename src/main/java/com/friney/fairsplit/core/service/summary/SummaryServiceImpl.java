@@ -93,7 +93,7 @@ public class SummaryServiceImpl implements SummaryService {
         List<ReceiptSummary> receiptSummaries = new ArrayList<>();
         for (Receipt receipt : receipts) {
             User recipient = receipt.getPaidByUser();
-            UserDto recipientDto = userMapper.map(recipient);
+            UserDto recipientDto = userMapper.mapUser(recipient);
             Set<Expense> expenses = receipt.getExpenses();
             if (expenses == null || expenses.isEmpty()) {
                 receiptSummaries.add(new ReceiptSummary(receipt.getName(), BigDecimal.ZERO, List.of(), List.of(), List.of()));
@@ -141,8 +141,8 @@ public class SummaryServiceImpl implements SummaryService {
             List<Debt> debts = new ArrayList<>();
             List<PayerInfo> payerInfos = new ArrayList<>();
             for (Map.Entry<User, BigDecimal> entry : payerInfoMap.entrySet()) {
-                UserDto fromDto = userMapper.map(entry.getKey());
-                UserDto toDto = userMapper.map(recipient);
+                UserDto fromDto = userMapper.mapUser(entry.getKey());
+                UserDto toDto = userMapper.mapUser(recipient);
                 debts.add(new Debt(fromDto, toDto, entry.getValue()));
                 payerInfos.add(new PayerInfo(fromDto, entry.getValue()));
             }

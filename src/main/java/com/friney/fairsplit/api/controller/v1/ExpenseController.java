@@ -1,10 +1,11 @@
-package com.friney.fairsplit.api.controller;
+package com.friney.fairsplit.api.controller.v1;
 
 import com.friney.fairsplit.api.Paths;
-import com.friney.fairsplit.api.dto.expense.ExpenseCreateDto;
+import com.friney.fairsplit.api.dto.expense.ExpenseCreateRequest;
 import com.friney.fairsplit.api.dto.expense.ExpenseDto;
-import com.friney.fairsplit.api.dto.expense.ExpenseUpdateDto;
+import com.friney.fairsplit.api.dto.expense.ExpenseUpdateRequest;
 import com.friney.fairsplit.core.service.expense.ExpenseService;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(Paths.EXPENSES)
+@RequestMapping(Paths.EXPENSES_V1)
 @RequiredArgsConstructor
 public class ExpenseController {
 
@@ -34,14 +35,14 @@ public class ExpenseController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ExpenseDto create(@RequestBody ExpenseCreateDto expenseCreateDto, @PathVariable Long receiptId) {
-        return expenseService.create(expenseCreateDto, receiptId);
+    public ExpenseDto create(@Valid @RequestBody ExpenseCreateRequest expenseCreateRequest, @PathVariable Long receiptId) {
+        return expenseService.create(expenseCreateRequest, receiptId);
     }
 
     @PatchMapping("{id}")
-    public ExpenseDto update(@RequestBody ExpenseUpdateDto expenseUpdateDto, @PathVariable Long id,
+    public ExpenseDto update(@Valid @RequestBody ExpenseUpdateRequest expenseUpdateRequest, @PathVariable Long id,
                              @PathVariable Long receiptId, @AuthenticationPrincipal UserDetails userDetails) {
-        return expenseService.update(expenseUpdateDto, id, receiptId, userDetails);
+        return expenseService.update(expenseUpdateRequest, id, receiptId, userDetails);
     }
 
     @DeleteMapping("{id}")

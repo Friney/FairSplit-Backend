@@ -1,9 +1,8 @@
 package com.friney.fairsplit.core.service;
 
-import com.friney.fairsplit.api.dto.event.EventDto;
-import com.friney.fairsplit.api.dto.receipt.ReceiptCreateDto;
+import com.friney.fairsplit.api.dto.receipt.ReceiptCreateRequest;
 import com.friney.fairsplit.api.dto.receipt.ReceiptDto;
-import com.friney.fairsplit.api.dto.receipt.ReceiptUpdateDto;
+import com.friney.fairsplit.api.dto.receipt.ReceiptUpdateRequest;
 import com.friney.fairsplit.api.dto.user.UserDto;
 import com.friney.fairsplit.core.entity.event.Event;
 import com.friney.fairsplit.core.entity.receipt.Receipt;
@@ -23,6 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -65,41 +65,54 @@ class ReceiptServiceImplTest {
                 .displayName("user 2")
                 .build();
 
-        ReceiptDto dto1 = ReceiptDto.builder()
+        Receipt receipt1 = Receipt.builder()
                 .id(1L)
                 .name("receipt 1")
+                .build();
+
+        Receipt receipt2 = Receipt.builder()
+                .id(2L)
+                .name("receipt 2")
+                .build();
+
+        ReceiptDto dto1 = ReceiptDto.builder()
+                .id(1L)
+                .name(receipt1.getName())
                 .paidByUser(user1)
                 .build();
 
         ReceiptDto dto2 = ReceiptDto.builder()
                 .id(2L)
-                .name("receipt 2")
+                .name(receipt2.getName())
                 .paidByUser(user2)
                 .build();
 
-        List<ReceiptDto> expectedDtos = Arrays.asList(dto1, dto2);
-        EventDto eventDto = EventDto.builder()
-                .receipts(expectedDtos)
-                .build();
+        List<ReceiptDto> receiptsDto = Arrays.asList(dto1, dto2);
+        List<Receipt> receipts = Arrays.asList(receipt1, receipt2);
 
-        when(eventService.getDtoById(1L)).thenReturn(eventDto);
+        Sort sort = Sort.sort(Receipt.class).by(Receipt::getId).descending();
+
+        when(eventService.isExists(1L)).thenReturn(true);
+        when(receiptRepository.findAllByEventId(1L, sort)).thenReturn(receipts);
+        when(receiptMapper.map(receipts)).thenReturn(receiptsDto);
+
 
         List<ReceiptDto> result = receiptService.getAllByEventId(1L);
 
-        assertEquals(expectedDtos, result);
-        verify(eventService, times(1)).getDtoById(1L);
+        assertEquals(receiptsDto, result);
+        verify(eventService, times(1)).isExists(1L);
+        verify(receiptRepository, times(1)).findAllByEventId(1L, sort);
     }
 
     @Test
     void testGetAllByEventIdEventNotFound() {
-        when(eventService.getDtoById(1L))
-                .thenThrow(new ServiceException("event with id 1 not found", HttpStatus.NOT_FOUND));
+        when(eventService.isExists(1L)).thenReturn(false);
 
         ServiceException exception = assertThrows(ServiceException.class, () -> receiptService.getAllByEventId(1L));
 
         assertEquals("event with id 1 not found", exception.getMessage());
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
-        verify(eventService, times(1)).getDtoById(1L);
+        verify(eventService, times(1)).isExists(1L);
     }
 
     @Test
@@ -151,7 +164,7 @@ class ReceiptServiceImplTest {
 
     @Test
     void testCreate() {
-        ReceiptCreateDto createDto = ReceiptCreateDto.builder()
+        ReceiptCreateRequest createDto = ReceiptCreateRequest.builder()
                 .name("Test receipt")
                 .userId(1L)
                 .build();
@@ -202,7 +215,7 @@ class ReceiptServiceImplTest {
     @Test
     void testCreateEventNotFound() {
         // Given
-        ReceiptCreateDto createDto = ReceiptCreateDto.builder()
+        ReceiptCreateRequest createDto = ReceiptCreateRequest.builder()
                 .name("Test receipt")
                 .userId(1L)
                 .build();
@@ -219,7 +232,7 @@ class ReceiptServiceImplTest {
 
     @Test
     void testCreateUserNotFound() {
-        ReceiptCreateDto createDto = ReceiptCreateDto.builder()
+        ReceiptCreateRequest createDto = ReceiptCreateRequest.builder()
                 .name("Test receipt")
                 .userId(1L)
                 .build();
@@ -243,7 +256,7 @@ class ReceiptServiceImplTest {
 
     @Test
     void testUpdate() {
-        ReceiptUpdateDto updateDto = ReceiptUpdateDto.builder()
+        ReceiptUpdateRequest updateDto = ReceiptUpdateRequest.builder()
                 .name("Updated receipt")
                 .build();
 

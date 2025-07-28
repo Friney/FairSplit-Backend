@@ -1,6 +1,8 @@
 package com.friney.fairsplit.core.service.jwt;
 
 import com.friney.fairsplit.api.dto.jwt.JwtAuthenticationDto;
+import com.friney.fairsplit.core.service.jwt.version.JwtVersionService;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
@@ -9,21 +11,26 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import javax.crypto.SecretKey;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class JwtServiceImpl implements JwtService {
 
     @Value("${jwt.secret}")
     private String jwtSecret;
 
-    @Value("${jwt.lifetime}")
+    @Value("${jwt.token-lifetime}")
     private Duration jwtLifetime;
 
+    @Value("${jwt.refresh-lifetime}")
     private final Duration refreshTokenLifetime = Duration.ofDays(7);
+
+    private final JwtVersionService jwtVersionService;
 
     @Override
     public JwtAuthenticationDto generateAuthToken(String email) {
@@ -34,10 +41,10 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public JwtAuthenticationDto refreshBaseToken(String email, String refreshToken) {
+    public JwtAuthenticationDto refreshTokens(String email, String refreshToken) {
         return JwtAuthenticationDto.builder()
                 .token(generateJwtToken(email))
-                .refreshToken(refreshToken)
+                .refreshToken(generateRefreshToken(email))
                 .build();
     }
 
@@ -54,12 +61,15 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public boolean validateToken(String token) {
         try {
-            Jwts.parser()
+            Claims claims = Jwts.parser()
                     .verifyWith(getSingInKey())
                     .build()
                     .parseSignedClaims(token)
                     .getPayload();
-            return true;
+
+            String email = claims.getSubject();
+            Long version = claims.get("version", Long.class);
+            return jwtVersionService.isValidVersion(email, version);
         } catch (Exception e) {
             log.info("{} -> {}", e.getClass(), e.getMessage());
             return false;
@@ -79,8 +89,10 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public String generateToken(String email, Duration duration) {
         Date date = Date.from(LocalDateTime.now().plus(duration).atZone(ZoneId.systemDefault()).toInstant());
+        Long version = jwtVersionService.getCurrentVersion(email);
         return Jwts.builder()
                 .subject(email)
+                .claim("version", version)
                 .expiration(date)
                 .signWith(getSingInKey())
                 .compact();

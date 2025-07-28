@@ -1,10 +1,11 @@
-package com.friney.fairsplit.api.controller;
+package com.friney.fairsplit.api.controller.v1;
 
 import com.friney.fairsplit.api.Paths;
-import com.friney.fairsplit.api.dto.event.EventCreateDto;
+import com.friney.fairsplit.api.dto.event.EventCreateRequest;
 import com.friney.fairsplit.api.dto.event.EventDto;
-import com.friney.fairsplit.api.dto.event.EventUpdateDto;
+import com.friney.fairsplit.api.dto.event.EventUpdateRequest;
 import com.friney.fairsplit.core.service.event.EventService;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(Paths.EVENTS)
+@RequestMapping(Paths.EVENTS_V1)
 @RequiredArgsConstructor
 public class EventController {
 
@@ -34,13 +35,13 @@ public class EventController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public EventDto create(@RequestBody EventCreateDto eventCreateDto, @AuthenticationPrincipal UserDetails userDetails) {
-        return eventService.create(eventCreateDto, userDetails);
+    public EventDto create(@Valid @RequestBody EventCreateRequest eventCreateRequest, @AuthenticationPrincipal UserDetails userDetails) {
+        return eventService.create(eventCreateRequest, userDetails);
     }
 
     @PatchMapping("{id}")
-    public EventDto update(@RequestBody EventUpdateDto eventUpdateDto, @PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
-        return eventService.update(eventUpdateDto, id, userDetails);
+    public EventDto update(@Valid @RequestBody EventUpdateRequest eventUpdateRequest, @PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
+        return eventService.update(eventUpdateRequest, id, userDetails);
     }
 
     @DeleteMapping("{id}")
