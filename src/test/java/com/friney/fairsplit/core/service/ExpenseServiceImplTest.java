@@ -1,8 +1,8 @@
 package com.friney.fairsplit.core.service;
 
-import com.friney.fairsplit.api.dto.expense.ExpenseCreateDto;
+import com.friney.fairsplit.api.dto.expense.ExpenseCreateRequest;
 import com.friney.fairsplit.api.dto.expense.ExpenseDto;
-import com.friney.fairsplit.api.dto.expense.ExpenseUpdateDto;
+import com.friney.fairsplit.api.dto.expense.ExpenseUpdateRequest;
 import com.friney.fairsplit.core.entity.event.Event;
 import com.friney.fairsplit.core.entity.expense.Expense;
 import com.friney.fairsplit.core.entity.receipt.Receipt;
@@ -137,7 +137,7 @@ class ExpenseServiceImplTest {
 
     @Test
     void testCreate() {
-        ExpenseCreateDto createDto = ExpenseCreateDto.builder()
+        ExpenseCreateRequest createDto = ExpenseCreateRequest.builder()
                 .name("Test expense")
                 .amount(BigDecimal.valueOf(100))
                 .build();
@@ -174,7 +174,7 @@ class ExpenseServiceImplTest {
 
     @Test
     void testCreateReceiptNotFound() {
-        ExpenseCreateDto createDto = ExpenseCreateDto.builder()
+        ExpenseCreateRequest createDto = ExpenseCreateRequest.builder()
                 .name("Test expense")
                 .amount(BigDecimal.valueOf(100))
                 .build();
@@ -191,7 +191,7 @@ class ExpenseServiceImplTest {
 
     @Test
     void testUpdate() {
-        ExpenseUpdateDto updateDto = ExpenseUpdateDto.builder()
+        ExpenseUpdateRequest updateDto = ExpenseUpdateRequest.builder()
                 .name("Updated expense")
                 .build();
 

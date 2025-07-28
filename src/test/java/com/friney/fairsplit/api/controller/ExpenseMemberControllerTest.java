@@ -1,6 +1,7 @@
 package com.friney.fairsplit.api.controller;
 
-import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberCreateDto;
+import com.friney.fairsplit.api.controller.v1.ExpenseMemberController;
+import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberCreateRequest;
 import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberDto;
 import com.friney.fairsplit.api.dto.user.UserDto;
 import com.friney.fairsplit.core.service.expense.member.ExpenseMemberService;
@@ -65,7 +66,7 @@ class ExpenseMemberControllerTest {
                 .displayName("user")
                 .build();
 
-        ExpenseMemberCreateDto createDto = ExpenseMemberCreateDto.builder()
+        ExpenseMemberCreateRequest createDto = ExpenseMemberCreateRequest.builder()
                 .userId(1L)
                 .build();
 

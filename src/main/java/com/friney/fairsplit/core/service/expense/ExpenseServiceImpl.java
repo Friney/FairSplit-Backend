@@ -1,8 +1,8 @@
 package com.friney.fairsplit.core.service.expense;
 
-import com.friney.fairsplit.api.dto.expense.ExpenseCreateDto;
+import com.friney.fairsplit.api.dto.expense.ExpenseCreateRequest;
 import com.friney.fairsplit.api.dto.expense.ExpenseDto;
-import com.friney.fairsplit.api.dto.expense.ExpenseUpdateDto;
+import com.friney.fairsplit.api.dto.expense.ExpenseUpdateRequest;
 import com.friney.fairsplit.core.entity.expense.Expense;
 import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.mapper.ExpenseMapper;
@@ -44,17 +44,17 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public ExpenseDto create(ExpenseCreateDto expenseCreateDto, Long receiptId) {
+    public ExpenseDto create(ExpenseCreateRequest expenseCreateRequest, Long receiptId) {
         Expense expense = Expense.builder()
-                .name(expenseCreateDto.name())
-                .amount(expenseCreateDto.amount())
+                .name(expenseCreateRequest.name())
+                .amount(expenseCreateRequest.amount())
                 .receipt(receiptService.getById(receiptId))
                 .build();
         return expenseMapper.map(expenseRepository.save(expense));
     }
 
     @Override
-    public ExpenseDto update(ExpenseUpdateDto expenseCreateDto, Long id, Long receiptId, UserDetails userDetails) {
+    public ExpenseDto update(ExpenseUpdateRequest expenseCreateDto, Long id, Long receiptId, UserDetails userDetails) {
         Expense expense = getById(id);
         validateChangeRequest(expense, receiptId, userDetails);
 

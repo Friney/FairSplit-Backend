@@ -1,12 +1,13 @@
 package com.friney.fairsplit.api.controller;
 
+import com.friney.fairsplit.api.controller.v1.AuthController;
 import com.friney.fairsplit.api.dto.jwt.JwtAuthenticationDto;
-import com.friney.fairsplit.api.dto.jwt.RefreshTokenDto;
-import com.friney.fairsplit.api.dto.user.CreateRegisteredUserDto;
+import com.friney.fairsplit.api.dto.jwt.RefreshTokenRequest;
+import com.friney.fairsplit.api.dto.user.CreateRegisteredUserRequest;
 import com.friney.fairsplit.api.dto.user.RegisteredUserDto;
-import com.friney.fairsplit.api.dto.user.UserChangePasswordDto;
-import com.friney.fairsplit.api.dto.user.UserCredentialsDto;
-import com.friney.fairsplit.api.dto.user.UserUpdateDto;
+import com.friney.fairsplit.api.dto.user.UserChangePasswordRequest;
+import com.friney.fairsplit.api.dto.user.UserCredentialsRequest;
+import com.friney.fairsplit.api.dto.user.UserUpdateRequest;
 import com.friney.fairsplit.core.service.auth.AuthService;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ class AuthControllerTest {
 
     @Test
     void testLogin() {
-        UserCredentialsDto credentials = UserCredentialsDto.builder()
+        UserCredentialsRequest credentials = UserCredentialsRequest.builder()
                 .email("controller@example.com")
                 .password("password")
                 .build();
@@ -51,7 +52,7 @@ class AuthControllerTest {
 
     @Test
     void testRefresh() {
-        RefreshTokenDto refreshTokenDto = RefreshTokenDto.builder()
+        RefreshTokenRequest refreshTokenRequest = RefreshTokenRequest.builder()
                 .refreshToken("refreshToken")
                 .build();
         JwtAuthenticationDto expectedResponse = JwtAuthenticationDto.builder()
@@ -59,17 +60,17 @@ class AuthControllerTest {
                 .refreshToken("refreshToken")
                 .build();
 
-        when(authService.refresh(refreshTokenDto)).thenReturn(expectedResponse);
+        when(authService.refresh(refreshTokenRequest)).thenReturn(expectedResponse);
 
-        JwtAuthenticationDto result = authController.refresh(refreshTokenDto);
+        JwtAuthenticationDto result = authController.refresh(refreshTokenRequest);
 
         assertEquals(expectedResponse, result);
-        verify(authService, times(1)).refresh(refreshTokenDto);
+        verify(authService, times(1)).refresh(refreshTokenRequest);
     }
 
     @Test
     void testRegister() {
-        CreateRegisteredUserDto registrationDto = CreateRegisteredUserDto.builder()
+        CreateRegisteredUserRequest registrationDto = CreateRegisteredUserRequest.builder()
                 .name("controller")
                 .email("controller@example.com")
                 .password("password")
@@ -93,7 +94,7 @@ class AuthControllerTest {
 
     @Test
     void testChangePassword() {
-        UserChangePasswordDto changePasswordDto = UserChangePasswordDto.builder()
+        UserChangePasswordRequest changePasswordDto = UserChangePasswordRequest.builder()
                 .oldPassword("oldPassword")
                 .newPassword("newPassword")
                 .build();
@@ -107,7 +108,7 @@ class AuthControllerTest {
 
     @Test
     void testUpdate() {
-        UserUpdateDto userUpdateDto = UserUpdateDto.builder()
+        UserUpdateRequest userUpdateRequest = UserUpdateRequest.builder()
                 .name("newName")
                 .build();
         RegisteredUserDto expectedUser = RegisteredUserDto.builder()
@@ -118,12 +119,12 @@ class AuthControllerTest {
                 .build();
         UserDetails userDetails = createTestUserDetails();
 
-        when(authService.update(userUpdateDto, userDetails)).thenReturn(expectedUser);
+        when(authService.update(userUpdateRequest, userDetails)).thenReturn(expectedUser);
 
-        RegisteredUserDto result = authController.update(userUpdateDto, userDetails);
+        RegisteredUserDto result = authController.update(userUpdateRequest, userDetails);
 
         assertEquals(expectedUser, result);
-        verify(authService, times(1)).update(userUpdateDto, userDetails);
+        verify(authService, times(1)).update(userUpdateRequest, userDetails);
     }
 
     @Test

@@ -1,8 +1,8 @@
 package com.friney.fairsplit.core.service;
 
-import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberCreateDto;
+import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberCreateRequest;
 import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberDto;
-import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberUpdateDto;
+import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberUpdateRequest;
 import com.friney.fairsplit.api.dto.user.UserDto;
 import com.friney.fairsplit.core.entity.event.Event;
 import com.friney.fairsplit.core.entity.expense.Expense;
@@ -113,7 +113,7 @@ class ExpenseMemberServiceImplTest {
 
     @Test
     void testCreate() {
-        ExpenseMemberCreateDto createDto = ExpenseMemberCreateDto.builder()
+        ExpenseMemberCreateRequest createDto = ExpenseMemberCreateRequest.builder()
                 .userId(1L)
                 .build();
 
@@ -159,7 +159,7 @@ class ExpenseMemberServiceImplTest {
 
     @Test
     void testCreateUserNotFound() {
-        ExpenseMemberCreateDto createDto = ExpenseMemberCreateDto.builder()
+        ExpenseMemberCreateRequest createDto = ExpenseMemberCreateRequest.builder()
                 .userId(1L)
                 .build();
 
@@ -178,7 +178,7 @@ class ExpenseMemberServiceImplTest {
 
     @Test
     void testCreateExpenseNotFound() {
-        ExpenseMemberCreateDto createDto = ExpenseMemberCreateDto.builder()
+        ExpenseMemberCreateRequest createDto = ExpenseMemberCreateRequest.builder()
                 .userId(1L)
                 .build();
 
@@ -203,7 +203,7 @@ class ExpenseMemberServiceImplTest {
 
     @Test
     void testUpdate() {
-        ExpenseMemberUpdateDto updateDto = ExpenseMemberUpdateDto.builder()
+        ExpenseMemberUpdateRequest updateDto = ExpenseMemberUpdateRequest.builder()
                 .userId(1L)
                 .build();
 

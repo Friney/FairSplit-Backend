@@ -2,18 +2,18 @@ package com.friney.fairsplit.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.friney.fairsplit.api.Paths;
-import com.friney.fairsplit.api.dto.event.EventCreateDto;
+import com.friney.fairsplit.api.dto.event.EventCreateRequest;
 import com.friney.fairsplit.api.dto.event.EventDto;
-import com.friney.fairsplit.api.dto.expense.ExpenseCreateDto;
+import com.friney.fairsplit.api.dto.expense.ExpenseCreateRequest;
 import com.friney.fairsplit.api.dto.expense.ExpenseDto;
-import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberCreateDto;
-import com.friney.fairsplit.api.dto.receipt.ReceiptCreateDto;
+import com.friney.fairsplit.api.dto.expense.member.ExpenseMemberCreateRequest;
+import com.friney.fairsplit.api.dto.receipt.ReceiptCreateRequest;
 import com.friney.fairsplit.api.dto.receipt.ReceiptDto;
 import com.friney.fairsplit.api.dto.summary.ExpenseSummaryDto;
 import com.friney.fairsplit.api.dto.summary.ReceiptSummaryDto;
 import com.friney.fairsplit.api.dto.summary.SummaryDto;
-import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserDto;
-import com.friney.fairsplit.api.dto.user.CreateRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserRequest;
+import com.friney.fairsplit.api.dto.user.CreateRegisteredUserRequest;
 import com.friney.fairsplit.api.dto.user.UserDto;
 import com.friney.fairsplit.core.entity.summary.Debt;
 import com.friney.fairsplit.core.entity.summary.PayerInfo;
@@ -343,12 +343,12 @@ class SummaryControllerIT {
     }
 
     private EventDto createEvent() throws Exception {
-        EventCreateDto createDto = EventCreateDto.builder()
+        EventCreateRequest createDto = EventCreateRequest.builder()
                 .name("event")
                 .description("description")
                 .build();
 
-        String response = mockMvc.perform(post(Paths.EVENTS)
+        String response = mockMvc.perform(post(Paths.EVENTS_V1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(createDto)))
                 .andExpect(status().isCreated())
@@ -362,11 +362,11 @@ class SummaryControllerIT {
     }
 
     private User createNotRegisteredUser(String name) throws Exception {
-        CreateNotRegisteredUserDto userDto = CreateNotRegisteredUserDto.builder()
+        CreateNotRegisteredUserRequest userDto = CreateNotRegisteredUserRequest.builder()
                 .name(name)
                 .build();
 
-        String response = mockMvc.perform(post(Paths.USERS)
+        String response = mockMvc.perform(post(Paths.USERS_V1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isCreated())
@@ -379,14 +379,14 @@ class SummaryControllerIT {
     }
 
     private User createRegisteredUser(String name, String email) throws Exception {
-        CreateRegisteredUserDto userDto = CreateRegisteredUserDto.builder()
+        CreateRegisteredUserRequest userDto = CreateRegisteredUserRequest.builder()
                 .name(name)
                 .email(email)
                 .password("password")
                 .confirmPassword("password")
                 .build();
 
-        String response = mockMvc.perform(post(Paths.AUTH + "/registration")
+        String response = mockMvc.perform(post(Paths.AUTH_V1 + "/registration")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userDto)))
                 .andExpect(status().isCreated())
@@ -399,7 +399,7 @@ class SummaryControllerIT {
     }
 
     private ReceiptDto createReceipt(Long eventId, String name, Long userId) throws Exception {
-        ReceiptCreateDto receiptDto = ReceiptCreateDto.builder()
+        ReceiptCreateRequest receiptDto = ReceiptCreateRequest.builder()
                 .name(name)
                 .userId(userId)
                 .build();
@@ -418,7 +418,7 @@ class SummaryControllerIT {
     }
 
     private ExpenseDto createExpense(Long receiptId, String name, BigDecimal amount) throws Exception {
-        ExpenseCreateDto expenseDto = ExpenseCreateDto.builder()
+        ExpenseCreateRequest expenseDto = ExpenseCreateRequest.builder()
                 .name(name)
                 .amount(amount)
                 .build();
@@ -437,7 +437,7 @@ class SummaryControllerIT {
     }
 
     private void createExpenseMember(Long eventId, Long userId) throws Exception {
-        ExpenseMemberCreateDto expenseMemberDto = ExpenseMemberCreateDto.builder()
+        ExpenseMemberCreateRequest expenseMemberDto = ExpenseMemberCreateRequest.builder()
                 .userId(userId)
                 .build();
 

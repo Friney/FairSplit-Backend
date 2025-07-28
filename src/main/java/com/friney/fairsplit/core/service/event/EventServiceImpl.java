@@ -1,8 +1,8 @@
 package com.friney.fairsplit.core.service.event;
 
-import com.friney.fairsplit.api.dto.event.EventCreateDto;
+import com.friney.fairsplit.api.dto.event.EventCreateRequest;
 import com.friney.fairsplit.api.dto.event.EventDto;
-import com.friney.fairsplit.api.dto.event.EventUpdateDto;
+import com.friney.fairsplit.api.dto.event.EventUpdateRequest;
 import com.friney.fairsplit.core.entity.event.Event;
 import com.friney.fairsplit.core.entity.user.RegisteredUser;
 import com.friney.fairsplit.core.exception.ServiceException;
@@ -43,10 +43,10 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventDto create(EventCreateDto eventCreateDto, UserDetails userDetails) {
+    public EventDto create(EventCreateRequest eventCreateRequest, UserDetails userDetails) {
         Event event = Event.builder()
-                .name(eventCreateDto.name())
-                .description(eventCreateDto.description())
+                .name(eventCreateRequest.name())
+                .description(eventCreateRequest.description())
                 .owner(userService.findByEmail(userDetails.getUsername()))
                 .build();
         Event savedEvent = eventRepository.save(event);
@@ -54,14 +54,14 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventDto update(EventUpdateDto eventUpdateDto, Long id, UserDetails userDetails) {
+    public EventDto update(EventUpdateRequest eventUpdateRequest, Long id, UserDetails userDetails) {
         Event event = getById(id);
         validateChangeRequest(event, userDetails);
-        if (eventUpdateDto.name() != null) {
-            event.setName(eventUpdateDto.name());
+        if (eventUpdateRequest.name() != null) {
+            event.setName(eventUpdateRequest.name());
         }
-        if (eventUpdateDto.description() != null) {
-            event.setDescription(eventUpdateDto.description());
+        if (eventUpdateRequest.description() != null) {
+            event.setDescription(eventUpdateRequest.description());
         }
         return eventMapper.map(eventRepository.save(event));
     }

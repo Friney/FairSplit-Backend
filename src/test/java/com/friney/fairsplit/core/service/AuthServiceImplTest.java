@@ -1,11 +1,11 @@
 package com.friney.fairsplit.core.service;
 
 import com.friney.fairsplit.api.dto.jwt.JwtAuthenticationDto;
-import com.friney.fairsplit.api.dto.jwt.RefreshTokenDto;
-import com.friney.fairsplit.api.dto.user.CreateRegisteredUserDto;
+import com.friney.fairsplit.api.dto.jwt.RefreshTokenRequest;
+import com.friney.fairsplit.api.dto.user.CreateRegisteredUserRequest;
 import com.friney.fairsplit.api.dto.user.RegisteredUserDto;
-import com.friney.fairsplit.api.dto.user.UserChangePasswordDto;
-import com.friney.fairsplit.api.dto.user.UserCredentialsDto;
+import com.friney.fairsplit.api.dto.user.UserChangePasswordRequest;
+import com.friney.fairsplit.api.dto.user.UserCredentialsRequest;
 import com.friney.fairsplit.core.entity.user.RegisteredUser;
 import com.friney.fairsplit.core.exception.ServiceException;
 import com.friney.fairsplit.core.service.auth.AuthServiceImpl;
@@ -52,7 +52,7 @@ class AuthServiceImplTest {
 
     @Test
     void testLogin() {
-        UserCredentialsDto credentials = UserCredentialsDto.builder()
+        UserCredentialsRequest credentials = UserCredentialsRequest.builder()
                 .email("test@example.com")
                 .password("password")
                 .build();
@@ -81,7 +81,7 @@ class AuthServiceImplTest {
 
     @Test
     void testRegistration() {
-        CreateRegisteredUserDto userDto = CreateRegisteredUserDto.builder()
+        CreateRegisteredUserRequest userDto = CreateRegisteredUserRequest.builder()
                 .name("controller")
                 .email("test@example.com")
                 .password("password")
@@ -107,7 +107,7 @@ class AuthServiceImplTest {
 
     @Test
     void testRegistrationWhenPasswordsNotMatch() {
-        CreateRegisteredUserDto userDto = CreateRegisteredUserDto.builder()
+        CreateRegisteredUserRequest userDto = CreateRegisteredUserRequest.builder()
                 .name("controller")
                 .email("test@example.com")
                 .password("password")
@@ -124,13 +124,13 @@ class AuthServiceImplTest {
     @Test
     void testRefresh() {
         String email = "test@example.com";
-        RefreshTokenDto refreshTokenDto = RefreshTokenDto.builder()
+        RefreshTokenRequest refreshTokenRequest = RefreshTokenRequest.builder()
                 .refreshToken("refreshToken")
                 .build();
 
         JwtAuthenticationDto expectedToken = JwtAuthenticationDto.builder()
                 .token("newAccessToken")
-                .refreshToken(refreshTokenDto.refreshToken())
+                .refreshToken(refreshTokenRequest.refreshToken())
                 .build();
 
         RegisteredUser expectedUser = RegisteredUser.builder()
@@ -138,29 +138,29 @@ class AuthServiceImplTest {
                 .email(email)
                 .build();
 
-        when(jwtService.validateToken(refreshTokenDto.refreshToken())).thenReturn(true);
-        when(jwtService.getEmailFromToken(refreshTokenDto.refreshToken())).thenReturn(email);
+        when(jwtService.validateToken(refreshTokenRequest.refreshToken())).thenReturn(true);
+        when(jwtService.getEmailFromToken(refreshTokenRequest.refreshToken())).thenReturn(email);
         when(userService.findByEmail(email)).thenReturn(expectedUser);
-        when(jwtService.refreshTokens(email, refreshTokenDto.refreshToken())).thenReturn(expectedToken);
+        when(jwtService.refreshTokens(email, refreshTokenRequest.refreshToken())).thenReturn(expectedToken);
         doNothing().when(jwtVersionService).incrementVersion(expectedUser.getId());
 
-        JwtAuthenticationDto result = authService.refresh(refreshTokenDto);
+        JwtAuthenticationDto result = authService.refresh(refreshTokenRequest);
 
         assertEquals(expectedToken, result);
-        verify(jwtService, times(1)).validateToken(refreshTokenDto.refreshToken());
-        verify(jwtService, times(1)).getEmailFromToken(refreshTokenDto.refreshToken());
-        verify(jwtService, times(1)).refreshTokens(email, refreshTokenDto.refreshToken());
+        verify(jwtService, times(1)).validateToken(refreshTokenRequest.refreshToken());
+        verify(jwtService, times(1)).getEmailFromToken(refreshTokenRequest.refreshToken());
+        verify(jwtService, times(1)).refreshTokens(email, refreshTokenRequest.refreshToken());
     }
 
     @Test
     void testRefreshWhenInvalidToken() {
         String invalidToken = "invalidToken";
-        RefreshTokenDto refreshTokenDto = new RefreshTokenDto(invalidToken);
+        RefreshTokenRequest refreshTokenRequest = new RefreshTokenRequest(invalidToken);
 
         when(jwtService.validateToken(invalidToken)).thenReturn(false);
 
         ServiceException exception = assertThrows(ServiceException.class,
-                () -> authService.refresh(refreshTokenDto));
+                () -> authService.refresh(refreshTokenRequest));
 
         assertEquals("invalid refresh token", exception.getMessage());
         assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
@@ -170,7 +170,7 @@ class AuthServiceImplTest {
 
     @Test
     void testUpdatePassword() {
-        UserChangePasswordDto updatePasswordDto = UserChangePasswordDto.builder()
+        UserChangePasswordRequest updatePasswordDto = UserChangePasswordRequest.builder()
                 .oldPassword("oldPassword")
                 .newPassword("newPassword")
                 .confirmPassword("newPassword")
@@ -208,7 +208,7 @@ class AuthServiceImplTest {
 
     @Test
     void testUpdatePasswordWhenPasswordsNotMatch() {
-        UserChangePasswordDto updatePasswordDto = UserChangePasswordDto.builder()
+        UserChangePasswordRequest updatePasswordDto = UserChangePasswordRequest.builder()
                 .oldPassword("oldPassword")
                 .newPassword("newPassword")
                 .confirmPassword("wrongPassword")
@@ -225,7 +225,7 @@ class AuthServiceImplTest {
 
     @Test
     void testUpdatePasswordWhenOldPasswordNotMatch() {
-        UserChangePasswordDto updatePasswordDto = UserChangePasswordDto.builder()
+        UserChangePasswordRequest updatePasswordDto = UserChangePasswordRequest.builder()
                 .oldPassword("oldPassword")
                 .newPassword("newPassword")
                 .confirmPassword("newPassword")

@@ -1,14 +1,15 @@
-package com.friney.fairsplit.api.controller;
+package com.friney.fairsplit.api.controller.v1;
 
 import com.friney.fairsplit.api.Paths;
 import com.friney.fairsplit.api.dto.jwt.JwtAuthenticationDto;
-import com.friney.fairsplit.api.dto.jwt.RefreshTokenDto;
-import com.friney.fairsplit.api.dto.user.CreateRegisteredUserDto;
+import com.friney.fairsplit.api.dto.jwt.RefreshTokenRequest;
+import com.friney.fairsplit.api.dto.user.CreateRegisteredUserRequest;
 import com.friney.fairsplit.api.dto.user.RegisteredUserDto;
-import com.friney.fairsplit.api.dto.user.UserChangePasswordDto;
-import com.friney.fairsplit.api.dto.user.UserCredentialsDto;
-import com.friney.fairsplit.api.dto.user.UserUpdateDto;
+import com.friney.fairsplit.api.dto.user.UserChangePasswordRequest;
+import com.friney.fairsplit.api.dto.user.UserCredentialsRequest;
+import com.friney.fairsplit.api.dto.user.UserUpdateRequest;
 import com.friney.fairsplit.core.service.auth.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,42 +24,42 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(Paths.AUTH)
+@RequestMapping(Paths.AUTH_V1)
 @RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
 
     @PostMapping("/login")
-    public JwtAuthenticationDto login(@RequestBody UserCredentialsDto userCredentialsDto) {
-        return authService.login(userCredentialsDto);
+    public JwtAuthenticationDto login(@Valid @RequestBody UserCredentialsRequest userCredentialsRequest) {
+        return authService.login(userCredentialsRequest);
     }
 
     @GetMapping("/me")
-    public RegisteredUserDto me(@AuthenticationPrincipal UserDetails userDetails) {
+    public RegisteredUserDto me(@Valid @AuthenticationPrincipal UserDetails userDetails) {
         return authService.loadUser(userDetails);
     }
 
     @PostMapping("/refresh")
-    public JwtAuthenticationDto refresh(@RequestBody RefreshTokenDto refreshTokenDto) {
-        return authService.refresh(refreshTokenDto);
+    public JwtAuthenticationDto refresh(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+        return authService.refresh(refreshTokenRequest);
     }
 
     @PostMapping("/registration")
     @ResponseStatus(HttpStatus.CREATED)
-    public RegisteredUserDto register(@RequestBody CreateRegisteredUserDto createRegisteredUserDto) {
-        return authService.registration(createRegisteredUserDto);
+    public RegisteredUserDto register(@Valid @RequestBody CreateRegisteredUserRequest createRegisteredUserRequest) {
+        return authService.registration(createRegisteredUserRequest);
     }
 
     @PatchMapping("/change-password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void changePassword(@RequestBody UserChangePasswordDto userChangePasswordDto, @AuthenticationPrincipal UserDetails userDetails) {
-        authService.changePassword(userChangePasswordDto, userDetails);
+    public void changePassword(@Valid @RequestBody UserChangePasswordRequest userChangePasswordRequest, @AuthenticationPrincipal UserDetails userDetails) {
+        authService.changePassword(userChangePasswordRequest, userDetails);
     }
 
     @PatchMapping
-    public RegisteredUserDto update(UserUpdateDto userUpdateDto, @AuthenticationPrincipal UserDetails userDetails) {
-        return authService.update(userUpdateDto, userDetails);
+    public RegisteredUserDto update(@Valid @RequestBody UserUpdateRequest userUpdateRequest, @AuthenticationPrincipal UserDetails userDetails) {
+        return authService.update(userUpdateRequest, userDetails);
     }
 
     @DeleteMapping
