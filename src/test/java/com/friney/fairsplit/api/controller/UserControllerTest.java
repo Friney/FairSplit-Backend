@@ -1,8 +1,8 @@
 package com.friney.fairsplit.api.controller;
 
-import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserRequest;
 import com.friney.fairsplit.api.dto.user.UserDto;
-import com.friney.fairsplit.api.dto.user.UserUpdateDto;
+import com.friney.fairsplit.api.dto.user.UserUpdateRequest;
 import com.friney.fairsplit.core.entity.user.NotRegisteredUser;
 import com.friney.fairsplit.core.service.user.UserService;
 import java.util.List;
@@ -27,7 +27,7 @@ class UserControllerTest {
 
     @Test
     void testCreateNotRegisteredUser() {
-        CreateNotRegisteredUserDto notRegisteredUser = CreateNotRegisteredUserDto.builder()
+        CreateNotRegisteredUserRequest notRegisteredUser = CreateNotRegisteredUserRequest.builder()
                 .name("controller")
                 .build();
 
@@ -75,7 +75,7 @@ class UserControllerTest {
 
     @Test
     void testUpdate() {
-        UserUpdateDto userUpdateDto = UserUpdateDto.builder()
+        UserUpdateRequest userUpdateRequest = UserUpdateRequest.builder()
                 .name("new name")
                 .build();
 
@@ -84,11 +84,11 @@ class UserControllerTest {
                 .name("new name")
                 .build();
 
-        when(userService.updateNotRegisteredUser(userUpdateDto, 1L)).thenReturn(expectedUser);
+        when(userService.updateNotRegisteredUser(userUpdateRequest, 1L)).thenReturn(expectedUser);
 
-        UserDto result = userController.update(userUpdateDto, 1L);
+        UserDto result = userController.update(userUpdateRequest, 1L);
 
         assertEquals(expectedUser, result);
-        verify(userService, times(1)).updateNotRegisteredUser(userUpdateDto, 1L);
+        verify(userService, times(1)).updateNotRegisteredUser(userUpdateRequest, 1L);
     }
 }

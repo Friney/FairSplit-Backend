@@ -1,9 +1,9 @@
 package com.friney.fairsplit.core.service;
 
-import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserRequest;
 import com.friney.fairsplit.api.dto.user.RegisteredUserDto;
 import com.friney.fairsplit.api.dto.user.UserDto;
-import com.friney.fairsplit.api.dto.user.UserUpdateDto;
+import com.friney.fairsplit.api.dto.user.UserUpdateRequest;
 import com.friney.fairsplit.core.entity.user.NotRegisteredUser;
 import com.friney.fairsplit.core.entity.user.RegisteredUser;
 import com.friney.fairsplit.core.entity.user.User;
@@ -153,7 +153,7 @@ class UserServiceImplTest {
 
     @Test
     void testAddNotRegisteredUser() {
-        CreateNotRegisteredUserDto userDto = CreateNotRegisteredUserDto.builder()
+        CreateNotRegisteredUserRequest userDto = CreateNotRegisteredUserRequest.builder()
                 .name("controller")
                 .build();
         NotRegisteredUser savedUser = NotRegisteredUser.builder()
@@ -238,13 +238,13 @@ class UserServiceImplTest {
 
     @Test
     void testUpdateNotRegisteredUser() {
-        UserUpdateDto userUpdateDto = UserUpdateDto.builder()
+        UserUpdateRequest userUpdateRequest = UserUpdateRequest.builder()
                 .name("controller")
                 .build();
 
         NotRegisteredUser user = NotRegisteredUser.builder()
                 .id(1L)
-                .name(userUpdateDto.name())
+                .name(userUpdateRequest.name())
                 .build();
 
         UserDto userDto = UserDto.builder()
@@ -256,7 +256,7 @@ class UserServiceImplTest {
         when(notRegisteredUserRepository.save(any(NotRegisteredUser.class))).thenReturn(user);
         when(userMapper.mapUser(any(User.class))).thenReturn(userDto);
 
-        UserDto result = userService.updateNotRegisteredUser(userUpdateDto, 1L);
+        UserDto result = userService.updateNotRegisteredUser(userUpdateRequest, 1L);
 
         assertEquals(userDto, result);
         verify(notRegisteredUserRepository, times(1)).save(any(NotRegisteredUser.class));

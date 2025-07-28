@@ -2,8 +2,8 @@ package com.friney.fairsplit.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.friney.fairsplit.api.Paths;
-import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserDto;
-import com.friney.fairsplit.api.dto.user.CreateRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserRequest;
+import com.friney.fairsplit.api.dto.user.CreateRegisteredUserRequest;
 import com.friney.fairsplit.api.dto.user.UserDto;
 import com.friney.fairsplit.core.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -52,7 +52,7 @@ class UserControllerIT {
     @Test
     @WithMockUser
     void testCreateAndGetNotRegisteredUser() throws Exception {
-        CreateNotRegisteredUserDto userDto = CreateNotRegisteredUserDto.builder()
+        CreateNotRegisteredUserRequest userDto = CreateNotRegisteredUserRequest.builder()
                 .name("controller")
                 .build();
 
@@ -76,20 +76,20 @@ class UserControllerIT {
     @Test
     @WithMockUser
     void testCreateAndGetRegisteredUser() throws Exception {
-        CreateRegisteredUserDto createRegisteredUserDto = CreateRegisteredUserDto.builder()
+        CreateRegisteredUserRequest createRegisteredUserRequest = CreateRegisteredUserRequest.builder()
                 .name("controller")
                 .email("email@email.com")
                 .password("password")
                 .confirmPassword("password")
                 .build();
         UserDto registeredUserDto = UserDto.builder()
-                .name(createRegisteredUserDto.name())
-                .displayName(createRegisteredUserDto.name() + " (" + createRegisteredUserDto.email() + ")")
+                .name(createRegisteredUserRequest.name())
+                .displayName(createRegisteredUserRequest.name() + " (" + createRegisteredUserRequest.email() + ")")
                 .build();
 
         mockMvc.perform(post(Paths.AUTH + "/registration")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(createRegisteredUserDto)))
+                        .content(new ObjectMapper().writeValueAsString(createRegisteredUserRequest)))
                 .andExpectAll(
                         status().isCreated(),
                         jsonPath("$.name").value(registeredUserDto.name()),
@@ -107,17 +107,17 @@ class UserControllerIT {
     @Test
     @WithMockUser
     void testCreateTwoNotRegisteredUsersWithSameName() throws Exception {
-        CreateNotRegisteredUserDto createNotRegisteredUserDto = CreateNotRegisteredUserDto.builder()
+        CreateNotRegisteredUserRequest createNotRegisteredUserRequest = CreateNotRegisteredUserRequest.builder()
                 .name("controller")
                 .build();
         UserDto notRegistereduserDto = UserDto.builder()
-                .name(createNotRegisteredUserDto.name())
-                .displayName(createNotRegisteredUserDto.name())
+                .name(createNotRegisteredUserRequest.name())
+                .displayName(createNotRegisteredUserRequest.name())
                 .build();
 
         mockMvc.perform(post(Paths.USERS)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(createNotRegisteredUserDto)))
+                        .content(new ObjectMapper().writeValueAsString(createNotRegisteredUserRequest)))
                 .andExpectAll(
                         status().isCreated(),
                         jsonPath("$.name").value(notRegistereduserDto.name()),
@@ -126,7 +126,7 @@ class UserControllerIT {
 
         mockMvc.perform(post(Paths.USERS)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(createNotRegisteredUserDto)))
+                        .content(new ObjectMapper().writeValueAsString(createNotRegisteredUserRequest)))
                 .andExpectAll(
                         status().isCreated(),
                         jsonPath("$.name").value(notRegistereduserDto.name()),
@@ -148,16 +148,16 @@ class UserControllerIT {
     @Test
     @WithMockUser
     void testGetAllUsers() throws Exception {
-        CreateNotRegisteredUserDto createNotRegisteredUserDto = CreateNotRegisteredUserDto.builder()
+        CreateNotRegisteredUserRequest createNotRegisteredUserRequest = CreateNotRegisteredUserRequest.builder()
                 .name("controller")
                 .build();
         UserDto notRegistereduserDto = UserDto.builder()
-                .name(createNotRegisteredUserDto.name())
-                .displayName(createNotRegisteredUserDto.name())
+                .name(createNotRegisteredUserRequest.name())
+                .displayName(createNotRegisteredUserRequest.name())
                 .build();
         mockMvc.perform(post(Paths.USERS)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(createNotRegisteredUserDto))
+                        .content(new ObjectMapper().writeValueAsString(createNotRegisteredUserRequest))
                 )
                 .andExpectAll(
                         status().isCreated(),
@@ -165,20 +165,20 @@ class UserControllerIT {
                         jsonPath("$.displayName").value(notRegistereduserDto.displayName())
                 );
 
-        CreateRegisteredUserDto createRegisteredUserDto = CreateRegisteredUserDto.builder()
+        CreateRegisteredUserRequest createRegisteredUserRequest = CreateRegisteredUserRequest.builder()
                 .name("User2")
                 .email("email@email.com")
                 .password("password")
                 .confirmPassword("password")
                 .build();
         UserDto registeredUserDto = UserDto.builder()
-                .name(createRegisteredUserDto.name())
-                .displayName(createRegisteredUserDto.name() + " (" + createRegisteredUserDto.email() + ")")
+                .name(createRegisteredUserRequest.name())
+                .displayName(createRegisteredUserRequest.name() + " (" + createRegisteredUserRequest.email() + ")")
                 .build();
 
         mockMvc.perform(post(Paths.AUTH + "/registration")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(createRegisteredUserDto)))
+                        .content(new ObjectMapper().writeValueAsString(createRegisteredUserRequest)))
                 .andExpectAll(
                         status().isCreated(),
                         jsonPath("$.name").value(registeredUserDto.name()),

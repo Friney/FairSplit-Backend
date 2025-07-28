@@ -1,8 +1,8 @@
 package com.friney.fairsplit.api.controller;
 
-import com.friney.fairsplit.api.dto.expense.ExpenseCreateDto;
+import com.friney.fairsplit.api.dto.expense.ExpenseCreateRequest;
 import com.friney.fairsplit.api.dto.expense.ExpenseDto;
-import com.friney.fairsplit.api.dto.expense.ExpenseUpdateDto;
+import com.friney.fairsplit.api.dto.expense.ExpenseUpdateRequest;
 import com.friney.fairsplit.core.service.expense.ExpenseService;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -52,7 +52,7 @@ class ExpenseControllerTest {
 
     @Test
     void testCreate() {
-        ExpenseCreateDto createDto = ExpenseCreateDto.builder()
+        ExpenseCreateRequest createDto = ExpenseCreateRequest.builder()
                 .name("Test expense")
                 .amount(BigDecimal.valueOf(100))
                 .build();
@@ -72,7 +72,7 @@ class ExpenseControllerTest {
 
     @Test
     void testUpdate() {
-        ExpenseUpdateDto updateDto = ExpenseUpdateDto.builder()
+        ExpenseUpdateRequest updateDto = ExpenseUpdateRequest.builder()
                 .name("Updated expense")
                 .build();
 

@@ -1,9 +1,9 @@
 package com.friney.fairsplit.core.service.user;
 
-import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserDto;
+import com.friney.fairsplit.api.dto.user.CreateNotRegisteredUserRequest;
 import com.friney.fairsplit.api.dto.user.RegisteredUserDto;
 import com.friney.fairsplit.api.dto.user.UserDto;
-import com.friney.fairsplit.api.dto.user.UserUpdateDto;
+import com.friney.fairsplit.api.dto.user.UserUpdateRequest;
 import com.friney.fairsplit.core.entity.user.NotRegisteredUser;
 import com.friney.fairsplit.core.entity.user.RegisteredUser;
 import com.friney.fairsplit.core.entity.user.User;
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto addNotRegisteredUser(CreateNotRegisteredUserDto userDto) {
+    public UserDto addNotRegisteredUser(CreateNotRegisteredUserRequest userDto) {
         return notRegisteredUserRepository.findByName(userDto.name())
                 .map(userMapper::mapUser)
                 .orElseGet(() -> {
@@ -96,12 +96,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto updateNotRegisteredUser(UserUpdateDto userUpdateDto, Long id) {
+    public UserDto updateNotRegisteredUser(UserUpdateRequest userUpdateRequest, Long id) {
         // TODO Сделать проверку использования юзера, если не где не используется, то обновить
-        CreateNotRegisteredUserDto createNotRegisteredUserDto = CreateNotRegisteredUserDto.builder()
-                .name(userUpdateDto.name())
+        CreateNotRegisteredUserRequest createNotRegisteredUserRequest = CreateNotRegisteredUserRequest.builder()
+                .name(userUpdateRequest.name())
                 .build();
-        return addNotRegisteredUser(createNotRegisteredUserDto);
+        return addNotRegisteredUser(createNotRegisteredUserRequest);
     }
 
     @Override

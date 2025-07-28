@@ -16,7 +16,7 @@ create table if not exists registered_users
 -- Незарегистрированные пользователи (по сути просто ники людей, которые не зарегистрированы)
 create table if not exists not_registered_users
 (
-            user_id bigint primary key,
+    user_id bigint primary key,
     foreign key (user_id) references users (id)
 );
 

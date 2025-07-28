@@ -4,7 +4,7 @@ import jakarta.annotation.Nullable;
 import lombok.Builder;
 
 @Builder
-public record ReceiptUpdateDto(
+public record ReceiptUpdateRequest(
         @Nullable String name,
         @Nullable Long userId
 ) {

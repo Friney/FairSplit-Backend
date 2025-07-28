@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import lombok.Builder;
 
 @Builder
-public record ExpenseUpdateDto(
+public record ExpenseUpdateRequest(
         @Nullable String name,
         @Nullable BigDecimal amount
 ) {

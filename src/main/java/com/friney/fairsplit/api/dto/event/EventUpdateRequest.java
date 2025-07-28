@@ -4,7 +4,7 @@ import lombok.Builder;
 import org.springframework.lang.Nullable;
 
 @Builder
-public record EventUpdateDto(
+public record EventUpdateRequest(
         @Nullable String name,
         @Nullable String description
 ) {

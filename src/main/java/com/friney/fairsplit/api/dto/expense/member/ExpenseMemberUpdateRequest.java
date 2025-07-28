@@ -4,7 +4,7 @@ import jakarta.annotation.Nullable;
 import lombok.Builder;
 
 @Builder
-public record ExpenseMemberUpdateDto(
+public record ExpenseMemberUpdateRequest(
         @Nullable Long userId
 ) {
 }

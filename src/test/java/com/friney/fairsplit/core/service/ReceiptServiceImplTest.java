@@ -1,8 +1,8 @@
 package com.friney.fairsplit.core.service;
 
-import com.friney.fairsplit.api.dto.receipt.ReceiptCreateDto;
+import com.friney.fairsplit.api.dto.receipt.ReceiptCreateRequest;
 import com.friney.fairsplit.api.dto.receipt.ReceiptDto;
-import com.friney.fairsplit.api.dto.receipt.ReceiptUpdateDto;
+import com.friney.fairsplit.api.dto.receipt.ReceiptUpdateRequest;
 import com.friney.fairsplit.api.dto.user.UserDto;
 import com.friney.fairsplit.core.entity.event.Event;
 import com.friney.fairsplit.core.entity.receipt.Receipt;
@@ -164,7 +164,7 @@ class ReceiptServiceImplTest {
 
     @Test
     void testCreate() {
-        ReceiptCreateDto createDto = ReceiptCreateDto.builder()
+        ReceiptCreateRequest createDto = ReceiptCreateRequest.builder()
                 .name("Test receipt")
                 .userId(1L)
                 .build();
@@ -215,7 +215,7 @@ class ReceiptServiceImplTest {
     @Test
     void testCreateEventNotFound() {
         // Given
-        ReceiptCreateDto createDto = ReceiptCreateDto.builder()
+        ReceiptCreateRequest createDto = ReceiptCreateRequest.builder()
                 .name("Test receipt")
                 .userId(1L)
                 .build();
@@ -232,7 +232,7 @@ class ReceiptServiceImplTest {
 
     @Test
     void testCreateUserNotFound() {
-        ReceiptCreateDto createDto = ReceiptCreateDto.builder()
+        ReceiptCreateRequest createDto = ReceiptCreateRequest.builder()
                 .name("Test receipt")
                 .userId(1L)
                 .build();
@@ -256,7 +256,7 @@ class ReceiptServiceImplTest {
 
     @Test
     void testUpdate() {
-        ReceiptUpdateDto updateDto = ReceiptUpdateDto.builder()
+        ReceiptUpdateRequest updateDto = ReceiptUpdateRequest.builder()
                 .name("Updated receipt")
                 .build();
 

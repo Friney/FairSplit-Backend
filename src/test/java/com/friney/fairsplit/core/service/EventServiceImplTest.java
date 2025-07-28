@@ -1,8 +1,8 @@
 package com.friney.fairsplit.core.service;
 
-import com.friney.fairsplit.api.dto.event.EventCreateDto;
+import com.friney.fairsplit.api.dto.event.EventCreateRequest;
 import com.friney.fairsplit.api.dto.event.EventDto;
-import com.friney.fairsplit.api.dto.event.EventUpdateDto;
+import com.friney.fairsplit.api.dto.event.EventUpdateRequest;
 import com.friney.fairsplit.core.entity.event.Event;
 import com.friney.fairsplit.core.entity.user.RegisteredUser;
 import com.friney.fairsplit.core.exception.ServiceException;
@@ -166,7 +166,7 @@ class EventServiceImplTest {
 
     @Test
     void testCreate() {
-        EventCreateDto createDto = EventCreateDto.builder()
+        EventCreateRequest createDto = EventCreateRequest.builder()
                 .name("event")
                 .build();
         Event event = Event.builder()
@@ -201,7 +201,7 @@ class EventServiceImplTest {
                 .owner(user)
                 .build();
 
-        EventUpdateDto updateDto = EventUpdateDto.builder()
+        EventUpdateRequest updateDto = EventUpdateRequest.builder()
                 .name("new name")
                 .build();
         EventDto dto = EventDto.builder()
