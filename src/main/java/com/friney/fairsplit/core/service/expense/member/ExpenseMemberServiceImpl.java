@@ -36,6 +36,11 @@ public class ExpenseMemberServiceImpl implements ExpenseMemberService {
 
     @Override
     public ExpenseMemberDto create(ExpenseMemberCreateRequest expenseMemberCreateRequest, Long expenseId) {
+        boolean expenseMemberExists = expenseMemberAlreadyExists(expenseId, expenseMemberCreateRequest.userId());
+        if (expenseMemberExists) {
+            throw new ServiceException("user with id " + expenseMemberCreateRequest.userId() + " is already in this expense", HttpStatus.BAD_REQUEST);
+        }
+
         ExpenseMember expenseMember = ExpenseMember.builder()
                 .user(userService.getById(expenseMemberCreateRequest.userId()))
                 .expense(expenseService.getById(expenseId))
@@ -51,6 +56,10 @@ public class ExpenseMemberServiceImpl implements ExpenseMemberService {
 
     @Override
     public ExpenseMemberDto update(ExpenseMemberUpdateRequest expenseMemberCreateDto, Long id, Long expenseId, UserDetails userDetails) {
+        boolean expenseMemberExists = expenseMemberAlreadyExists(expenseId, expenseMemberCreateDto.userId());
+        if (expenseMemberExists) {
+            throw new ServiceException("user with id " + expenseMemberCreateDto.userId() + " is already in this expense", HttpStatus.BAD_REQUEST);
+        }
         ExpenseMember expenseMember = getById(id);
         validateChangeRequest(expenseMember, expenseId, userDetails);
 
@@ -68,11 +77,31 @@ public class ExpenseMemberServiceImpl implements ExpenseMemberService {
         expenseMemberRepository.delete(expenseMember);
     }
 
-    boolean hasPermissionOnChange(ExpenseMember expenseMember, UserDetails userDetails) {
-        return expenseMember.getExpense().getReceipt().getEvent().getOwner().getEmail().equals(userDetails.getUsername());
+    private boolean expenseMemberAlreadyExists(Long expenseId, Long userId) {
+        return expenseService
+                .getById(expenseId)
+                .getExpenseMembers()
+                .stream()
+                .anyMatch(
+                        expenseMember ->
+                                expenseMember
+                                        .getUser()
+                                        .getId()
+                                        .equals(userId)
+                );
     }
 
-    void validateChangeRequest(ExpenseMember expenseMember, Long expenseId, UserDetails userDetails) {
+    private boolean hasPermissionOnChange(ExpenseMember expenseMember, UserDetails userDetails) {
+        return expenseMember
+                .getExpense()
+                .getReceipt()
+                .getEvent()
+                .getOwner()
+                .getEmail()
+                .equals(userDetails.getUsername());
+    }
+
+    private void validateChangeRequest(ExpenseMember expenseMember, Long expenseId, UserDetails userDetails) {
         if (!expenseMember.getExpense().getId().equals(expenseId)) {
             throw new ServiceException("expense member with id " + expenseMember.getId() + " in expense with id " + expenseId + " not found", HttpStatus.NOT_FOUND);
         }

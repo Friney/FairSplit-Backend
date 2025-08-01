@@ -47,6 +47,9 @@ class UserControllerIT {
         registry.add("spring.datasource.url", postgres::getJdbcUrl);
         registry.add("spring.datasource.username", postgres::getUsername);
         registry.add("spring.datasource.password", postgres::getPassword);
+        registry.add("jwt.secret", () -> "secret-jwt-signing-key");
+        registry.add("jwt.token-lifetime", () -> "1d");
+        registry.add("jwt.refresh-lifetime", () -> "1d");
     }
 
     @Test

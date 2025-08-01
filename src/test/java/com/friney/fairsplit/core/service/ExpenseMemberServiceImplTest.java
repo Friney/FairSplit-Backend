@@ -17,6 +17,7 @@ import com.friney.fairsplit.core.service.expense.ExpenseService;
 import com.friney.fairsplit.core.service.expense.member.ExpenseMemberServiceImpl;
 import com.friney.fairsplit.core.service.user.UserService;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -125,6 +126,7 @@ class ExpenseMemberServiceImplTest {
         Expense expense = Expense.builder()
                 .id(1L)
                 .name("expense")
+                .expenseMembers(new HashSet<>())
                 .build();
 
         ExpenseMember savedExpenseMember = ExpenseMember.builder()
@@ -145,6 +147,7 @@ class ExpenseMemberServiceImplTest {
 
         when(userService.getById(1L)).thenReturn(user);
         when(expenseService.getById(1L)).thenReturn(expense);
+        when(expenseService.getById(1L)).thenReturn(expense);
         when(expenseMemberRepository.save(any(ExpenseMember.class))).thenReturn(savedExpenseMember);
         when(expenseMemberMapper.map(savedExpenseMember)).thenReturn(expectedDto);
 
@@ -152,7 +155,6 @@ class ExpenseMemberServiceImplTest {
 
         assertEquals(expectedDto, result);
         verify(userService, times(1)).getById(1L);
-        verify(expenseService, times(1)).getById(1L);
         verify(expenseMemberRepository, times(1)).save(any(ExpenseMember.class));
         verify(expenseMemberMapper, times(1)).map((ExpenseMember) any());
     }
@@ -163,6 +165,14 @@ class ExpenseMemberServiceImplTest {
                 .userId(1L)
                 .build();
 
+        Expense expense = Expense.builder()
+                .id(1L)
+                .name("expense")
+                .expenseMembers(new HashSet<>())
+                .build();
+
+
+        when(expenseService.getById(1L)).thenReturn(expense);
         when(userService.getById(1L))
                 .thenThrow(new ServiceException("controller with id 1 not found", HttpStatus.NOT_FOUND));
 
@@ -171,7 +181,6 @@ class ExpenseMemberServiceImplTest {
         assertEquals("controller with id 1 not found", exception.getMessage());
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
         verify(userService, times(1)).getById(1L);
-        verify(expenseService, times(0)).getById(any());
         verify(expenseMemberRepository, times(0)).save(any());
         verify(expenseMemberMapper, times(0)).map((ExpenseMember) any());
     }
@@ -182,12 +191,6 @@ class ExpenseMemberServiceImplTest {
                 .userId(1L)
                 .build();
 
-        User user = User.builder()
-                .id(1L)
-                .name("controller")
-                .build();
-
-        when(userService.getById(1L)).thenReturn(user);
         when(expenseService.getById(1L))
                 .thenThrow(new ServiceException("expense with id 1 not found", HttpStatus.NOT_FOUND));
 
@@ -195,8 +198,6 @@ class ExpenseMemberServiceImplTest {
 
         assertEquals("expense with id 1 not found", exception.getMessage());
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
-        verify(userService, times(1)).getById(1L);
-        verify(expenseService, times(1)).getById(1L);
         verify(expenseMemberRepository, times(0)).save(any());
         verify(expenseMemberMapper, times(0)).map((ExpenseMember) any());
     }
@@ -234,6 +235,7 @@ class ExpenseMemberServiceImplTest {
         Expense expense = Expense.builder()
                 .id(1L)
                 .receipt(recipient)
+                .expenseMembers(new HashSet<>())
                 .build();
 
         ExpenseMember expenseMember = ExpenseMember.builder()
@@ -243,6 +245,7 @@ class ExpenseMemberServiceImplTest {
 
         when(expenseMemberRepository.findById(1L)).thenReturn(Optional.of(expenseMember));
         when(expenseMemberRepository.save(any(ExpenseMember.class))).thenReturn(expenseMember);
+        when(expenseService.getById(1L)).thenReturn(expense);
         when(expenseMemberMapper.map(expenseMember)).thenReturn(expectedDto);
 
         ExpenseMemberDto result = expenseMemberService.update(updateDto, 1L, 1L, createTestUserDetails());
