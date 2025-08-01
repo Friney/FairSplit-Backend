@@ -59,6 +59,9 @@ class SummaryControllerIT {
         registry.add("spring.datasource.url", postgres::getJdbcUrl);
         registry.add("spring.datasource.username", postgres::getUsername);
         registry.add("spring.datasource.password", postgres::getPassword);
+        registry.add("jwt.secret", () -> "secret-jwt-signing-key");
+        registry.add("jwt.token-lifetime", () -> "1d");
+        registry.add("jwt.refresh-lifetime", () -> "1d");
     }
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -173,6 +176,8 @@ class SummaryControllerIT {
         ExpenseDto expense1 = createExpense(receipt1.id(), "expense 1", BigDecimal.valueOf(100));
         ExpenseDto expense2 = createExpense(receipt1.id(), "expense 2", BigDecimal.valueOf(100));
         ExpenseDto expense3 = createExpense(receipt2.id(), "expense 3", BigDecimal.valueOf(300));
+
+        saveInTransactional();
 
         createExpenseMember(expense1.id(), user1.getId());
         createExpenseMember(expense1.id(), user2.getId());
@@ -404,7 +409,7 @@ class SummaryControllerIT {
                 .userId(userId)
                 .build();
 
-        String response = mockMvc.perform(post("/events/" + eventId + "/receipts")
+        String response = mockMvc.perform(post(Paths.API + Paths.V1 + "/events/" + eventId + "/receipts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(receiptDto)))
                 .andExpect(status().isCreated())
@@ -423,7 +428,7 @@ class SummaryControllerIT {
                 .amount(amount)
                 .build();
 
-        String response = mockMvc.perform(post("/receipts/" + receiptId + "/expenses")
+        String response = mockMvc.perform(post(Paths.API + Paths.V1 + "/receipts/" + receiptId + "/expenses")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(expenseDto)))
                 .andExpect(status().isCreated())
@@ -441,7 +446,7 @@ class SummaryControllerIT {
                 .userId(userId)
                 .build();
 
-        mockMvc.perform(post("/expenses/" + eventId + "/members")
+        mockMvc.perform(post(Paths.API + Paths.V1 + "/expenses/" + eventId + "/members")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(expenseMemberDto)))
                 .andExpect(status().isCreated());
@@ -453,7 +458,7 @@ class SummaryControllerIT {
     }
 
     private void testSummaryEndpoint(Long id, SummaryDto expected) throws Exception {
-        mockMvc.perform(get("/events/" + id + "/summary"))
+        mockMvc.perform(get(Paths.API + Paths.V1 + "/events/" + id + "/summary"))
                 .andExpectAll(
                         status().isOk(),
                         content().json(new ObjectMapper().writeValueAsString(expected))
