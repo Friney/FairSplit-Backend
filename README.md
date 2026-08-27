@@ -6,6 +6,8 @@
 Backend представляет из себя сервер на Spring.<br>
 Данные хранятся в PostgreSQL.
 
+Состояние проекта на момент сдачи бакалаврского диплома зафиксировано в ветке `bachelor-thesis`.
+
 ## Запуск
 
 Переименовать файл `.env.example` в `.env` и заменить все значения в нем на свои.<br>
@@ -13,3 +15,4 @@ Backend представляет из себя сервер на Spring.<br>
 `docker compose --env-file ../.env -f docker/docker-compose.yml -p docker up -d --build postgres`.<br>
 Запустить сервер командой
 `docker compose --env-file ../.env -f docker/docker-compose.yml -p docker up -d --build fair_split`.
+
